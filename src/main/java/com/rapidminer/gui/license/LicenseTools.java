@@ -20,7 +20,6 @@ package com.rapidminer.gui.license;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,11 +28,7 @@ import java.util.Properties;
 import java.util.TimeZone;
 import java.util.logging.Level;
 
-import com.rapidminer.RapidMiner;
-import com.rapidminer.RapidMiner.ExecutionMode;
-import com.rapidminer.license.License;
 import com.rapidminer.tools.FileSystemService;
-import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.LogService;
 
 
@@ -63,28 +58,28 @@ public class LicenseTools {
 		}
 	};
 
-	/**
-	 * Get the translated name of the product associated with the license.
-	 *
-	 * @param license
-	 *            The {@link License}.
-	 * @return The translated product name.
-	 */
-	public static String translateProductName(License license) {
-		return I18N.getMessage(I18N.getGUIBundle(), "gui.license." + license.getProductId() + ".label");
-	}
-
-	/**
-	 * Get the translated edition of the product associated with the license.
-	 *
-	 * @param license
-	 *            The {@link License}.
-	 * @return The translated product edition.
-	 */
-	public static String translateProductEdition(License license) {
-		return I18N.getMessage(I18N.getGUIBundle(),
-				"gui.license." + license.getProductId() + "." + license.getProductEdition() + ".label");
-	}
+//	/**
+//	 * Get the translated name of the product associated with the license.
+//	 *
+//	 * @param license
+//	 *            The {@link License}.
+//	 * @return The translated product name.
+//	 */
+//	public static String translateProductName(License license) {
+//		return I18N.getMessage(I18N.getGUIBundle(), "gui.license." + license.getProductId() + ".label");
+//	}
+//
+//	/**
+//	 * Get the translated edition of the product associated with the license.
+//	 *
+//	 * @param license
+//	 *            The {@link License}.
+//	 * @return The translated product edition.
+//	 */
+//	public static String translateProductEdition(License license) {
+//		return I18N.getMessage(I18N.getGUIBundle(),
+//				"gui.license." + license.getProductId() + "." + license.getProductEdition() + ".label");
+//	}
 
 	/**
 	 * Load last active license properties.
@@ -106,35 +101,35 @@ public class LicenseTools {
 		return licenseProperties;
 	}
 
-	/**
-	 * Store active license properties. Requires RapidMiner to be running ad standalone GUI
-	 * application.
-	 */
-	public static void storeActiveLicenseProperties(License activeLicense) {
-		// do nothing when RapidMiner is not executed as standalone GUI application
-		if (RapidMiner.getExecutionMode() != ExecutionMode.UI) {
-			return;
-		}
-
-		// load existing properties file
-		File licensePropertiesFile = FileSystemService.getUserConfigFile(LICENSE_PROPERTIES_PATH);
-		Properties licenseProperties = LicenseTools.loadLastActiveLicenseProperties();
-
-		// store properties necessary to identify the license
-		licenseProperties.setProperty(LAST_ACTIVE_LICENSE_PRODUCT_ID, activeLicense.getProductId());
-		licenseProperties.setProperty(LAST_ACTIVE_LICENSE_PRODUCT_EDITION, activeLicense.getProductEdition());
-		licenseProperties.setProperty(LAST_ACTIVE_LICENSE_PRECEDENCE, String.valueOf(activeLicense.getPrecedence()));
-		if (activeLicense.getExpirationDate() != null) {
-			String dateString = ISO_DATE_FORMATTER.get().format(activeLicense.getExpirationDate());
-			licenseProperties.setProperty(LAST_ACTIVE_LICENSE_EXPIRATION_DATE, dateString);
-		}
-
-		// store properties
-		try (FileOutputStream out = new FileOutputStream(licensePropertiesFile)) {
-			licenseProperties.store(out, "RapidMiner Studio License Properties");
-		} catch (IOException e) {
-			LogService.getRoot().log(Level.WARNING,
-					"com.rapidminer.gui.license.RMLicenseManagerListener.storing_properties_failed", e);
-		}
-	}
+//	/**
+//	 * Store active license properties. Requires RapidMiner to be running ad standalone GUI
+//	 * application.
+//	 */
+//	public static void storeActiveLicenseProperties(License activeLicense) {
+//		// do nothing when RapidMiner is not executed as standalone GUI application
+//		if (RapidMiner.getExecutionMode() != ExecutionMode.UI) {
+//			return;
+//		}
+//
+//		// load existing properties file
+//		File licensePropertiesFile = FileSystemService.getUserConfigFile(LICENSE_PROPERTIES_PATH);
+//		Properties licenseProperties = LicenseTools.loadLastActiveLicenseProperties();
+//
+//		// store properties necessary to identify the license
+//		licenseProperties.setProperty(LAST_ACTIVE_LICENSE_PRODUCT_ID, activeLicense.getProductId());
+//		licenseProperties.setProperty(LAST_ACTIVE_LICENSE_PRODUCT_EDITION, activeLicense.getProductEdition());
+//		licenseProperties.setProperty(LAST_ACTIVE_LICENSE_PRECEDENCE, String.valueOf(activeLicense.getPrecedence()));
+//		if (activeLicense.getExpirationDate() != null) {
+//			String dateString = ISO_DATE_FORMATTER.get().format(activeLicense.getExpirationDate());
+//			licenseProperties.setProperty(LAST_ACTIVE_LICENSE_EXPIRATION_DATE, dateString);
+//		}
+//
+//		// store properties
+//		try (FileOutputStream out = new FileOutputStream(licensePropertiesFile)) {
+//			licenseProperties.store(out, "RapidMiner Studio License Properties");
+//		} catch (IOException e) {
+//			LogService.getRoot().log(Level.WARNING,
+//					"com.rapidminer.gui.license.RMLicenseManagerListener.storing_properties_failed", e);
+//		}
+//	}
 }

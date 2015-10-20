@@ -35,10 +35,6 @@ import com.rapidminer.example.table.ExampleTable;
 import com.rapidminer.example.table.FileDataRowReader;
 import com.rapidminer.example.table.MemoryExampleTable;
 import com.rapidminer.gui.wizards.ExampleSourceConfigurationWizardCreator;
-import com.rapidminer.license.LicenseConstants;
-import com.rapidminer.license.annotation.LicenseConstraint;
-import com.rapidminer.license.product.ConnectorTypes;
-import com.rapidminer.license.product.Product;
 import com.rapidminer.operator.OperatorDescription;
 import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.UserError;
@@ -108,7 +104,6 @@ import com.rapidminer.tools.io.Encoding;
  *
  * @author Simon Fischer, Ingo Mierswa
  */
-@LicenseConstraint(productId = Product.RM_REGEX, constraintId = LicenseConstants.CONNECTORS_CONSTRAINT_ID, value = ConnectorTypes.ADVANCED_CONNECTORS)
 public class ExampleSource extends AbstractExampleSource {
 
 	/**

@@ -46,9 +46,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.rapidminer.gui.license.LicenseTools;
-import com.rapidminer.license.License;
-import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.LogService;
 import com.rapidminer.tools.Tools;
 import com.rapidminer.tools.container.Pair;
@@ -110,7 +107,7 @@ public class SplashScreen extends JPanel implements ActionListener {
 	private List<Pair<BufferedImage, Long>> extensionIcons = Collections
 			.synchronizedList(new LinkedList<Pair<BufferedImage, Long>>());
 	private long lastExtensionAdd = 0;
-	private License license;
+//	private License license;
 	private String productEdition;
 	private String productName;
 
@@ -257,13 +254,13 @@ public class SplashScreen extends JPanel implements ActionListener {
 			drawString(g, builder.toString(), y);
 			y += 15;
 		}
-		if (license != null) {
+		if (/*license != null*/false) {
 			g.setFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
 			drawString(g, productEdition, y);
 			y += 15;
-			if (license.getLicenseUser().getName() != null) {
-				drawString(g, I18N.getGUILabel("registered_to", license.getLicenseUser().getName()), y);
-			}
+//			if (license.getLicenseUser().getName() != null) {
+//				drawString(g, I18N.getGUILabel("registered_to", license.getLicenseUser().getName()), y);
+//			}
 			y += 15;
 		} else {
 			y += 30;
@@ -340,13 +337,13 @@ public class SplashScreen extends JPanel implements ActionListener {
 		repaint();
 	}
 
-	/**
-	 * @param license
-	 *            the currently active license
-	 */
-	public void setLicense(License license) {
-		this.license = license;
-		this.productEdition = I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license));
-		this.productName = LicenseTools.translateProductName(license);
-	}
+//	/**
+//	 * @param license
+//	 *            the currently active license
+//	 */
+//	public void setLicense(License license) {
+//		this.license = license;
+//		this.productEdition = I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license));
+//		this.productName = LicenseTools.translateProductName(license);
+//	}
 }

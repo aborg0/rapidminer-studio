@@ -20,17 +20,6 @@
  */
 package com.rapidminer.tools.usagestats;
 
-import com.rapidminer.RapidMiner;
-import com.rapidminer.RapidMinerVersion;
-import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.io.process.XMLTools;
-import com.rapidminer.license.License;
-import com.rapidminer.tools.FileSystemService;
-import com.rapidminer.tools.I18N;
-import com.rapidminer.tools.LogService;
-import com.rapidminer.tools.ProgressListener;
-import com.rapidminer.tools.WebServiceTools;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -50,6 +39,15 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.rapidminer.RapidMiner;
+import com.rapidminer.RapidMinerVersion;
+import com.rapidminer.io.process.XMLTools;
+import com.rapidminer.tools.FileSystemService;
+import com.rapidminer.tools.I18N;
+import com.rapidminer.tools.LogService;
+import com.rapidminer.tools.ProgressListener;
+import com.rapidminer.tools.WebServiceTools;
 
 
 /**
@@ -185,10 +183,10 @@ public class UsageStatistics {
 		root.setAttribute("rapidminer-version", new RapidMinerVersion().toString());
 		root.setAttribute("os-name", System.getProperties().getProperty("os.name"));
 		root.setAttribute("os-version", System.getProperties().getProperty("os.version"));
-		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
-		if ((activeLicense != null) && (activeLicense.getLicenseID() != null)) {
-			root.setAttribute("lid", activeLicense.getLicenseID());
-		}
+//		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
+//		if ((activeLicense != null) && (activeLicense.getLicenseID() != null)) {
+//			root.setAttribute("lid", activeLicense.getLicenseID());
+//		}
 
 		doc.appendChild(root);
 

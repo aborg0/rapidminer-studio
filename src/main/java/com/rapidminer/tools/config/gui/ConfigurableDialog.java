@@ -69,7 +69,6 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jdesktop.swingx.painter.MattePainter;
 
 import com.rapidminer.Process;
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.ApplicationFrame;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ExtendedJScrollPane;
@@ -81,9 +80,6 @@ import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.UpdateQueue;
 import com.rapidminer.gui.tools.components.TransparentGlassPanePanel;
 import com.rapidminer.gui.tools.dialogs.ButtonDialog;
-import com.rapidminer.license.LicenseConstants;
-import com.rapidminer.license.LicenseManagerRegistry;
-import com.rapidminer.license.product.ServerEditions;
 import com.rapidminer.parameter.Parameters;
 import com.rapidminer.repository.Repository;
 import com.rapidminer.repository.RepositoryException;
@@ -885,8 +881,8 @@ public class ConfigurableDialog extends ButtonDialog {
 		int i = 1;
 
 		// only add remote task panes in case the license permits collaboration features
-		if (LicenseManagerRegistry.INSTANCE.get().isAllowed(ProductConstraintManager.INSTANCE.getProduct(),
-		        LicenseConstants.SERVER_EDITION_CONSTRAINT, ServerEditions.COLLABORATION)) {
+		if (/*LicenseManagerRegistry.INSTANCE.get().isAllowed(ProductConstraintManager.INSTANCE.getProduct(),
+		        LicenseConstants.SERVER_EDITION_CONSTRAINT, ServerEditions.COLLABORATION)*/true) {
 			for (final String source : remoteConfigListModels.keySet()) {
 				final JXTaskPane remoteTaskPane = new JXTaskPane();
 				remoteTaskPane.setName("remoteGroup" + i);

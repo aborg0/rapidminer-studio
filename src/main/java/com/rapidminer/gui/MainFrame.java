@@ -55,7 +55,6 @@ import com.rapidminer.ProcessLocation;
 import com.rapidminer.ProcessStorageListener;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RapidMiner.ExitMode;
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.actions.AboutAction;
 import com.rapidminer.gui.actions.Actions;
 import com.rapidminer.gui.actions.AnovaCalculatorAction;
@@ -93,7 +92,6 @@ import com.rapidminer.gui.flow.processrendering.event.ProcessRendererModelEvent;
 import com.rapidminer.gui.flow.processrendering.event.ProcessRendererOperatorEvent;
 import com.rapidminer.gui.flow.processrendering.event.ProcessRendererOperatorEvent.OperatorEvent;
 import com.rapidminer.gui.flow.processrendering.model.ProcessRendererModel;
-import com.rapidminer.gui.license.LicenseTools;
 import com.rapidminer.gui.operatortree.OperatorTree;
 import com.rapidminer.gui.operatortree.OperatorTreePanel;
 import com.rapidminer.gui.operatortree.actions.CutCopyPasteDeleteAction;
@@ -253,7 +251,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener {
 
 	private static final String getFrameTitle() {
 		return "RapidMiner Studio "
-				+ LicenseTools.translateProductEdition(ProductConstraintManager.INSTANCE.getActiveLicense()) + " "
+				/*+ LicenseTools.translateProductEdition(ProductConstraintManager.INSTANCE.getActiveLicense()) + " "*/
 				+ RapidMiner.getLongVersion();
 	}
 

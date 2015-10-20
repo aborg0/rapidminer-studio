@@ -53,13 +53,10 @@ import com.rapidminer.Process;
 import com.rapidminer.ProcessLocation;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RepositoryProcessLocation;
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.actions.OpenAction;
 import com.rapidminer.gui.autosave.AutoSave;
-import com.rapidminer.gui.dialog.EULADialog;
 import com.rapidminer.gui.docking.RapidDockableContainerFactory;
 import com.rapidminer.gui.internal.GUIStartupListener;
-import com.rapidminer.gui.license.LicenseTools;
 import com.rapidminer.gui.look.RapidLookAndFeel;
 import com.rapidminer.gui.look.fc.BookmarkIO;
 import com.rapidminer.gui.look.ui.RapidDockingUISettings;
@@ -72,7 +69,6 @@ import com.rapidminer.gui.tools.logging.LogModel;
 import com.rapidminer.gui.tools.logging.LogModelRegistry;
 import com.rapidminer.gui.tools.logging.LogViewer;
 import com.rapidminer.gui.viewer.MetaDataViewerTableModel;
-import com.rapidminer.license.License;
 import com.rapidminer.parameter.ParameterTypeBoolean;
 import com.rapidminer.parameter.ParameterTypeCategory;
 import com.rapidminer.parameter.ParameterTypeColor;
@@ -284,8 +280,8 @@ public class RapidMinerGUI extends RapidMiner {
 
 		// store (possibly new) active license (necessary, since no
 		// ACTIVE_LICENSE_CHANGED event is fired on startup)
-		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
-		LicenseTools.storeActiveLicenseProperties(activeLicense);
+//		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
+//		LicenseTools.storeActiveLicenseProperties(activeLicense);
 
 		// init logging GUI
 		defaultLogModel = new LogHandlerModel(LogService.getRoot(), SwingTools.createIcon("16/"
@@ -306,18 +302,18 @@ public class RapidMinerGUI extends RapidMiner {
 		setupGUI();
 
 		// check whether current EULA has been accepted
-		if (!EULADialog.getEULAAccepted()) {
-			// show EULA dialog
-			RapidMiner.splashMessage("eula");
-			SwingTools.invokeAndWait(new Runnable() {
-
-				@Override
-				public void run() {
-					EULADialog dialog = new EULADialog();
-					dialog.setVisible(true);
-				}
-			});
-		}
+//		if (!EULADialog.getEULAAccepted()) {
+//			// show EULA dialog
+//			RapidMiner.splashMessage("eula");
+//			SwingTools.invokeAndWait(new Runnable() {
+//
+//				@Override
+//				public void run() {
+//					EULADialog dialog = new EULADialog();
+//					dialog.setVisible(true);
+//				}
+//			});
+//		}
 
 		RapidMiner.splashMessage("history");
 		loadRecentFileList();

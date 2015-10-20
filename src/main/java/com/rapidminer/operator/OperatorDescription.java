@@ -31,13 +31,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.io.process.XMLTools;
-import com.rapidminer.license.License;
-import com.rapidminer.license.LicenseEvent;
-import com.rapidminer.license.LicenseEvent.LicenseEventType;
-import com.rapidminer.license.LicenseManagerListener;
 import com.rapidminer.tools.GenericOperatorFactory;
 import com.rapidminer.tools.GroupTree;
 import com.rapidminer.tools.I18N;
@@ -129,18 +124,18 @@ public class OperatorDescription implements Comparable<OperatorDescription> {
 			}
 		}
 
-		// we need to know when the license changes because operators may become
-		// supported/unsupported, which results in a changed icon */
-		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
-
-			@Override
-			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
-				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
-					isSupportedByLicense = null;
-					updateIcons();
-				}
-			}
-		});
+//		// we need to know when the license changes because operators may become
+//		// supported/unsupported, which results in a changed icon */
+//		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
+//
+//			@Override
+//			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
+//				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
+//					isSupportedByLicense = null;
+//					updateIcons();
+//				}
+//			}
+//		});
 		setIconName(XMLTools.getTagContents(element, "icon"));
 		updateIcons();
 	}
@@ -176,17 +171,17 @@ public class OperatorDescription implements Comparable<OperatorDescription> {
 			}
 		}
 
-		// we need to know when the license changes because operators may become
-		// supported/unsupported, which results in a changed icon */
-		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
-
-			@Override
-			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
-				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
-					refresh();
-				}
-			}
-		});
+//		// we need to know when the license changes because operators may become
+//		// supported/unsupported, which results in a changed icon */
+//		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
+//
+//			@Override
+//			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
+//				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
+//					refresh();
+//				}
+//			}
+//		});
 
 		setIconName(iconName);
 		updateIcons();
@@ -538,12 +533,12 @@ public class OperatorDescription implements Comparable<OperatorDescription> {
 	 */
 	private Boolean isSupportedByLicense() {
 		if (isSupportedByLicense == null) {
-			try {
+//			try {
 				// check for operator annotations
-				isSupportedByLicense = Boolean.valueOf(ProductConstraintManager.INSTANCE
-						.isAllowedByAnnotations(createOperatorInstance()));
-			} catch (OperatorCreationException e) {
-			} // does not really matter
+				isSupportedByLicense = /*Boolean.valueOf(ProductConstraintManager.INSTANCE
+						.isAllowedByAnnotations(createOperatorInstance()))*/true;
+//			} catch (OperatorCreationException e) {
+//			} // does not really matter
 		}
 		if (isSupportedByLicense == null) {
 			isSupportedByLicense = Boolean.TRUE;

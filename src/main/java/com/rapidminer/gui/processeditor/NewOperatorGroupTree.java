@@ -50,7 +50,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.MainFrame;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.actions.ToggleAction;
@@ -70,9 +69,6 @@ import com.rapidminer.gui.tools.components.DropDownButton;
 import com.rapidminer.gui.tools.components.ToolTipWindow;
 import com.rapidminer.gui.tools.components.ToolTipWindow.TipProvider;
 import com.rapidminer.gui.tools.components.ToolTipWindow.TooltipLocation;
-import com.rapidminer.license.LicenseEvent;
-import com.rapidminer.license.LicenseEvent.LicenseEventType;
-import com.rapidminer.license.LicenseManagerListener;
 import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.OperatorCreationException;
 import com.rapidminer.operator.OperatorDescription;
@@ -382,17 +378,17 @@ public class NewOperatorGroupTree extends JPanel implements FilterListener, Sele
 
 		});
 
-		// we need to know when the license changes because operators may become
-		// supported/unsupported
-		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
-
-			@Override
-			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
-				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
-					operatorGroupTree.repaint();
-				}
-			}
-		});
+//		// we need to know when the license changes because operators may become
+//		// supported/unsupported
+//		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
+//
+//			@Override
+//			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
+//				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
+//					operatorGroupTree.repaint();
+//				}
+//			}
+//		});
 
 		new ToolTipWindow(new TipProvider() {
 

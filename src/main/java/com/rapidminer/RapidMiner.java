@@ -34,8 +34,8 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 
-import com.rapidminer.core.license.ActionStatisticsLicenseManagerListener;
-import com.rapidminer.core.license.ProductConstraintManager;
+import org.apache.commons.math3.stat.descriptive.summary.Product;
+
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.properties.SettingsItems;
 import com.rapidminer.gui.renderer.RendererService;
@@ -43,12 +43,6 @@ import com.rapidminer.gui.safemode.SafeMode;
 import com.rapidminer.gui.tools.SplashScreen;
 import com.rapidminer.gui.tools.VersionNumber;
 import com.rapidminer.io.process.XMLImporter;
-import com.rapidminer.license.AlreadyRegisteredException;
-import com.rapidminer.license.InvalidProductException;
-import com.rapidminer.license.License;
-import com.rapidminer.license.location.LicenseLoadingException;
-import com.rapidminer.license.location.LicenseLocation;
-import com.rapidminer.license.product.Product;
 import com.rapidminer.operator.IOObject;
 import com.rapidminer.operator.IOObjectMap;
 import com.rapidminer.operator.ProcessRootOperator;
@@ -556,7 +550,7 @@ public class RapidMiner {
 	 * will be used. If {@link LicenseLocation} is <code>null</code> the default
 	 * {@link LicenseLocation} from {@link ProductConstraintManager} will be used.
 	 */
-	public static void init(final Product product, final LicenseLocation licenseLocation) {
+	public static void init(final Object product, final Object licenseLocation) {
 
 		RapidMiner.splashMessage("init_i18n");
 		I18N.getErrorBundle();
@@ -577,22 +571,22 @@ public class RapidMiner {
 		RapidMiner.splashMessage("license_check");
 
 		// initialize product constraint manager
-		try {
-			if (!ProductConstraintManager.INSTANCE.isInitialized()) {
-				ProductConstraintManager.INSTANCE.initialize(licenseLocation, product);
-			}
-		} catch (IllegalAccessException | AlreadyRegisteredException | LicenseLoadingException | InvalidProductException e) {
-			// should never happen
-			throw new RuntimeException("Product constraint manager could not be initialized!", e);
-		}
+//		try {
+//			if (!ProductConstraintManager.INSTANCE.isInitialized()) {
+//				ProductConstraintManager.INSTANCE.initialize(licenseLocation, product);
+//			}
+//		} catch (IllegalAccessException | AlreadyRegisteredException | LicenseLoadingException | InvalidProductException e) {
+//			// should never happen
+//			throw new RuntimeException("Product constraint manager could not be initialized!", e);
+//		}
 
 		// show product name, version, edition and registered to
-		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
+//		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
 		RapidMiner.showSplashInfos();
-		RapidMiner.splashLicense(activeLicense);
+//		RapidMiner.splashLicense(activeLicense);
 
 		// install action statistics license event listener
-		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(ActionStatisticsLicenseManagerListener.INSTANCE);
+//		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(ActionStatisticsLicenseManagerListener.INSTANCE);
 
 		// init repositories
 		RapidMiner.splashMessage("init_repository");
@@ -711,12 +705,12 @@ public class RapidMiner {
 		}
 	}
 
-	/** Displays the edition and registered to info. */
-	public static void splashLicense(final License license) {
-		if (RapidMiner.splashScreen != null) {
-			RapidMiner.splashScreen.setLicense(license);
-		}
-	}
+//	/** Displays the edition and registered to info. */
+//	public static void splashLicense(final License license) {
+//		if (RapidMiner.splashScreen != null) {
+//			RapidMiner.splashScreen.setLicense(license);
+//		}
+//	}
 
 	/** Displays the formatted message with 18n key gui.splash.messageKey. */
 	public static void splashMessage(final String messageKey, final Object... args) {

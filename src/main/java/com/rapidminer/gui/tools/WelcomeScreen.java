@@ -63,7 +63,6 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import com.rapidminer.ProcessLocation;
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.MainFrame;
 import com.rapidminer.gui.Perspectives;
 import com.rapidminer.gui.RapidMinerGUI;
@@ -76,7 +75,6 @@ import com.rapidminer.gui.look.ui.EditorPaneUI;
 import com.rapidminer.gui.tools.components.FancyButton;
 import com.rapidminer.gui.tools.components.FancyConstants;
 import com.rapidminer.gui.tools.components.FancyDropDownButton;
-import com.rapidminer.license.License;
 import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.LogService;
 import com.rapidminer.tools.RMUrlHandler;
@@ -363,10 +361,10 @@ public final class WelcomeScreen extends ImagePanel implements Dockable {
 			newsPane.setPreferredSize(new Dimension(300, 180));
 			try {
 				String url = I18N.getMessage(I18N.getGUIBundle(), "gui.label.news.url");
-				License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
-				if (activeLicense != null && activeLicense.getLicenseID() != null) {
-					url += "?lid=" + activeLicense.getLicenseID();
-				}
+//				License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
+//				if (activeLicense != null && activeLicense.getLicenseID() != null) {
+//					url += "?lid=" + activeLicense.getLicenseID();
+//				}
 				newsPane.setPage(url);
 			} catch (IOException e2) {
 				LogService.getRoot().log(

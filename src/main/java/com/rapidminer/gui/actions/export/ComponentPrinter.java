@@ -20,10 +20,6 @@
  */
 package com.rapidminer.gui.actions.export;
 
-import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.gui.license.LicenseTools;
-import com.rapidminer.gui.tools.PrintingTools;
-
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,6 +27,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Pageable;
 import java.awt.print.Printable;
+
+import com.rapidminer.gui.tools.PrintingTools;
 
 
 /**
@@ -78,7 +76,7 @@ public class ComponentPrinter implements Printable, Pageable {
 
 		String title = components[pageIndex].getExportName();
 		if (title == null) {
-			title = LicenseTools.translateProductName(ProductConstraintManager.INSTANCE.getActiveLicense());
+			title = "";//LicenseTools.translateProductName(ProductConstraintManager.INSTANCE.getActiveLicense());
 		}
 		Rectangle2D rect = TITLE_FONT.getStringBounds(title, ((Graphics2D) g).getFontRenderContext());
 		g.setFont(TITLE_FONT);

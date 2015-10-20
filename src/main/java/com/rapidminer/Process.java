@@ -48,13 +48,10 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.rapidminer.core.license.LicenseViolationException;
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.datatable.DataTable;
 import com.rapidminer.datatable.SimpleDataTable;
 import com.rapidminer.example.table.AttributeFactory;
 import com.rapidminer.io.process.XMLImporter;
-import com.rapidminer.license.violation.LicenseViolation;
 import com.rapidminer.operator.Annotations;
 import com.rapidminer.operator.DebugMode;
 import com.rapidminer.operator.DummyOperator;
@@ -995,12 +992,12 @@ public class Process extends AbstractObservable<Process> implements Cloneable {
 			// we only care about enabled operators
 			if (op.isEnabled()) {
 
-				// Check for annotations that constrain access to the current operator
-				List<LicenseViolation> licenseViolations = ProductConstraintManager.INSTANCE.checkAnnotationViolations(op,
-						true);
-				if (!licenseViolations.isEmpty()) {
-					throw new LicenseViolationException(op, licenseViolations);
-				}
+//				// Check for annotations that constrain access to the current operator
+//				List<LicenseViolation> licenseViolations = ProductConstraintManager.INSTANCE.checkAnnotationViolations(op,
+//						true);
+//				if (!licenseViolations.isEmpty()) {
+//					throw new LicenseViolationException(op, licenseViolations);
+//				}
 
 				// as a side effect mark all enabled operators as dirty
 				// so it is clear which ones have already been executed

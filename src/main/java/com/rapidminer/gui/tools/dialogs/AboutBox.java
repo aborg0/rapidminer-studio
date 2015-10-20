@@ -48,12 +48,9 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import com.rapidminer.gui.license.LicenseTools;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.components.LinkButton;
-import com.rapidminer.license.License;
-import com.rapidminer.license.LicenseConstants;
 import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.LogService;
 import com.rapidminer.tools.PlatformUtilities;
@@ -237,7 +234,7 @@ public class AboutBox extends JDialog {
 		this(owner, createProperties(productName, productVersion, licensor, url, text, renderTextNextToLogo), productLogo);
 	}
 
-	public AboutBox(Frame owner, String productVersion, License license, Image productLogo) {
+	public AboutBox(Frame owner, String productVersion, /*License*/Object license, Image productLogo) {
 		this(owner, createProperties(productVersion, license), productLogo);
 	}
 
@@ -314,7 +311,7 @@ public class AboutBox extends JDialog {
 		return properties;
 	}
 
-	private static Properties createProperties(String productVersion, License license) {
+	private static Properties createProperties(String productVersion, Object license) {
 		Properties properties = new Properties();
 		try {
 			URL propUrl = Tools.getResource(PROPERTY_FILE);
@@ -327,18 +324,18 @@ public class AboutBox extends JDialog {
 			LogService.getRoot().log(Level.SEVERE, "com.rapidminer.gui.tools.dialogs.AboutBox.reading_splash_screen_error",
 					e.getMessage());
 		}
-		properties.setProperty("name", LicenseTools.translateProductName(license));
+		properties.setProperty("name", "RapidMiner");//LicenseTools.translateProductName(license));
 		properties.setProperty("version", productVersion);
-		if (LicenseConstants.DEFAULT_PRODUCT_ID.equals(license.getProductId())
-				&& PlatformUtilities.getReleaseRevision() != null) {
+		if (/*LicenseConstants.DEFAULT_PRODUCT_ID.equals(license.getProductId())
+				&&*/ PlatformUtilities.getReleaseRevision() != null) {
 			properties.setProperty("revision", PlatformUtilities.getReleaseRevision());
 			properties.setProperty("platform", PlatformUtilities.getReleasePlatform().toString());
 		}
-		properties
-		.setProperty("edition", I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license)));
-		if (license.getLicenseUser().getName() != null) {
-			properties.setProperty("registered_to", license.getLicenseUser().getName());
-		}
+//		properties
+//		.setProperty("edition", I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license)));
+//		if (license.getLicenseUser().getName() != null) {
+//			properties.setProperty("registered_to", license.getLicenseUser().getName());
+//		}
 		Plugin.initAboutTexts(properties);
 		return properties;
 	}
