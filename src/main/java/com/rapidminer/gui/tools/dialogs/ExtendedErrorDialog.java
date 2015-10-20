@@ -28,7 +28,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Locale;
 
 import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
@@ -36,16 +35,14 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import org.apache.xmlrpc.client.XmlRpcClient;
 
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RapidMiner.ExecutionMode;
@@ -53,18 +50,14 @@ import com.rapidminer.gui.ApplicationFrame;
 import com.rapidminer.gui.MainFrame;
 import com.rapidminer.gui.Perspectives;
 import com.rapidminer.gui.RapidMinerGUI;
-import com.rapidminer.gui.dialog.BugZillaAssistant;
 import com.rapidminer.gui.tools.ExtendedJScrollPane;
-import com.rapidminer.gui.tools.ProgressThread;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.components.LinkButton;
-import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.UserError;
 import com.rapidminer.repository.RepositoryException;
 import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.Tools;
-import com.rapidminer.tools.XmlRpcHandler;
 
 
 /**
@@ -320,73 +313,76 @@ public class ExtendedErrorDialog extends ButtonDialog {
 
 		}
 		if (isBug) {
-			sendReport = new JButton(new ResourceAction("send_bugreport") {
+			ResourceAction sendBugReportAction = new ResourceAction("send_bugreport") {
 
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// in case of UserError, ask if the user really wants to send a bugreport
-					// because it's likely not a bug
-					if (error instanceof UserError) {
-						if (SwingTools.showConfirmDialog("send_bugreport.confirm", ConfirmDialog.YES_NO_OPTION) == ConfirmDialog.NO_OPTION) {
-							return;
-						}
-					}
-					// create bug report window and connect to BugZilla
-					new ProgressThread("connect_to_bugzilla", false) {
-
-						@Override
-						public void run() {
-							sendReport.setEnabled(false);
-							final BugZillaAssistant bugAst;
-							getProgressListener().setTotal(100);
-							getProgressListener().setCompleted(10);
-							char[] pw = new char[] { '!', 'z', '4', '8', '#', 'H', 'c', '2', '$', '%', 'm', ')', '9', '+',
-									'*', '*' };
-							String email = "bugs@rapid-i.com";
-							try {
-								XmlRpcClient rpcClient = XmlRpcHandler.login(XmlRpcHandler.BUGZILLA_URL, email, pw);
-								getProgressListener().setCompleted(20);
-								bugAst = new BugZillaAssistant(this, error, rpcClient);
-							} catch (Exception e) {
-								SwingTools.showVerySimpleErrorMessage("bugreport_xmlrpc_init_error");
-								return;
-							} finally {
-								for (int i = 0; i < pw.length; i++) {
-									pw[i] = 0;
-								}
-								getProgressListener().complete();
-								sendReport.setEnabled(true);
-							}
-							if (!isCancelled()) {
-								SwingUtilities.invokeLater(new Runnable() {
-
-									@Override
-									public void run() {
-										// if operator from import group is present, ask the user to
-										// include the data in the bug report
-										if (RapidMinerGUI.getMainFrame() != null
-												&& RapidMinerGUI.getMainFrame().getProcess() != null) {
-											for (Operator op : RapidMinerGUI.getMainFrame().getProcess().getAllOperators()) {
-												if (op.getOperatorDescription().getGroup().toLowerCase(Locale.ENGLISH)
-														.contains("import")
-														|| op.getName().toLowerCase(Locale.ENGLISH).equals("retrieve")) {
-													SwingTools.showMessageDialog("send_bugreport.import_operator_message");
-													break;
-												}
-											}
-										}
-										bugAst.setVisible(true);
-									}
-								});
-							} else {
-								bugAst.dispose();
-							}
-						}
-					}.start();
+					JOptionPane.showMessageDialog(null, "Bug reporting is disabled.");
+//					// in case of UserError, ask if the user really wants to send a bugreport
+//					// because it's likely not a bug
+//					if (error instanceof UserError) {
+//						if (SwingTools.showConfirmDialog("send_bugreport.confirm", ConfirmDialog.YES_NO_OPTION) == ConfirmDialog.NO_OPTION) {
+//							return;
+//						}
+//					}
+//					// create bug report window and connect to BugZilla
+//					new ProgressThread("connect_to_bugzilla", false) {
+//
+//						@Override
+//						public void run() {
+//							sendReport.setEnabled(false);
+//							final BugZillaAssistant bugAst;
+//							getProgressListener().setTotal(100);
+//							getProgressListener().setCompleted(10);
+//							char[] pw = new char[] { '!', 'z', '4', '8', '#', 'H', 'c', '2', '$', '%', 'm', ')', '9', '+',
+//									'*', '*' };
+//							String email = "bugs@rapid-i.com";
+//							try {
+//								XmlRpcClient rpcClient = XmlRpcHandler.login(XmlRpcHandler.BUGZILLA_URL, email, pw);
+//								getProgressListener().setCompleted(20);
+//								bugAst = new BugZillaAssistant(this, error, rpcClient);
+//							} catch (Exception e) {
+//								SwingTools.showVerySimpleErrorMessage("bugreport_xmlrpc_init_error");
+//								return;
+//							} finally {
+//								for (int i = 0; i < pw.length; i++) {
+//									pw[i] = 0;
+//								}
+//								getProgressListener().complete();
+//								sendReport.setEnabled(true);
+//							}
+//							if (!isCancelled()) {
+//								SwingUtilities.invokeLater(new Runnable() {
+//
+//									@Override
+//									public void run() {
+//										// if operator from import group is present, ask the user to
+//										// include the data in the bug report
+//										if (RapidMinerGUI.getMainFrame() != null
+//												&& RapidMinerGUI.getMainFrame().getProcess() != null) {
+//											for (Operator op : RapidMinerGUI.getMainFrame().getProcess().getAllOperators()) {
+//												if (op.getOperatorDescription().getGroup().toLowerCase(Locale.ENGLISH)
+//														.contains("import")
+//														|| op.getName().toLowerCase(Locale.ENGLISH).equals("retrieve")) {
+//													SwingTools.showMessageDialog("send_bugreport.import_operator_message");
+//													break;
+//												}
+//											}
+//										}
+//										bugAst.setVisible(true);
+//									}
+//								});
+//							} else {
+//								bugAst.dispose();
+//							}
+//						}
+//					}.start();
 				}
-			});
+			};
+			sendBugReportAction.setEnabled(false);
+			sendReport = new JButton(sendBugReportAction);
 			// don't show "Send bugreport" button if this dialog is shown when RM is only embedded
 			if (!RapidMiner.getExecutionMode().equals(ExecutionMode.EMBEDDED_WITH_UI)) {
 				buttons.add(sendReport);
@@ -464,12 +460,12 @@ public class ExtendedErrorDialog extends ButtonDialog {
 		}
 	}
 
-	private class StackTraceList extends JList {
+	private class StackTraceList extends JList<Object> {
 
 		private static final long serialVersionUID = -2482220036723949144L;
 
 		public StackTraceList(Throwable t) {
-			super(new DefaultListModel());
+			super(new DefaultListModel<Object>());
 			setFont(getFont().deriveFont(Font.PLAIN));
 			setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			appendAllStackTraces(t);
@@ -490,8 +486,8 @@ public class ExtendedErrorDialog extends ButtonDialog {
 			});
 		}
 
-		private DefaultListModel model() {
-			return (DefaultListModel) getModel();
+		private DefaultListModel<Object> model() {
+			return (DefaultListModel<Object>) getModel();
 		}
 
 		private void appendAllStackTraces(Throwable throwable) {
