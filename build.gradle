@@ -108,8 +108,8 @@ dependencies {
 	embedded 'com.rapidminer.studio:rapidminer-studio-osx-adapter:1.0.1'
 
 	// RapidMiner license framework for license management
-	embedded 'com.rapidminer.license:rapidminer-license-api:3.1.0'
-	embedded 'com.rapidminer.license:rapidminer-license-commons:3.1.0'
+//	embedded 'com.rapidminer.license:rapidminer-license-api:3.1.0'
+//	embedded 'com.rapidminer.license:rapidminer-license-commons:3.1.0'
 
 	// RapidMiner API
 	//compile 'com.mind_era.com.rapidminer:rapidminer-api:0.1.1'
@@ -227,7 +227,7 @@ dependencies {
 jar {
 	manifest {
 	//com.sun.management should be provided.
-    	instruction 'Import-Package', '!com.sun.*,!sun.*,*'
+    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,*'
 	}
 	//From: http://kennethjorgensen.com/blog/2014/fat-jars-with-excluded-dependencies-in-gradle
 	dependsOn configurations.runtime
