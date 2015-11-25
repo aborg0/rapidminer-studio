@@ -69,7 +69,6 @@ import com.rapidminer.gui.look.fc.Bookmark;
 import com.rapidminer.gui.look.fc.BookmarkIO;
 import com.rapidminer.gui.tools.dialogs.ConfirmDialog;
 import com.rapidminer.gui.tools.dialogs.ErrorDialog;
-import com.rapidminer.gui.tools.dialogs.ExtendedErrorDialog;
 import com.rapidminer.gui.tools.dialogs.InputDialog;
 import com.rapidminer.gui.tools.dialogs.LongMessageDialog;
 import com.rapidminer.gui.tools.dialogs.MessageDialog;
@@ -820,14 +819,6 @@ public class SwingTools {
 			LogService.getRoot().log(Level.WARNING, I18N.getMessage(LogService.getRoot().getResourceBundle(),
 			        "com.rapidminer.gui.tools.SwingTools.show_simple_get_message", e.getMessage()), e);
 		}
-		invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ExtendedErrorDialog dialog = new ExtendedErrorDialog(key, e, displayExceptionMessage, arguments);
-				dialog.setVisible(true);
-			}
-		});
 	}
 
 	/**
@@ -848,15 +839,6 @@ public class SwingTools {
 	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
 	 */
 	public static void showSimpleErrorMessage(final String key, final String errorMessage, final Object... arguments) {
-		invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ExtendedErrorDialog dialog = new ExtendedErrorDialog(key, errorMessage, arguments);
-				dialog.setVisible(true);
-			}
-		});
-
 		// if debug mode is enabled, print throwable into logger
 		if (ParameterService.getParameterValue(RapidMiner.PROPERTY_RAPIDMINER_GENERAL_DEBUGMODE).equals("true")) {
 			LogService.getRoot().log(Level.WARNING, errorMessage);
@@ -884,14 +866,6 @@ public class SwingTools {
 		if (ParameterService.getParameterValue(RapidMiner.PROPERTY_RAPIDMINER_GENERAL_DEBUGMODE).equals("true")) {
 			LogService.getRoot().log(Level.SEVERE, e.getMessage(), e);
 		}
-		invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ExtendedErrorDialog dialog = new ExtendedErrorDialog(key, e, displayExceptionMessage, objects);
-				dialog.setVisible(true);
-			}
-		});
 	}
 
 	/**
