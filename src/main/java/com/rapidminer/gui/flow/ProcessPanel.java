@@ -35,7 +35,8 @@ import javax.swing.JToggleButton;
 import javax.swing.JViewport;
 
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.AbstractUIState;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.actions.AutoWireAction;
 import com.rapidminer.gui.flow.processrendering.annotations.AnnotationsVisualizer;
 import com.rapidminer.gui.flow.processrendering.annotations.model.WorkflowAnnotation;
@@ -83,7 +84,7 @@ public class ProcessPanel extends JPanel implements Dockable, ProcessEditor {
 
 	private final JScrollPane scrollPane;
 
-	public ProcessPanel(final MainFrame mainFrame) {
+	public ProcessPanel(final MainUIState mainFrame) {
 		processButtonBar = new ProcessButtonBar(mainFrame);
 
 		ProcessRendererModel model = new ProcessRendererModel();
@@ -144,7 +145,7 @@ public class ProcessPanel extends JPanel implements Dockable, ProcessEditor {
 		toolBar.add(renderer.getArrangeOperatorsAction(), ViewToolBar.RIGHT);
 		toolBar.add(flowVisualizer.SHOW_ORDER_TOGGLEBUTTON, ViewToolBar.RIGHT);
 		toolBar.add(renderer.getAutoFitAction(), ViewToolBar.RIGHT);
-		JToggleButton toggleRealMetadataPropagationButton = new JToggleButton(mainFrame.PROPAGATE_REAL_METADATA_ACTION);
+		JToggleButton toggleRealMetadataPropagationButton = new JToggleButton(mainFrame.getPropagateRealMetadataAction());
 		toggleRealMetadataPropagationButton.setText("");
 		toolBar.add(toggleRealMetadataPropagationButton, ViewToolBar.RIGHT);
 
@@ -237,7 +238,7 @@ public class ProcessPanel extends JPanel implements Dockable, ProcessEditor {
 	public static final String PROCESS_PANEL_DOCK_KEY = "process_panel";
 	private final DockKey DOCK_KEY = new ResourceDockKey(PROCESS_PANEL_DOCK_KEY);
 	{
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 	}
 
 	@Override

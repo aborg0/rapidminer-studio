@@ -20,11 +20,11 @@
  */
 package com.rapidminer.gui.actions;
 
-import com.rapidminer.gui.MainFrame;
-import com.rapidminer.gui.Perspectives;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+
+import com.rapidminer.gui.MainUIState;
+import com.rapidminer.gui.Perspectives;
 
 
 /**
@@ -35,9 +35,9 @@ import java.awt.event.ActionEvent;
 public class WelcomeNewAction extends WelcomeAction {
 
 	private static final long serialVersionUID = 1358354112149248404L;
-	private MainFrame mainFrame;
+	private MainUIState mainFrame;
 
-	public WelcomeNewAction(MainFrame mainFrame) {
+	public WelcomeNewAction(MainUIState mainFrame) {
 
 		super("new", new Color(42, 127, 197));
 		this.mainFrame = mainFrame;

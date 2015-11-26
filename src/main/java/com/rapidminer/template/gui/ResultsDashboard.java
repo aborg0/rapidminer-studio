@@ -20,37 +20,6 @@
  */
 package com.rapidminer.template.gui;
 
-import com.rapidminer.example.ExampleSet;
-import com.rapidminer.gui.MainFrame;
-import com.rapidminer.gui.Perspectives;
-import com.rapidminer.gui.RapidMinerGUI;
-import com.rapidminer.gui.actions.export.PrintableComponent;
-import com.rapidminer.gui.plotter.PlotterConfigurationSettings;
-import com.rapidminer.gui.processeditor.results.ResultDisplayTools;
-import com.rapidminer.gui.renderer.AbstractGraphRenderer;
-import com.rapidminer.gui.renderer.Renderer;
-import com.rapidminer.gui.renderer.RendererService;
-import com.rapidminer.gui.tools.ExtendedHTMLJEditorPane;
-import com.rapidminer.gui.tools.PrintingTools;
-import com.rapidminer.gui.tools.ResourceAction;
-import com.rapidminer.gui.tools.SwingTools;
-import com.rapidminer.gui.tools.components.LinkButton;
-import com.rapidminer.gui.tools.components.ToolTipWindow;
-import com.rapidminer.gui.tools.components.ToolTipWindow.TipProvider;
-import com.rapidminer.gui.tour.BubbleWindow;
-import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
-import com.rapidminer.gui.tour.ComponentBubbleWindow;
-import com.rapidminer.operator.IOContainer;
-import com.rapidminer.operator.IOObject;
-import com.rapidminer.operator.ResultObject;
-import com.rapidminer.report.Renderable;
-import com.rapidminer.report.Reportable;
-import com.rapidminer.repository.IOObjectEntry;
-import com.rapidminer.template.TemplateController;
-import com.rapidminer.template.TemplateState;
-import com.rapidminer.tools.I18N;
-import com.rapidminer.tools.LogService;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -87,6 +56,37 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+
+import com.rapidminer.example.ExampleSet;
+import com.rapidminer.gui.MainUIState;
+import com.rapidminer.gui.Perspectives;
+import com.rapidminer.gui.RapidMinerGUI;
+import com.rapidminer.gui.actions.export.PrintableComponent;
+import com.rapidminer.gui.plotter.PlotterConfigurationSettings;
+import com.rapidminer.gui.processeditor.results.ResultDisplayTools;
+import com.rapidminer.gui.renderer.AbstractGraphRenderer;
+import com.rapidminer.gui.renderer.Renderer;
+import com.rapidminer.gui.renderer.RendererService;
+import com.rapidminer.gui.tools.ExtendedHTMLJEditorPane;
+import com.rapidminer.gui.tools.PrintingTools;
+import com.rapidminer.gui.tools.ResourceAction;
+import com.rapidminer.gui.tools.SwingTools;
+import com.rapidminer.gui.tools.components.LinkButton;
+import com.rapidminer.gui.tools.components.ToolTipWindow;
+import com.rapidminer.gui.tools.components.ToolTipWindow.TipProvider;
+import com.rapidminer.gui.tour.BubbleWindow;
+import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
+import com.rapidminer.gui.tour.ComponentBubbleWindow;
+import com.rapidminer.operator.IOContainer;
+import com.rapidminer.operator.IOObject;
+import com.rapidminer.operator.ResultObject;
+import com.rapidminer.report.Renderable;
+import com.rapidminer.report.Reportable;
+import com.rapidminer.repository.IOObjectEntry;
+import com.rapidminer.template.TemplateController;
+import com.rapidminer.template.TemplateState;
+import com.rapidminer.tools.I18N;
+import com.rapidminer.tools.LogService;
 
 
 /**
@@ -519,7 +519,7 @@ public class ResultsDashboard extends JPanel implements PrintableComponent {
 		if (alignment == null) {
 			alignment = AlignedSide.BOTTOM;
 		}
-		final ComponentBubbleWindow bubble = new ComponentBubbleWindow(wrapper, RapidMinerGUI.getMainFrame(), alignment,
+		final ComponentBubbleWindow bubble = new ComponentBubbleWindow(wrapper, RapidMinerGUI.getMainFrame().getWindow(), alignment,
 				"bla", null, new JButton[] { new JButton(new ResourceAction("template.got_it") {
 
 					private static final long serialVersionUID = 1L;
@@ -607,7 +607,7 @@ public class ResultsDashboard extends JPanel implements PrintableComponent {
 
 								@Override
 								public void run() {
-									MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+									MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 									mainFrame.selectOperator(mainFrame.getProcess().getOperator(linkedOperator));
 									mainFrame.getPerspectives().showPerspective(Perspectives.DESIGN);
 								}

@@ -20,6 +20,9 @@
  */
 package com.rapidminer.template.gui;
 
+import java.awt.event.ActionEvent;
+import java.io.File;
+
 import com.rapidminer.example.ExampleSet;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
@@ -29,9 +32,6 @@ import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.io.ExcelExampleSetWriter;
 import com.rapidminer.template.TemplateState;
 import com.rapidminer.tools.OperatorService;
-
-import java.awt.event.ActionEvent;
-import java.io.File;
 
 
 /**
@@ -55,7 +55,7 @@ public class ExportExcelAction extends ResourceAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame(), "import_process", null, true, false,
+		final File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame().getWindow(), "import_process", null, true, false,
 				new String[] { "xls" }, new String[] { "Excel spreadsheet" });
 		if (file == null) {
 			return;

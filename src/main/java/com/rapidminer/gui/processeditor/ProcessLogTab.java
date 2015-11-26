@@ -20,20 +20,20 @@
  */
 package com.rapidminer.gui.processeditor;
 
-import com.rapidminer.datatable.DataTable;
-import com.rapidminer.gui.MainFrame;
-import com.rapidminer.gui.tools.ResourceLabel;
-import com.rapidminer.gui.tools.SwingTools;
-import com.rapidminer.gui.viewer.DataTableViewer;
-import com.vlsolutions.swing.docking.DockKey;
-import com.vlsolutions.swing.docking.Dockable;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JPanel;
+
+import com.rapidminer.datatable.DataTable;
+import com.rapidminer.gui.AbstractUIState;
+import com.rapidminer.gui.tools.ResourceLabel;
+import com.rapidminer.gui.tools.SwingTools;
+import com.rapidminer.gui.viewer.DataTableViewer;
+import com.vlsolutions.swing.docking.DockKey;
+import com.vlsolutions.swing.docking.Dockable;
 
 
 /**
@@ -54,7 +54,7 @@ public class ProcessLogTab extends JPanel implements Dockable {
 		setLayout(new BorderLayout());
 		this.dockKey = new DockKey(key);
 		dockKey.setIcon(DATA_TABLE_ICON);
-		dockKey.setDockGroup(MainFrame.DOCK_GROUP_RESULTS);
+		dockKey.setDockGroup(AbstractUIState.DOCK_GROUP_RESULTS);
 	}
 
 	public void setDataTableViewer(DataTableViewer viewer) {

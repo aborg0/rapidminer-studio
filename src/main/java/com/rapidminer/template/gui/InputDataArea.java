@@ -212,7 +212,7 @@ public class InputDataArea extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame(), "import_data", null, true, false,
+				final File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame().getWindow(), "import_data", null, true, false,
 						new String[] { "xls", "xlsx", "csv", "tsv", "xml" }, new String[] { "Excel spreadsheet",
 					"Excel  2007 spreadsheet", "Comma separated values", "Tab separated values", "XML files" },
 					false);

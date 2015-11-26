@@ -149,7 +149,7 @@ public abstract class ApplicationPerspectives {
 		}
 
 		// TODO: change to listener mechanism
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		if (mainFrame != null) {
 
 			// check all ConditionalActions on perspective switch

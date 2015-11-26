@@ -79,7 +79,7 @@ import org.xml.sax.SAXException;
 
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RepositoryProcessLocation;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.ProcessState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.VersionNumber;
 import com.rapidminer.io.process.XMLImporter;
@@ -831,7 +831,7 @@ public class Tools {
 		Charset result = null;
 
 		if (RapidMiner.getExecutionMode().hasMainFrame()) {
-			MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+            ProcessState mainFrame = RapidMinerGUI.getMainFrame();
 			if (mainFrame != null) {
 				com.rapidminer.Process process = mainFrame.getProcess();
 				if (process != null) {

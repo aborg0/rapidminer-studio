@@ -58,6 +58,7 @@ import javax.swing.text.html.StyleSheet;
 
 import com.rapidminer.Process;
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.look.ui.EditorPaneUI;
 import com.rapidminer.gui.processeditor.ExtendedProcessEditor;
@@ -106,7 +107,7 @@ public class TemplateView extends JPanel implements Dockable {
 	private JPanel cards = new JPanel(cardLayout);
 	private TemplateController controller = new TemplateController();;
 
-	public TemplateView(MainFrame mainFrame) {
+	public TemplateView(MainUIState mainFrame) {
 		setLayout(new BorderLayout(0, 15));
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

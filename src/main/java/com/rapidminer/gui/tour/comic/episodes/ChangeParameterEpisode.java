@@ -306,7 +306,7 @@ public class ChangeParameterEpisode extends AbstractEpisode {
 		@Override
 		public void onTransition(final AbstractEpisode episode) {
 			super.onTransition(episode);
-			goBackToDesignBubble = new ButtonBubble(RapidMinerGUI.getMainFrame(), null, AlignedSide.BOTTOM,
+			goBackToDesignBubble = new ButtonBubble(RapidMinerGUI.getMainFrame().getWindow(), null, AlignedSide.BOTTOM,
 					"design_perspective_go_back_comic", "workspace_design", "result");
 			goBackToDesignBubble.setVisible(true);
 		}

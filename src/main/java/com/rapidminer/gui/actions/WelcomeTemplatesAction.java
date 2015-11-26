@@ -20,11 +20,11 @@
  */
 package com.rapidminer.gui.actions;
 
-import com.rapidminer.gui.MainFrame;
-import com.rapidminer.gui.Perspectives;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+
+import com.rapidminer.gui.MainUIState;
+import com.rapidminer.gui.Perspectives;
 
 
 /**
@@ -36,9 +36,9 @@ public class WelcomeTemplatesAction extends WelcomeAction {
 
 	private static final long serialVersionUID = 1358354112149248404L;
 
-	private MainFrame mainFrame;
+	private MainUIState mainFrame;
 
-	public WelcomeTemplatesAction(MainFrame mainFrame) {
+	public WelcomeTemplatesAction(MainUIState mainFrame) {
 		super("templates", new Color(100, 100, 100), false);
 		this.mainFrame = mainFrame;
 	}

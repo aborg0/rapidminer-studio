@@ -20,6 +20,23 @@
  */
 package com.rapidminer.gui.tour.comic.gui;
 
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import com.rapidminer.Process;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.NotificationPopup;
@@ -33,22 +50,6 @@ import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
 import com.rapidminer.gui.tour.ButtonBubble;
 import com.rapidminer.gui.tour.comic.episodes.AbstractEpisode;
 import com.rapidminer.tools.I18N;
-
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 
 /**
@@ -169,7 +170,9 @@ public class ComicGuiTools {
 			}
 		};
 
-		return NotificationPopup.showFadingPopup(notificationPanel, RapidMinerGUI.getMainFrame().getContentPane(),
+		final JFrame window = RapidMinerGUI.getMainFrame().getWindow();
+		final Container contentPane = window != null ? window.getContentPane() : null;
+		return NotificationPopup.showFadingPopup(notificationPanel, contentPane,
 				PopupLocation.CENTER, DELAY_SUCCESS_BEFORE_FADE, 0, 0, BorderFactory.createLineBorder(Color.GRAY, 1, false),
 				listener);
 	}
@@ -181,7 +184,7 @@ public class ComicGuiTools {
 	public static void showComicHintBubble() {
 		// show hint bubble if user did not click on "next tutorial" link button
 		if (!ComicDialog.getInstance().isVisible()) {
-			BubbleWindow moreComicsBubble = new ButtonBubble(RapidMinerGUI.getMainFrame(), null, AlignedSide.BOTTOM,
+			BubbleWindow moreComicsBubble = new ButtonBubble(RapidMinerGUI.getMainFrame().getWindow(), null, AlignedSide.BOTTOM,
 					"comic_button_comic", "comic_dropdown");
 			moreComicsBubble.setVisible(true);
 		}

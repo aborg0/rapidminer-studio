@@ -20,16 +20,16 @@
  */
 package com.rapidminer.gui;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+
+import javax.swing.SwingUtilities;
+
 import com.rapidminer.Process;
 import com.rapidminer.gui.tools.ProgressThread;
 import com.rapidminer.gui.tools.UpdateQueue;
 import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.LogService;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-
-import javax.swing.SwingUtilities;
 
 
 /**
@@ -40,9 +40,9 @@ import javax.swing.SwingUtilities;
  */
 public class MetaDataUpdateQueue extends UpdateQueue {
 
-	private final MainFrame mainFrame;
+	private final MainUIState mainFrame;
 
-	public MetaDataUpdateQueue(MainFrame mainFrame) {
+	public MetaDataUpdateQueue(MainUIState mainFrame) {
 		super("MetaDataValidation");
 		this.mainFrame = mainFrame;
 		this.setPriority(MIN_PRIORITY);
@@ -65,7 +65,7 @@ public class MetaDataUpdateQueue extends UpdateQueue {
 					public void run() {
 						getProgressListener().setTotal(100);
 						getProgressListener().setCompleted(10);
-						if (force || mainFrame.VALIDATE_AUTOMATICALLY_ACTION.isSelected()) {
+						if (force || mainFrame.getValidateAutomaticallyAction().isSelected()) {
 							process.getRootOperator().checkAll();
 						} else {
 							process.getRootOperator().checkAllExcludingMetaData();

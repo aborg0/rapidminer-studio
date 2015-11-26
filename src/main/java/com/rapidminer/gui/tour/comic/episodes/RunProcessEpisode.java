@@ -109,7 +109,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 			// only show perspective bubble on first launch, not when we re-enter this via error
 			// state
 			if (firstTime) {
-				designBubble = new ButtonBubble(RapidMinerGUI.getMainFrame(), null, AlignedSide.BOTTOM,
+				designBubble = new ButtonBubble(RapidMinerGUI.getMainFrame().getWindow(), null, AlignedSide.BOTTOM,
 						"design_perspective_comic", "workspace_design", true, true,
 						new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 				registerBubble(designBubble);
@@ -118,7 +118,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 					@Override
 					public void bubbleClosed(BubbleWindow bw) {
-						repositoryBubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT,
+						repositoryBubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT,
 								"repository_comic", RepositoryBrowser.REPOSITORY_BROWSER_DOCK_KEY,
 								new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 						registerBubble(repositoryBubble);
@@ -128,7 +128,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 					@Override
 					public void actionPerformed(BubbleWindow bw) {
-						repositoryBubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT,
+						repositoryBubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT,
 								"repository_comic", RepositoryBrowser.REPOSITORY_BROWSER_DOCK_KEY,
 								new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 						registerBubble(repositoryBubble);
@@ -138,7 +138,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 				});
 				firstTime = false;
 			} else {
-				repositoryBubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT, "repository_comic",
+				repositoryBubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT, "repository_comic",
 						RepositoryBrowser.REPOSITORY_BROWSER_DOCK_KEY, new JButton[] { getBubbleWindowNextButton(true) },
 						new Object[0]);
 				registerBubble(repositoryBubble);
@@ -230,7 +230,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 		@Override
 		public void onTransition(final AbstractEpisode episode) {
 			super.onTransition(episode);
-			operatorBubble = new OperatorBubble(RapidMinerGUI.getMainFrame(), AlignedSide.BOTTOM, "operator_comic",
+			operatorBubble = new OperatorBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.BOTTOM, "operator_comic",
 					RepositorySource.class, 1, new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 			registerBubble(operatorBubble);
 			operatorBubble.setVisible(true);
@@ -238,7 +238,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 				@Override
 				public void bubbleClosed(BubbleWindow bw) {
-					portBubble = new OperatorBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT, "port_comic",
+					portBubble = new OperatorBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT, "port_comic",
 							RepositorySource.class, 1, new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 					registerBubble(portBubble);
 					portBubble.setVisible(true);
@@ -246,7 +246,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 						@Override
 						public void bubbleClosed(BubbleWindow bw) {
-							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT,
+							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT,
 									"operatortree_comic", NewOperatorEditor.NEW_OPERATOR_DOCK_KEY,
 									new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 							registerBubble(operatorsBubble);
@@ -256,7 +256,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 						@Override
 						public void actionPerformed(BubbleWindow bw) {
-							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT,
+							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT,
 									"operatortree_comic", NewOperatorEditor.NEW_OPERATOR_DOCK_KEY,
 									new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 							registerBubble(operatorsBubble);
@@ -268,7 +268,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 				@Override
 				public void actionPerformed(BubbleWindow bw) {
-					portBubble = new OperatorBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT, "port_comic",
+					portBubble = new OperatorBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT, "port_comic",
 							RepositorySource.class, 1, new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 					registerBubble(portBubble);
 					portBubble.setVisible(true);
@@ -276,7 +276,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 						@Override
 						public void bubbleClosed(BubbleWindow bw) {
-							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT,
+							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT,
 									"operatortree_comic", NewOperatorEditor.NEW_OPERATOR_DOCK_KEY,
 									new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 							registerBubble(operatorsBubble);
@@ -286,7 +286,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 
 						@Override
 						public void actionPerformed(BubbleWindow bw) {
-							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.RIGHT,
+							operatorsBubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.RIGHT,
 									"operatortree_comic", NewOperatorEditor.NEW_OPERATOR_DOCK_KEY,
 									new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 							registerBubble(operatorsBubble);
@@ -384,7 +384,7 @@ public class RunProcessEpisode extends AbstractEpisode {
 		@Override
 		public void onTransition(final AbstractEpisode episode) {
 			super.onTransition(episode);
-			connectBubble = new OperatorBubble(RapidMinerGUI.getMainFrame(), AlignedSide.BOTTOM, "connect_comic",
+			connectBubble = new OperatorBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.BOTTOM, "connect_comic",
 					ParallelDecisionTreeLearner.class, 1, new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 			registerBubble(connectBubble);
 			connectBubble.addBubbleListener(episode.getEpisodeEventDelegator());
@@ -528,12 +528,12 @@ public class RunProcessEpisode extends AbstractEpisode {
 		@Override
 		public void onTransition(final AbstractEpisode episode) {
 			super.onTransition(episode);
-			resultBubble = new ButtonBubble(RapidMinerGUI.getMainFrame(), null, AlignedSide.BOTTOM,
+			resultBubble = new ButtonBubble(RapidMinerGUI.getMainFrame().getWindow(), null, AlignedSide.BOTTOM,
 					"result_perspective_comic", "workspace_result", true, true,
 					new JButton[] { getBubbleWindowNextButton(true) }, new Object[0]);
 			registerBubble(resultBubble);
 			resultBubble.setVisible(true);
-			goBackToDesignBubble = new ButtonBubble(RapidMinerGUI.getMainFrame(), null, AlignedSide.BOTTOM,
+			goBackToDesignBubble = new ButtonBubble(RapidMinerGUI.getMainFrame().getWindow(), null, AlignedSide.BOTTOM,
 					"design_perspective_go_back_comic", "workspace_design", "result");
 			registerBubble(goBackToDesignBubble);
 			resultBubble.addBubbleListener(new BubbleListener() {

@@ -20,13 +20,13 @@
  */
 package com.rapidminer.gui.tour;
 
+import java.awt.Window;
+
 import com.rapidminer.Process;
 import com.rapidminer.ProcessListener;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
 import com.rapidminer.operator.Operator;
-
-import java.awt.Window;
 
 
 /**
@@ -39,7 +39,7 @@ public class RunProcessStep extends Step {
 	private final String i18nKey;
 	private final Object[] arguments;
 	private final String docKey = null;
-	private final Window owner = RapidMinerGUI.getMainFrame();
+	private final Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private ProcessListener processListener;
 
 	public RunProcessStep(final String i18nKey, final Object... arguments) {

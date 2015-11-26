@@ -20,10 +20,10 @@
  */
 package com.rapidminer.gui.tour;
 
+import java.awt.Window;
+
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
-
-import java.awt.Window;
 
 
 /**
@@ -59,7 +59,7 @@ public class SimpleStep extends Step {
 	 */
 	public SimpleStep(AlignedSide preferredAlignment, String i18nKey, String buttonKey, boolean isInMenuBar,
 			Object... arguments) {
-		this(preferredAlignment, i18nKey, buttonKey, isInMenuBar, RapidMinerGUI.getMainFrame(), arguments);
+		this(preferredAlignment, i18nKey, buttonKey, isInMenuBar, RapidMinerGUI.getMainFrame().getWindow(), arguments);
 	}
 
 	/**

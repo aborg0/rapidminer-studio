@@ -20,12 +20,12 @@
  */
 package com.rapidminer.gui.actions;
 
-import com.rapidminer.gui.MainFrame;
-import com.rapidminer.gui.Perspectives;
-import com.rapidminer.gui.tour.comic.gui.ComicDialog;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+
+import com.rapidminer.gui.MainUIState;
+import com.rapidminer.gui.Perspectives;
+import com.rapidminer.gui.tour.comic.gui.ComicDialog;
 
 
 /**
@@ -37,9 +37,9 @@ public class WelcomeComicsAction extends WelcomeAction {
 
 	private static final long serialVersionUID = 1358354112149248404L;
 
-	private MainFrame mainFrame;
+	private MainUIState mainFrame;
 
-	public WelcomeComicsAction(MainFrame mainFrame) {
+	public WelcomeComicsAction(MainUIState mainFrame) {
 		super("comics", new Color(204, 31, 31), false);
 		this.mainFrame = mainFrame;
 	}

@@ -23,6 +23,7 @@ package com.rapidminer.gui.tour.comic.episodes;
 import java.util.Collection;
 
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.UserError;
@@ -89,7 +90,7 @@ public class EpisodeHelper {
 			throw new IllegalArgumentException("operator must not be null!");
 		}
 
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		if (mainFrame != null) {
 			for (Operator selectedOperator : mainFrame.getProcessPanel().getProcessRenderer().getModel()
 					.getSelectedOperators()) {
@@ -108,7 +109,7 @@ public class EpisodeHelper {
 	 * @return
 	 */
 	public static int getNumberOfDisplayedSplitPanels() {
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		if (mainFrame != null) {
 			return mainFrame.getProcessPanel().getProcessRenderer().getModel().getProcesses().size();
 		}
@@ -323,7 +324,7 @@ public class EpisodeHelper {
 			throw new IllegalArgumentException("viewKey must not be null or empty!");
 		}
 
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		if (mainFrame == null) {
 			throw new IllegalStateException("No MainFrame registered in RapidMinerGUI");
 		}
@@ -337,7 +338,7 @@ public class EpisodeHelper {
 	 * @param mainFrame
 	 * @return
 	 */
-	public static boolean isViewClosed(final String viewKey, final MainFrame mainFrame) {
+	public static boolean isViewClosed(final String viewKey, final MainUIState mainFrame) {
 		if (viewKey == null || "".equals(viewKey.trim())) {
 			throw new IllegalArgumentException("viewKey must not be null or empty!");
 		}
@@ -357,7 +358,7 @@ public class EpisodeHelper {
 	 * @throws IllegalArgumentException
 	 *             if no view with the key exists.
 	 */
-	public static DockableState getDockableState(final String viewKey, final MainFrame mainFrame) {
+	public static DockableState getDockableState(final String viewKey, final MainUIState mainFrame) {
 		if (viewKey == null || "".equals(viewKey.trim())) {
 			throw new IllegalArgumentException("viewKey must not be null or empty!");
 		}
@@ -390,7 +391,7 @@ public class EpisodeHelper {
 			throw new IllegalArgumentException("viewKey must not be null or empty!");
 		}
 
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		if (mainFrame == null) {
 			throw new IllegalStateException("No MainFrame registerer in RapidMinerGUI");
 		}

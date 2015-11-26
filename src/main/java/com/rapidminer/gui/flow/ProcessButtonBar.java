@@ -24,7 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.tools.ParentButtonPanel;
 import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.OperatorChain;
@@ -40,7 +40,7 @@ public class ProcessButtonBar extends ParentButtonPanel<Operator> {
 
 	private ProcessParentButtonModel model = new ProcessParentButtonModel(null);
 
-	public ProcessButtonBar(final MainFrame mainFrame) {
+	public ProcessButtonBar(final MainUIState mainFrame) {
 		setModel(model);
 		addActionListener(new ActionListener() {
 

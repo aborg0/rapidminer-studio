@@ -20,6 +20,12 @@
  */
 package com.rapidminer.gui.tour;
 
+import java.awt.Window;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
+
+import javax.swing.SwingUtilities;
+
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
 import com.vlsolutions.swing.docking.Dockable;
@@ -32,12 +38,6 @@ import com.vlsolutions.swing.docking.event.DockableStateChangeEvent;
 import com.vlsolutions.swing.docking.event.DockableStateChangeListener;
 import com.vlsolutions.swing.docking.event.DockingActionEvent;
 import com.vlsolutions.swing.docking.event.DockingActionListener;
-
-import java.awt.Window;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
-
-import javax.swing.SwingUtilities;
 
 
 /**
@@ -52,7 +52,7 @@ public class NotShowingStep extends Step {
 	private boolean showMe = false;
 	private boolean hidden = false;
 	int mode;
-	private Window owner = RapidMinerGUI.getMainFrame();
+	private Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private String dockableKey;
 	private String notOnScreen = "lostDockable";
 	private String notShowing = "not_showing";

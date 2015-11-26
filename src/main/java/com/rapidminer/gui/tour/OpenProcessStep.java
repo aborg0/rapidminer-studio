@@ -39,7 +39,7 @@ import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
 public class OpenProcessStep extends Step {
 
 	private AlignedSide alignment;
-	private Window owner = RapidMinerGUI.getMainFrame();
+	private Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private String i18nKey;
 	private String attachToKey;
 	private ProcessStorageListener listener = null;

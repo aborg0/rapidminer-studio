@@ -20,7 +20,7 @@
  */
 package com.rapidminer.gui.actions;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.tools.ResourceAction;
 
 import java.awt.event.ActionEvent;
@@ -35,9 +35,9 @@ public class NewAction extends ResourceAction {
 
 	private static final long serialVersionUID = 1358354112149248404L;
 
-	private MainFrame mainFrame;
+	private MainUIState mainFrame;
 
-	public NewAction(MainFrame mainFrame) {
+	public NewAction(MainUIState mainFrame) {
 		super("new");
 		this.mainFrame = mainFrame;
 

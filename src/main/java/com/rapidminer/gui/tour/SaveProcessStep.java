@@ -41,7 +41,7 @@ public class SaveProcessStep extends Step {
 	private String i18nKey;
 	private String buttonKey;
 	private AlignedSide alignment;
-	private Window owner = RapidMinerGUI.getMainFrame();
+	private Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private ProcessStorageListener listener = null;
 
 	/**

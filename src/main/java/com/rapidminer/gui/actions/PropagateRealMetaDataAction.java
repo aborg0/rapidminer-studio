@@ -20,7 +20,7 @@
  */
 package com.rapidminer.gui.actions;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.operator.DebugMode;
 
@@ -36,11 +36,11 @@ public class PropagateRealMetaDataAction extends ResourceAction {
 
 	private boolean isEnabled = false;
 
-	private MainFrame mainFrame;
+	private MainUIState mainFrame;
 
 	private static final long serialVersionUID = -1317229512005928906L;
 
-	public PropagateRealMetaDataAction(MainFrame mainFrame) {
+	public PropagateRealMetaDataAction(MainUIState mainFrame) {
 		super(true, "process_debug_mode");
 
 		this.mainFrame = mainFrame;

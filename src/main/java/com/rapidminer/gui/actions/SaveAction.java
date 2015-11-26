@@ -74,7 +74,7 @@ public class SaveAction extends ResourceAction {
 			if (confirmOverwriteWithNewVersion(process)) {
 				// user wants to save
 				// disable save action
-				RapidMinerGUI.getMainFrame().SAVE_ACTION.setEnabled(false);
+				RapidMinerGUI.getMainFrame().getSaveAction().setEnabled(false);
 				boolean successful = true;
 				try {
 					process.save();
@@ -90,7 +90,7 @@ public class SaveAction extends ResourceAction {
 					SwingTools
 							.showSimpleErrorMessage("cannot_save_process", e, process.getProcessLocation(), e.getMessage());
 					// something went wrong, enable save action again
-					RapidMinerGUI.getMainFrame().SAVE_ACTION.setEnabled(true);
+					RapidMinerGUI.getMainFrame().getSaveAction().setEnabled(true);
 				}
 				return successful;
 			} else {
@@ -116,7 +116,7 @@ public class SaveAction extends ResourceAction {
 			if (confirmOverwriteWithNewVersion(process)) {
 				// user wants to save
 				// disable save action
-				RapidMinerGUI.getMainFrame().SAVE_ACTION.setEnabled(false);
+				RapidMinerGUI.getMainFrame().getSaveAction().setEnabled(false);
 				// save in progressThread to execute asynchronously
 				ProgressThread saveThread = new ProgressThread(SAVE_PROGRESS_KEY) {
 
@@ -147,7 +147,7 @@ public class SaveAction extends ResourceAction {
 							SwingTools.showSimpleErrorMessage("cannot_save_process", ex, process.getProcessLocation(),
 									ex.getMessage());
 							// something went wrong, enable save action again
-							RapidMinerGUI.getMainFrame().SAVE_ACTION.setEnabled(true);
+							RapidMinerGUI.getMainFrame().getSaveAction().setEnabled(true);
 						}
 					}
 				};

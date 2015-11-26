@@ -22,7 +22,7 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.tools.EditBlockingProgressThread;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.operator.ExecutionUnit;
@@ -47,9 +47,9 @@ public class AutoWireAction extends ResourceAction {
 
 	private final boolean recursive;
 
-	private final MainFrame mainFrame;
+	private final MainUIState mainFrame;
 
-	public AutoWireAction(MainFrame mainFrame, String key, CompatibilityLevel level, boolean recursive,
+	public AutoWireAction(MainUIState mainFrame, String key, CompatibilityLevel level, boolean recursive,
 			boolean keepConnections) {
 		super(true, key);
 		setCondition(OPERATOR_SELECTED, MANDATORY);

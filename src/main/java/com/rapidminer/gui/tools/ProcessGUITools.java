@@ -209,7 +209,7 @@ public class ProcessGUITools {
 		runAnywayButton.registerKeyboardAction(runAnywayAction, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0),
 		        JComponent.WHEN_IN_FOCUSED_WINDOW);
 
-		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame(), firstResultPort,
+		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), firstResultPort,
 		        "process_unconnected_result_port");
 		final PortInfoBubble noResultConnectionBubble = builder.setHideOnConnection(true).setAlignment(AlignedSide.LEFT)
 		        .setStyle(BubbleStyle.WARNING).setHideOnProcessRun(false).setEnsureVisible(true).hideCloseButton()
@@ -527,7 +527,7 @@ public class ProcessGUITools {
 		final JButton ackButton = new JButton(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.label", arguments));
 		ackButton.setToolTipText(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.tip"));
 
-		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame(), op, param,
+		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), op, param,
 		        "mandatory_parameter_decoration", i18nKey, arguments);
 		final OperatorInfoBubble missingParameterBubble = builder.setHideOnDisable(true).setAlignment(AlignedSide.BOTTOM)
 		        .setStyle(isError ? BubbleStyle.ERROR : BubbleStyle.WARNING).setEnsureVisible(true).hideCloseButton()
@@ -591,7 +591,7 @@ public class ProcessGUITools {
 		final JButton ackButton = new JButton(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.label", arguments));
 		ackButton.setToolTipText(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.tip"));
 
-		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame(), port, i18nKey, arguments);
+		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), port, i18nKey, arguments);
 		final PortInfoBubble missingInputBubble = builder.setHideOnConnection(hideOnConnection).setHideOnDisable(true)
 		        .setAlignment(AlignedSide.LEFT).setStyle(isError ? BubbleStyle.ERROR : BubbleStyle.WARNING)
 		        .setEnsureVisible(true).hideCloseButton().setHideOnProcessRun(true)
@@ -639,7 +639,7 @@ public class ProcessGUITools {
 		String decoratorKey = param instanceof CombinedParameterType || param instanceof ParameterTypeAttributes
 		        ? "attributes_not_found_decoration" : "attribute_not_found_decoration";
 
-		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame(), op, param,
+		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), op, param,
 		        decoratorKey, i18nKey, arguments);
 		final ParameterErrorInfoBubble attributeNotFoundParameterBubble = builder.setHideOnDisable(true)
 		        .setAlignment(AlignedSide.BOTTOM).setStyle(isError ? BubbleStyle.ERROR : BubbleStyle.WARNING)
@@ -684,7 +684,7 @@ public class ProcessGUITools {
 		final JButton ackButton = new JButton(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.label", arguments));
 		ackButton.setToolTipText(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.tip"));
 
-		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame(), op, param,
+		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), op, param,
 		        "mandatory_parameter_decoration", i18nKey, arguments);
 		final OperatorInfoBubble missingParameterBubble = builder.setHideOnDisable(true).setAlignment(AlignedSide.BOTTOM)
 		        .setStyle(isError ? BubbleStyle.ERROR : BubbleStyle.WARNING).setEnsureVisible(true).hideCloseButton()
@@ -728,7 +728,7 @@ public class ProcessGUITools {
 		final JButton ackButton = new JButton(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.label", arguments));
 		ackButton.setToolTipText(I18N.getGUIMessage("gui.bubble." + i18nKey + ".button.tip"));
 
-		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame(), port, i18nKey, arguments);
+		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), port, i18nKey, arguments);
 		final PortInfoBubble missingInputBubble = builder.setHideOnConnection(hideOnConnection).setHideOnDisable(true)
 		        .setAlignment(AlignedSide.LEFT).setStyle(isError ? BubbleStyle.ERROR : BubbleStyle.WARNING)
 		        .setEnsureVisible(true).hideCloseButton().setHideOnProcessRun(true)
@@ -789,7 +789,7 @@ public class ProcessGUITools {
 		showDetailsButton.setToolTipText(I18N.getGUIMessage("gui.action." + i18nKey + ".button_show_details.tip"));
 		linkPanel.add(showDetailsButton);
 
-		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame(),
+		ParameterErrorBubbleBuilder builder = new ParameterErrorBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(),
 		        error.getOperator(), param, "generic_parameter_decoration", i18nKey, message, "");
 		// if no operator or root operator, show in middle, otherwise below
 		AlignedSide prefSide = error.getOperator() == null || error.getOperator() instanceof ProcessRootOperator
@@ -868,7 +868,7 @@ public class ProcessGUITools {
 		showDetailsButton.setToolTipText(I18N.getGUIMessage("gui.action." + i18nKey + ".button_show_details.tip"));
 		linkPanel.add(showDetailsButton);
 
-		OperatorBubbleBuilder builder = new OperatorBubbleBuilder(RapidMinerGUI.getMainFrame(), error.getOperator(), i18nKey,
+		OperatorBubbleBuilder builder = new OperatorBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), error.getOperator(), i18nKey,
 		        message, "");
 		// if no operator or root operator, show in middle, otherwise below
 		AlignedSide prefSide = error.getOperator() == null || error.getOperator() instanceof ProcessRootOperator
@@ -930,7 +930,7 @@ public class ProcessGUITools {
 
 		// input ports (located left) show the "hook" of the bubble on the left and vice versa
 		AlignedSide prefSide = error.getPort() instanceof InputPort ? AlignedSide.LEFT : AlignedSide.RIGHT;
-		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame(), error.getPort(), i18nKey, message,
+		PortBubbleBuilder builder = new PortBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), error.getPort(), i18nKey, message,
 		        "");
 		final PortInfoBubble portErrorBubble = builder.setHideOnDisable(true).setAlignment(prefSide)
 		        .setStyle(BubbleStyle.ERROR).setEnsureVisible(true).hideCloseButton().setHideOnProcessRun(true)
@@ -994,7 +994,7 @@ public class ProcessGUITools {
 		});
 		showDetailsButton.setToolTipText(I18N.getGUIMessage("gui.action." + i18nKey + ".button_show_details.tip"));
 
-		OperatorBubbleBuilder builder = new OperatorBubbleBuilder(RapidMinerGUI.getMainFrame(), error.getOperator(), i18nKey,
+		OperatorBubbleBuilder builder = new OperatorBubbleBuilder(RapidMinerGUI.getMainFrame().getWindow(), error.getOperator(), i18nKey,
 		        arguments);
 		final OperatorInfoBubble userErrorBubble = builder.setHideOnDisable(true).setHideOnProcessRun(true)
 		        .setAlignment(AlignedSide.BOTTOM).setStyle(BubbleStyle.ERROR).setEnsureVisible(true).hideCloseButton()

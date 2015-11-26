@@ -20,25 +20,6 @@
  */
 package com.rapidminer.gui.flow;
 
-import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
-import com.rapidminer.gui.processeditor.ProcessEditor;
-import com.rapidminer.gui.tools.ExtendedJScrollPane;
-import com.rapidminer.gui.tools.ExtendedJTable;
-import com.rapidminer.gui.tools.ResourceAction;
-import com.rapidminer.gui.tools.ResourceDockKey;
-import com.rapidminer.gui.tools.ResourceMenu;
-import com.rapidminer.gui.tools.SwingTools;
-import com.rapidminer.gui.tools.ViewToolBar;
-import com.rapidminer.operator.Operator;
-import com.rapidminer.operator.ProcessSetupError;
-import com.rapidminer.operator.ports.Port;
-import com.rapidminer.operator.ports.metadata.MetaDataError;
-import com.rapidminer.operator.ports.quickfix.QuickFix;
-import com.rapidminer.tools.I18N;
-import com.vlsolutions.swing.docking.DockKey;
-import com.vlsolutions.swing.docking.Dockable;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Point;
@@ -65,6 +46,26 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+
+import com.rapidminer.Process;
+import com.rapidminer.gui.AbstractUIState;
+import com.rapidminer.gui.MainUIState;
+import com.rapidminer.gui.processeditor.ProcessEditor;
+import com.rapidminer.gui.tools.ExtendedJScrollPane;
+import com.rapidminer.gui.tools.ExtendedJTable;
+import com.rapidminer.gui.tools.ResourceAction;
+import com.rapidminer.gui.tools.ResourceDockKey;
+import com.rapidminer.gui.tools.ResourceMenu;
+import com.rapidminer.gui.tools.SwingTools;
+import com.rapidminer.gui.tools.ViewToolBar;
+import com.rapidminer.operator.Operator;
+import com.rapidminer.operator.ProcessSetupError;
+import com.rapidminer.operator.ports.Port;
+import com.rapidminer.operator.ports.metadata.MetaDataError;
+import com.rapidminer.operator.ports.quickfix.QuickFix;
+import com.rapidminer.tools.I18N;
+import com.vlsolutions.swing.docking.DockKey;
+import com.vlsolutions.swing.docking.Dockable;
 
 
 /**
@@ -95,7 +96,7 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 			I18N.getMessage(I18N.getGUIBundle(), "gui.errortable.header.fixes.tip"),
 			I18N.getMessage(I18N.getGUIBundle(), "gui.errortable.header.location.tip") };
 
-	private final MainFrame mainFrame;
+	private final MainUIState mainFrame;
 
 	private final TableCellRenderer iconRenderer = new DefaultTableCellRenderer() {
 
@@ -283,7 +284,7 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 	};
 	private Process currentProcess;
 
-	public ErrorTable(final MainFrame mainFrame) {
+	public ErrorTable(final MainUIState mainFrame) {
 		super(new BorderLayout());
 		this.mainFrame = mainFrame;
 		onlyCurrent.setSelected(false);
@@ -389,7 +390,7 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 	public static final String ERROR_TABLE_DOCK_KEY = "error_table";
 	private final DockKey DOCK_KEY = new ResourceDockKey(ERROR_TABLE_DOCK_KEY);
 	{
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 	}
 	private Operator currentOperator;
 

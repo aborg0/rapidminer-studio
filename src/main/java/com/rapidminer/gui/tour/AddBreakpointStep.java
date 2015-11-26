@@ -50,7 +50,7 @@ public class AddBreakpointStep extends Step {
 	private Class<? extends Operator> operator;
 	private String i18nKey;
 	private AlignedSide alignment;
-	private Window owner = RapidMinerGUI.getMainFrame();
+	private Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private Position position;
 	private String elementKey = "breakpoint_after";
 	private ProcessSetupListener listener = null;

@@ -43,6 +43,7 @@ import com.rapidminer.Process;
 import com.rapidminer.ProcessListener;
 import com.rapidminer.datatable.DataTable;
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.Perspectives;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.actions.CloseAllResultsAction;
@@ -121,7 +122,7 @@ public class DockableResultDisplay extends JPanel implements ResultDisplay {
 	}
 
 	@Override
-	public void init(MainFrame mf) {
+	public void init(MainUIState mf) {
 		DockingDesktop desktop = mf.getDockingDesktop();
 		desktop.addDockingActionListener(new DockingActionListener() {
 

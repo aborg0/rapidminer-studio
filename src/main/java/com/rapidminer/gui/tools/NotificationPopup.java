@@ -20,8 +20,6 @@
  */
 package com.rapidminer.gui.tools;
 
-import com.rapidminer.gui.RapidMinerGUI;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -39,6 +37,8 @@ import javax.swing.JPanel;
 import javax.swing.JWindow;
 import javax.swing.Timer;
 import javax.swing.border.Border;
+
+import com.rapidminer.gui.RapidMinerGUI;
 
 
 /**
@@ -112,7 +112,7 @@ public class NotificationPopup extends JWindow {
 	 *            <code>null</code>
 	 */
 	private NotificationPopup(final JPanel content, final int delay, final NotificationPopupListener listener) {
-		super(RapidMinerGUI.getMainFrame());
+		super(RapidMinerGUI.getMainFrame().getWindow());
 
 		// determine what the default GraphicsDevice can support
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();

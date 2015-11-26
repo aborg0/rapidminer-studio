@@ -20,6 +20,8 @@
  */
 package com.rapidminer.gui.tour;
 
+import java.awt.Window;
+
 import com.rapidminer.ProcessSetupListener;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.flow.ProcessPanel;
@@ -27,8 +29,6 @@ import com.rapidminer.gui.properties.OperatorPropertyPanel;
 import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
 import com.rapidminer.operator.ExecutionUnit;
 import com.rapidminer.operator.Operator;
-
-import java.awt.Window;
 
 
 /**
@@ -42,7 +42,7 @@ import java.awt.Window;
 public class RenameOperatorStep extends Step {
 
 	private AlignedSide alignment;
-	private Window owner = RapidMinerGUI.getMainFrame();
+	private Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private BubbleType element;
 	private String i18nKey;
 	private String targetName;

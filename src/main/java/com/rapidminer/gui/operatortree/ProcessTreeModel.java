@@ -20,13 +20,6 @@
  */
 package com.rapidminer.gui.operatortree;
 
-import com.rapidminer.ProcessSetupListener;
-import com.rapidminer.gui.RapidMinerGUI;
-import com.rapidminer.operator.ExecutionUnit;
-import com.rapidminer.operator.Operator;
-import com.rapidminer.operator.OperatorChain;
-import com.rapidminer.tools.LogService;
-
 import java.util.List;
 import java.util.logging.Level;
 
@@ -36,6 +29,13 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+
+import com.rapidminer.ProcessSetupListener;
+import com.rapidminer.gui.RapidMinerGUI;
+import com.rapidminer.operator.ExecutionUnit;
+import com.rapidminer.operator.Operator;
+import com.rapidminer.operator.OperatorChain;
+import com.rapidminer.tools.LogService;
 
 
 /**
@@ -189,7 +189,7 @@ public class ProcessTreeModel implements TreeModel {
 			String desiredName = ((String) newValue).trim();
 			if (desiredName.length() > 0) {
 				if (desiredName.indexOf('.') >= 0) {
-					JOptionPane.showMessageDialog(RapidMinerGUI.getMainFrame(),
+					JOptionPane.showMessageDialog(RapidMinerGUI.getMainFrame().getWindow(),
 							"Renaming not possible: operator names are now allowed to contain the character '.'",
 							"Renaming failed", JOptionPane.WARNING_MESSAGE);
 				} else {

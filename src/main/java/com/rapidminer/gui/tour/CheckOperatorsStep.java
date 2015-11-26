@@ -20,14 +20,14 @@
  */
 package com.rapidminer.gui.tour;
 
+import java.util.ArrayList;
+
 import com.rapidminer.ProcessSetupListener;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.flow.ProcessPanel;
 import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
 import com.rapidminer.operator.ExecutionUnit;
 import com.rapidminer.operator.Operator;
-
-import java.util.ArrayList;
 
 
 /**
@@ -59,7 +59,7 @@ public class CheckOperatorsStep extends Step {
 	@Override
 	boolean createBubble() {
 		if (!this.areOperatorsAvailable()) {
-			bubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.MIDDLE, textKey,
+			bubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.MIDDLE, textKey,
 					ProcessPanel.PROCESS_PANEL_DOCK_KEY);
 			setupListener = new ProcessSetupListener() {
 

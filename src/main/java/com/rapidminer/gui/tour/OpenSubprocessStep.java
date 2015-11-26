@@ -43,7 +43,7 @@ import javax.swing.JPopupMenu;
 public class OpenSubprocessStep extends Step {
 
 	private AlignedSide alignment;
-	private Window owner = RapidMinerGUI.getMainFrame();
+	private Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private String i18nKey;
 	private Class<? extends OperatorChain> operatorClass;
 	private ProcessInteractionListener listener = null;

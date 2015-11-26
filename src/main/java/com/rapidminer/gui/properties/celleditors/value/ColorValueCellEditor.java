@@ -20,11 +20,6 @@
  */
 package com.rapidminer.gui.properties.celleditors.value;
 
-import com.rapidminer.gui.RapidMinerGUI;
-import com.rapidminer.gui.tools.components.ColorIcon;
-import com.rapidminer.operator.Operator;
-import com.rapidminer.parameter.ParameterTypeColor;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -34,6 +29,11 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JTable;
+
+import com.rapidminer.gui.RapidMinerGUI;
+import com.rapidminer.gui.tools.components.ColorIcon;
+import com.rapidminer.operator.Operator;
+import com.rapidminer.parameter.ParameterTypeColor;
 
 
 /**
@@ -59,7 +59,7 @@ public class ColorValueCellEditor extends AbstractCellEditor implements Property
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color newColor = JColorChooser.showDialog(RapidMinerGUI.getMainFrame(), "Choose Color for " + type.getKey(),
+				Color newColor = JColorChooser.showDialog(RapidMinerGUI.getMainFrame().getWindow(), "Choose Color for " + type.getKey(),
 						((ColorIcon) button.getIcon()).getColor());
 				if (newColor != null) {
 					setEditorColor(newColor);

@@ -57,7 +57,7 @@ public class LeaveSubprocess extends Step {
 		if (!"design".equals(RapidMinerGUI.getMainFrame().getPerspectives().getCurrentPerspective().getName())) {
 			return false;
 		}
-		bubble = new ButtonBubble(RapidMinerGUI.getMainFrame(), ProcessPanel.PROCESS_PANEL_DOCK_KEY, preferredAlignment,
+		bubble = new ButtonBubble(RapidMinerGUI.getMainFrame().getWindow(), ProcessPanel.PROCESS_PANEL_DOCK_KEY, preferredAlignment,
 				i18nKey, "select_parent", arguments);
 		return true;
 	}

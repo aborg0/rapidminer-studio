@@ -404,7 +404,7 @@ public class OperatorDocViewer extends JPanel implements Dockable, ProcessEditor
 	private ShowHelpTextAction showHelpTextAction;
 
 	{
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 	}
 
 	@Override

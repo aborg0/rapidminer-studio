@@ -94,7 +94,7 @@ public class OperatorPropertyTable extends DefaultPropertyTable implements Docka
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				mainFrame.TOGGLE_EXPERT_MODE_ACTION.actionPerformed(null);
+				mainFrame.getToggleExpertModeAction().actionPerformed(null);
 			}
 
 			@Override

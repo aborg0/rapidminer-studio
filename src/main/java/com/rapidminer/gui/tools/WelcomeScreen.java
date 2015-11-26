@@ -64,7 +64,7 @@ import javax.swing.event.PopupMenuListener;
 
 import com.rapidminer.ProcessLocation;
 import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.Perspectives;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.actions.OpenAction;
@@ -259,9 +259,9 @@ public final class WelcomeScreen extends ImagePanel implements Dockable {
 
 	};
 
-	private final MainFrame mainFrame;
+	private final MainUIState mainFrame;
 
-	public WelcomeScreen(final MainFrame mainFrame) {
+	public WelcomeScreen(final MainUIState mainFrame) {
 		super(backgroundImage, ResizeHandling.CHILDRENS_PREFERRED_SIZE, VerticalAnchor.BOTTOM);
 		this.mainFrame = mainFrame;
 		GridBagLayout layout = new GridBagLayout();

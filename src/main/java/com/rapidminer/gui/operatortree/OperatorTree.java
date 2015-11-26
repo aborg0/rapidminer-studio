@@ -20,27 +20,6 @@
  */
 package com.rapidminer.gui.operatortree;
 
-import com.rapidminer.BreakpointListener;
-import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
-import com.rapidminer.gui.dnd.OperatorTreeTransferHandler;
-import com.rapidminer.gui.flow.processrendering.view.ProcessRendererView;
-import com.rapidminer.gui.operatortree.actions.CollapseAllAction;
-import com.rapidminer.gui.operatortree.actions.ExpandAllAction;
-import com.rapidminer.gui.operatortree.actions.LockTreeStructureAction;
-import com.rapidminer.gui.operatortree.actions.RenameOperatorAction;
-import com.rapidminer.gui.operatortree.actions.ToggleShowDisabledItem;
-import com.rapidminer.gui.processeditor.ProcessEditor;
-import com.rapidminer.gui.tools.IconSize;
-import com.rapidminer.gui.tools.PrintingTools;
-import com.rapidminer.gui.tools.ResourceAction;
-import com.rapidminer.gui.tools.components.ToolTipWindow;
-import com.rapidminer.gui.tools.components.ToolTipWindow.TipProvider;
-import com.rapidminer.operator.ExecutionUnit;
-import com.rapidminer.operator.Operator;
-import com.rapidminer.operator.OperatorChain;
-import com.rapidminer.operator.ProcessSetupError;
-
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -58,6 +37,27 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+
+import com.rapidminer.BreakpointListener;
+import com.rapidminer.Process;
+import com.rapidminer.gui.MainUIState;
+import com.rapidminer.gui.dnd.OperatorTreeTransferHandler;
+import com.rapidminer.gui.flow.processrendering.view.ProcessRendererView;
+import com.rapidminer.gui.operatortree.actions.CollapseAllAction;
+import com.rapidminer.gui.operatortree.actions.ExpandAllAction;
+import com.rapidminer.gui.operatortree.actions.LockTreeStructureAction;
+import com.rapidminer.gui.operatortree.actions.RenameOperatorAction;
+import com.rapidminer.gui.operatortree.actions.ToggleShowDisabledItem;
+import com.rapidminer.gui.processeditor.ProcessEditor;
+import com.rapidminer.gui.tools.IconSize;
+import com.rapidminer.gui.tools.PrintingTools;
+import com.rapidminer.gui.tools.ResourceAction;
+import com.rapidminer.gui.tools.components.ToolTipWindow;
+import com.rapidminer.gui.tools.components.ToolTipWindow.TipProvider;
+import com.rapidminer.operator.ExecutionUnit;
+import com.rapidminer.operator.Operator;
+import com.rapidminer.operator.OperatorChain;
+import com.rapidminer.operator.ProcessSetupError;
 
 
 /**
@@ -93,7 +93,7 @@ public class OperatorTree extends JTree implements TreeSelectionListener, TreeEx
 			IconSize.SMALL);
 
 	/** The main frame. Used for conditional action updates and property table settings. */
-	private final MainFrame mainFrame;
+	private final MainUIState mainFrame;
 
 	/** The tree model of the operator tree. */
 	private transient ProcessTreeModel treeModel;
@@ -109,7 +109,7 @@ public class OperatorTree extends JTree implements TreeSelectionListener, TreeEx
 	// ======================================================================
 
 	/** Creates a new operator tree. */
-	public OperatorTree(MainFrame mainFrame) {
+	public OperatorTree(MainUIState mainFrame) {
 		super();
 		this.mainFrame = mainFrame;
 

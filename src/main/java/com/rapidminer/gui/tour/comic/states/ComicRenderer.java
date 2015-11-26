@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.Perspective;
 import com.rapidminer.gui.PerspectiveChangeListener;
 import com.rapidminer.gui.RapidMinerGUI;
@@ -68,8 +68,8 @@ public class ComicRenderer {
 	/** the {@link ProcessDrawDecorator} instance */
 	private ProcessDrawDecorator decorator;
 
-	/** the {@link MainFrame} instance */
-	private final MainFrame mainFrame;
+	/** the {@link MainUIState} instance */
+	private final MainUIState mainFrame;
 
 	/** indicates if the listeners have already been initialized */
 	private boolean initialized;
@@ -80,7 +80,7 @@ public class ComicRenderer {
 	 * @param processRenderer
 	 * @param mainFrame
 	 */
-	public ComicRenderer(final ProcessRendererView processRenderer, final MainFrame mainFrame) {
+	public ComicRenderer(final ProcessRendererView processRenderer, final MainUIState mainFrame) {
 		this.processRenderer = processRenderer;
 		this.mainFrame = mainFrame;
 		this.initialized = false;

@@ -20,8 +20,20 @@
  */
 package com.rapidminer.gui.tour.comic;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tour.comic.episodes.AbstractEpisode;
 import com.rapidminer.gui.tour.comic.episodes.ApplyModelEpisode;
@@ -35,18 +47,6 @@ import com.rapidminer.tools.FileSystemService;
 import com.rapidminer.tools.LogService;
 import com.rapidminer.tools.Tools;
 import com.rapidminer.tools.XMLException;
-
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
 
 
 /**
@@ -156,7 +156,7 @@ public class ComicManager extends AbstractObservable<ComicManagerEvent> {
 				episode.load();
 				setCurrentEpisode(listOfEpisodes.indexOf(episode));
 
-				MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+				MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 				previousProcess = mainFrame.getProcess();
 				try {
 					String defaultXML = episode.getDefaultProcessXML();

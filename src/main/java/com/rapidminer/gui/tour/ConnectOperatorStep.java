@@ -20,15 +20,15 @@
  */
 package com.rapidminer.gui.tour;
 
+import java.awt.Window;
+import java.util.ArrayList;
+
 import com.rapidminer.ProcessSetupListener;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.flow.ProcessPanel;
 import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
 import com.rapidminer.operator.ExecutionUnit;
 import com.rapidminer.operator.Operator;
-
-import java.awt.Window;
-import java.util.ArrayList;
 
 
 /**
@@ -48,7 +48,7 @@ public class ConnectOperatorStep extends Step {
 	private Object[] arguments;
 	private String i18nKey;
 	private AlignedSide preferredSide;
-	private Window owner = RapidMinerGUI.getMainFrame();
+	private Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private ProcessSetupListener setupListener;
 
 	public ConnectOperatorStep(AlignedSide preferredAlignment, Class<? extends Operator> startOperatorClass, int startPort,

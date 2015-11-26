@@ -20,6 +20,14 @@
  */
 package com.rapidminer.gui.tour.comic.states;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.SwingUtilities;
+
 import com.rapidminer.Process;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
@@ -31,14 +39,6 @@ import com.rapidminer.gui.tour.comic.ComicManager;
 import com.rapidminer.gui.tour.comic.episodes.AbstractEpisode;
 import com.rapidminer.gui.tour.comic.episodes.EpisodeEvent;
 import com.rapidminer.tools.XMLException;
-
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-
-import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 
 
 /**
@@ -92,7 +92,7 @@ public class EpisodeErrorState implements EpisodeState {
 			}
 		});
 
-		bubble = new DockableBubble(RapidMinerGUI.getMainFrame(), AlignedSide.MIDDLE, "comic.revert", "process_panel",
+		bubble = new DockableBubble(RapidMinerGUI.getMainFrame().getWindow(), AlignedSide.MIDDLE, "comic.revert", "process_panel",
 				new JButton[] { revertButton }, new Object[0]);
 		bubble.addBubbleListener(new BubbleListener() {
 

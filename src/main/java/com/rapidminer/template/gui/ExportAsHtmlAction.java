@@ -20,18 +20,18 @@
  */
 package com.rapidminer.template.gui;
 
+import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ProgressThread;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.template.TemplateController;
 import com.rapidminer.tools.LogService;
-
-import java.awt.Desktop;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 
 
 /**
@@ -53,7 +53,7 @@ public class ExportAsHtmlAction extends ResourceAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame(), "template.export_html", null, false, "html",
+		final File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame().getWindow(), "template.export_html", null, false, "html",
 				"HTML files");
 		if (file != null) {
 			new ProgressThread("template.export_html") {

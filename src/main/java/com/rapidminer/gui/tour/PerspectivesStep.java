@@ -20,12 +20,12 @@
  */
 package com.rapidminer.gui.tour;
 
+import java.awt.Window;
+
 import com.rapidminer.gui.Perspective;
 import com.rapidminer.gui.PerspectiveChangeListener;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tour.BubbleWindow.AlignedSide;
-
-import java.awt.Window;
 
 
 /**
@@ -41,7 +41,7 @@ public class PerspectivesStep extends Step {
 	public static final int PERSPECTIVE_RESULT = 2;
 
 	private String i18nKey, buttonKey;
-	private final Window owner = RapidMinerGUI.getMainFrame();
+	private final Window owner = RapidMinerGUI.getMainFrame().getWindow();
 	private final AlignedSide alignment = AlignedSide.BOTTOM;
 	private boolean showMe;
 	private final int perspectiveIndex;
