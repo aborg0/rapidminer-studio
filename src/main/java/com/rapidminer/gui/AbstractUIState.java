@@ -103,7 +103,6 @@ import com.rapidminer.gui.tools.StatusBar;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.SystemMonitor;
 import com.rapidminer.gui.tools.WelcomeScreen;
-import com.rapidminer.gui.tools.components.DropDownButton;
 import com.rapidminer.gui.tools.dialogs.ConfirmDialog;
 import com.rapidminer.gui.tools.dialogs.DecisionRememberingConfirmDialog;
 import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizard;
@@ -113,7 +112,6 @@ import com.rapidminer.gui.tools.dialogs.wizards.dataimport.WizardCreationExcepti
 import com.rapidminer.gui.tools.logging.LogViewer;
 import com.rapidminer.gui.tour.BubbleWindow;
 import com.rapidminer.gui.tour.comic.ComicManager;
-import com.rapidminer.gui.tour.comic.gui.ComicDialog;
 import com.rapidminer.gui.tour.comic.states.ComicRenderer;
 import com.rapidminer.operator.IOContainer;
 import com.rapidminer.operator.Operator;
@@ -992,10 +990,10 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 		buttonToolbar.add(makeToolbarButton(STOP_ACTION));
 		buttonToolbar.addSeparator();
 
-		DropDownButton comicDropdown = ComicDialog.makeDropDownButton();
-		comicDropdown.setUsePopupActionOnMainButton();
-		buttonToolbar.add(Box.createHorizontalGlue());
-		comicDropdown.addToToolBar(buttonToolbar);
+//		DropDownButton comicDropdown = ComicDialog.makeDropDownButton();
+//		comicDropdown.setUsePopupActionOnMainButton();
+//		buttonToolbar.add(Box.createHorizontalGlue());
+//		comicDropdown.addToToolBar(buttonToolbar);
 
 		JPanel toolbarPanel = new JPanel(new BorderLayout());
 		toolbarPanel.add(buttonToolbar, BorderLayout.WEST);

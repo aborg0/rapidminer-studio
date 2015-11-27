@@ -1744,4 +1744,8 @@ public class ProcessRendererView extends JPanel implements PrintableComponent {
 		}
 		return false;
 	}
+	
+	public MainUIState getMainFrame() {
+		return mainFrame;
+	}
 }

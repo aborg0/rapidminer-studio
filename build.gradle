@@ -67,8 +67,8 @@ runOsgi {
         manifest( "log4j*.*") {
         	instruction 'Import-Package', '!com.sun.*,*'
         }
-        manifest( "logkit*.*") {
-        }
+//        manifest( "logkit*.*") {
+//        }
         manifest("jgraphx*.*") {
         	instruction 'Export-Package', '*'
         }
@@ -86,8 +86,8 @@ dependencies {
 	embedded 'com.rapidminer.studio:rapidminer-studio-osx-adapter:1.0.1'
 
 	// RapidMiner license framework for license management
-	compile 'com.rapidminer.license:rapidminer-license-api:3.1.0'
-	compile 'com.rapidminer.license:rapidminer-license-commons:3.1.0'
+	embedded 'com.rapidminer.license:rapidminer-license-api:3.1.0'
+	embedded 'com.rapidminer.license:rapidminer-license-commons:3.1.0'
 
 	// RapidMiner API
 	compile 'com.rapidminer:rapidminer-api:0.1.1'
@@ -198,7 +198,8 @@ dependencies {
 jar {
 	manifest {
 	//com.sun.management should be provided.
-    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,*'
+    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,*'
+    	instruction '-exportcontents', 'com.vlsolutions.swing.docking,com.vlsolutions.swing.docking.ui,com.vlsolutions.swing.docking.animation,com.vlsolutions.swing.docking.event,com.vlsolutions.swing.docking.ws,com.vlsolutions.swing.toolbars'
 	}
 	//From: http://kennethjorgensen.com/blog/2014/fat-jars-with-excluded-dependencies-in-gradle
 	dependsOn configurations.runtime
