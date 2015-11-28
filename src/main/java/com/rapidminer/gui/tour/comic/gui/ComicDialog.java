@@ -121,7 +121,7 @@ public class ComicDialog extends ButtonDialog {
 	private ComicDialog() {
 		super(ApplicationFrame.getApplicationFrame(), "comic_dialog", ModalityType.MODELESS, new Object[] {});
 
-		initGUI();
+		SwingUtilities.invokeLater(() -> initGUI());
 	}
 
 	/**
