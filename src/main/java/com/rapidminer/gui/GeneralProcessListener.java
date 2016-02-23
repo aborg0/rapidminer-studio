@@ -18,13 +18,13 @@
  */
 package com.rapidminer.gui;
 
+import java.util.List;
+
 import com.rapidminer.Process;
 import com.rapidminer.ProcessListener;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.gui.processeditor.ProcessEditor;
 import com.rapidminer.operator.Operator;
-
-import java.util.List;
 
 
 /**
@@ -38,7 +38,7 @@ public abstract class GeneralProcessListener implements ProcessListener {
 
 	private Process process;
 
-	public GeneralProcessListener(MainFrame mainFrame) {
+	public GeneralProcessListener(MainUIState mainFrame) {
 		register(mainFrame);
 	}
 
@@ -46,7 +46,7 @@ public abstract class GeneralProcessListener implements ProcessListener {
 		this(null);
 	}
 
-	private void register(MainFrame mainFrame) {
+	private void register(MainUIState mainFrame) {
 		if (!RapidMiner.getExecutionMode().isHeadless()) {
 			final ProcessEditor processEditor = new ProcessEditor() {
 

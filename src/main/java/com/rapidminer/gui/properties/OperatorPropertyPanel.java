@@ -60,7 +60,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
 import com.rapidminer.Process;
+import com.rapidminer.gui.AbstractUIState;
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.OperatorDocToHtmlConverter;
 import com.rapidminer.gui.OperatorDocumentationBrowser;
 import com.rapidminer.gui.actions.ToggleAction;
@@ -177,7 +179,7 @@ public class OperatorPropertyPanel extends PropertyPanel implements Dockable, Pr
 	private final ResourceLabel compatibilityLabel = new ResourceLabel("compatibility_level");
 	private final JPanel compatibilityPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
-	public OperatorPropertyPanel(final MainFrame mainFrame) {
+	public OperatorPropertyPanel(final MainUIState mainFrame) {
 		super();
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -197,7 +199,7 @@ public class OperatorPropertyPanel extends PropertyPanel implements Dockable, Pr
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TOGGLE_EXPERT_MODE_ACTION.actionPerformed(null);
+				mainFrame.getToggleExpertModeAction().actionPerformed(null);
 			}
 		});
 

@@ -68,6 +68,7 @@ import org.xml.sax.InputSource;
 
 import com.rapidminer.Process;
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.look.Colors;
 import com.rapidminer.gui.tools.ExtendedJScrollPane;
@@ -347,7 +348,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 							}
 						} else {
 							try {
-								MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+								MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 								Process tutorialProcess = nextTutorial.makeProcess();
 								mainFrame.setOpenedProcess(tutorialProcess, false, null);
 								TutorialManager.INSTANCE.completedTutorial(nextTutorial.getIdentifier());

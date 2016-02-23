@@ -44,7 +44,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.dnd.AbstractPatchedTransferHandler;
 import com.rapidminer.gui.dnd.OperatorTransferHandler;
@@ -425,7 +425,7 @@ public class NewOperatorGroupTree extends JPanel implements FilterListener, Sele
 		if (operator == null) {
 			return;
 		}
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		mainFrame.getActions().insert(Collections.singletonList(operator));
 	}
 

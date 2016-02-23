@@ -232,7 +232,7 @@ public class AutoSave {
 
 				@Override
 				public void run() {
-					RapidMinerGUI.getMainFrame().SAVE_ACTION.setEnabled(true);
+					RapidMinerGUI.getMainFrame().getSaveAction().setEnabled(true);
 				}
 			});
 		}

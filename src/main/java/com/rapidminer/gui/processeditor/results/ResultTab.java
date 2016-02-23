@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.AbstractUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.actions.CloseAllResultsAction;
 import com.rapidminer.gui.actions.StoreInRepositoryAction;
@@ -73,7 +73,7 @@ public class ResultTab extends JPanel implements Dockable {
 		setLayout(new BorderLayout());
 		this.id = id;
 		this.dockKey = new DockKey(id, "Result " + id);
-		this.dockKey.setDockGroup(MainFrame.DOCK_GROUP_RESULTS);
+		this.dockKey.setDockGroup(AbstractUIState.DOCK_GROUP_RESULTS);
 		this.dockKey.setName(id);
 		this.dockKey.setFloatEnabled(true);
 		this.dockKey.setIconDisplayed(true);

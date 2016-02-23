@@ -18,11 +18,6 @@
  */
 package com.rapidminer.gui.wizards;
 
-import com.rapidminer.gui.RapidMinerGUI;
-import com.rapidminer.gui.tools.ResourceAction;
-import com.rapidminer.gui.tools.ResourceActionAdapter;
-import com.rapidminer.operator.io.ExampleSource;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -38,6 +33,11 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+
+import com.rapidminer.gui.RapidMinerGUI;
+import com.rapidminer.gui.tools.ResourceAction;
+import com.rapidminer.gui.tools.ResourceActionAdapter;
+import com.rapidminer.operator.io.ExampleSource;
 
 
 /**
@@ -114,7 +114,7 @@ public abstract class AbstractConfigurationWizard extends JDialog {
 
 	/** Creates a new wizard. */
 	public AbstractConfigurationWizard(String name, ConfigurationListener listener) {
-		super(RapidMinerGUI.getMainFrame(), name, true);
+		super(RapidMinerGUI.getMainFrame().getWindow(), name, true);
 
 		this.listener = listener;
 
