@@ -205,6 +205,8 @@ jar {
 	//com.sun.management should be provided.
     	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,*'
     	instruction '-exportcontents', 'com.vlsolutions.swing.docking,com.vlsolutions.swing.docking.ui,com.vlsolutions.swing.docking.animation,com.vlsolutions.swing.docking.event,com.vlsolutions.swing.docking.ws,com.vlsolutions.swing.toolbars'
+		instruction 'Bundle-RequiredExecutionEnvironment', 'JavaSE-1.8'
+		instruction 'Require-Capability', 'osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.7))"'
 	}
 	//From: http://kennethjorgensen.com/blog/2014/fat-jars-with-excluded-dependencies-in-gradle
 	dependsOn configurations.runtime

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="KNIME 3.0 + RM OSGi" sequenceNumber="45">
+<?pde version="3.8"?><target name="KNIME 3.0 + RM OSGi" sequenceNumber="63">
 <locations>
-<location path="D:\Java\knime_3.0\knime_3.0.0" type="Profile"/>
-<location path="D:\Java\eclipse_mars\workspace_RM\rapidminer-studio\build\osgi\plugins" type="Directory"/>
+<location path="C:\Users\aborg\git\rapidminer\rapidminer-studio\build\osgi\plugins" type="Directory"/>
+<location path="C:\utils\KNIME" type="Profile"/>
 </locations>
 <includeBundles>
 <plugin id="JFreeChart"/>
@@ -24,7 +24,6 @@
 <plugin id="com.fifesoft.rstaui"/>
 <plugin id="com.fifesoft.rsyntaxtextarea"/>
 <plugin id="com.fifesoft.spellchecker"/>
-<plugin id="com.ggasoftware.parso.source"/>
 <plugin id="com.github.fge.btf"/>
 <plugin id="com.github.fge.jackson-coreutils"/>
 <plugin id="com.github.fge.json-patch"/>
@@ -48,7 +47,7 @@
 <plugin id="com.knime.explorer.server"/>
 <plugin id="com.knime.explorer.sharedspace"/>
 <plugin id="com.knime.explorer.tempspace"/>
-<plugin id="com.rapidminer.studio.rapidminer-studio"/>
+<plugin id="com.mind_era.rapidminer.studio"/>
 <plugin id="com.sun.el"/>
 <plugin id="com.sun.jna"/>
 <plugin id="concurrent"/>
@@ -61,7 +60,7 @@
 <plugin id="groovy-all"/>
 <plugin id="hamcrest-core"/>
 <plugin id="itext"/>
-<plugin id="jama"/>
+<plugin id="jama" version="1.0.3"/>
 <plugin id="javax.activation" version="1.1.0.v201211130549"/>
 <plugin id="javax.annotation"/>
 <plugin id="javax.ejb"/>
@@ -104,16 +103,16 @@
 <plugin id="org.apache.batik.transcoder"/>
 <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
 <plugin id="org.apache.batik.util" version="1.7.0.v201011041433"/>
-<plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
 <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
+<plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
 <plugin id="org.apache.batik.xml"/>
-<plugin id="org.apache.commons.codec" version="1.9.0"/>
 <plugin id="org.apache.commons.codec" version="1.6.0.v201305230611"/>
+<plugin id="org.apache.commons.codec" version="1.9.0"/>
 <plugin id="org.apache.commons.httpclient"/>
 <plugin id="org.apache.commons.io"/>
 <plugin id="org.apache.commons.jxpath"/>
-<plugin id="org.apache.commons.lang" version="2.6"/>
 <plugin id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
+<plugin id="org.apache.commons.lang" version="2.6"/>
 <plugin id="org.apache.commons.lang3"/>
 <plugin id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
 <plugin id="org.apache.commons.math"/>
@@ -138,6 +137,7 @@
 <plugin id="org.apache.servicemix.bundles.poi"/>
 <plugin id="org.apache.servicemix.bundles.xmlresolver"/>
 <plugin id="org.apache.servicemix.bundles.xstream"/>
+<plugin id="org.apache.tika.core"/>
 <plugin id="org.apache.ws.xmlschema.core"/>
 <plugin id="org.apache.xalan"/>
 <plugin id="org.apache.xerces"/>
@@ -326,21 +326,16 @@
 <plugin id="org.knime.database.connectors"/>
 <plugin id="org.knime.deprecated"/>
 <plugin id="org.knime.distmatrix"/>
-<plugin id="org.knime.distmatrix.source"/>
 <plugin id="org.knime.ensembles"/>
 <plugin id="org.knime.ext.jep"/>
 <plugin id="org.knime.ext.jfreechart"/>
-<plugin id="org.knime.ext.jfreechart.source"/>
-<plugin id="org.knime.ext.jfreechart.v101.deprecated.source"/>
 <plugin id="org.knime.ext.js"/>
 <plugin id="org.knime.ext.libsvm"/>
-<plugin id="org.knime.ext.parso.source"/>
 <plugin id="org.knime.ext.phantomjs"/>
 <plugin id="org.knime.ext.phantomjs.bin.win32.x86"/>
 <plugin id="org.knime.ext.poi"/>
 <plugin id="org.knime.ext.sun"/>
 <plugin id="org.knime.ext.svg"/>
-<plugin id="org.knime.ext.svg.source"/>
 <plugin id="org.knime.js.core"/>
 <plugin id="org.knime.js.quickforms"/>
 <plugin id="org.knime.jsnippets"/>
@@ -352,7 +347,6 @@
 <plugin id="org.knime.workbench.core"/>
 <plugin id="org.knime.workbench.editor"/>
 <plugin id="org.knime.workbench.editor.svgexport"/>
-<plugin id="org.knime.workbench.editor.svgexport.source"/>
 <plugin id="org.knime.workbench.explorer.view"/>
 <plugin id="org.knime.workbench.help"/>
 <plugin id="org.knime.workbench.repository"/>
