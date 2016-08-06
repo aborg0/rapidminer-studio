@@ -18,23 +18,13 @@
  */
 package com.rapidminer.tools.usagestats;
 
-import com.rapidminer.RapidMiner;
-import com.rapidminer.RapidMinerVersion;
-import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.io.process.XMLTools;
-import com.rapidminer.license.License;
-import com.rapidminer.tools.FileSystemService;
-import com.rapidminer.tools.I18N;
-import com.rapidminer.tools.LogService;
-import com.rapidminer.tools.ProgressListener;
-import com.rapidminer.tools.WebServiceTools;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,15 +39,28 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.rapidminer.RapidMiner;
+import com.rapidminer.RapidMinerVersion;
+import com.rapidminer.core.license.ProductConstraintManager;
+import com.rapidminer.gui.dialog.EULADialog;
+import com.rapidminer.io.process.XMLTools;
+import com.rapidminer.license.License;
+import com.rapidminer.tools.FileSystemService;
+import com.rapidminer.tools.I18N;
+import com.rapidminer.tools.LogService;
+import com.rapidminer.tools.ProgressListener;
+import com.rapidminer.tools.SystemInfoUtilities;
+import com.rapidminer.tools.WebServiceTools;
+
 
 /**
  * Collects statistics about usage of operators. Statistics can be sent to a server collecting them.
  * Counting and resetting is thread safe.
- * 
+ *
  * @see UsageStatsTransmissionDialog
- * 
+ *
  * @author Simon Fischer
- * 
+ *
  */
 public class UsageStatistics {
 
@@ -71,11 +74,16 @@ public class UsageStatistics {
 		}
 	};
 
-	/** URL to send the statistics values to. TODO: Use correct URL */
+	/** URL to send the statistics values to. */
 	private static final String WEB_SERVICE_URL = "http://stats.rapidminer.com/usage-stats/upload/rapidminer";
 
-	private static final long TRANSMISSION_INTERVAL = 1000 * 60 * 60 * 24 * 14; // 14 days
+	/** Transmit usage statistics daily */
+	private static final long DEFAULT_TRANSMISSION_INTERVAL = 1000 * 60 * 60 * 24;
 
+	/** Schedule extra transmission 10 minutes from now */
+	private static final long SOON_TRANSMISSION_INTERVAL = 1000 * 60 * 10;
+
+	private Date initialSetup;
 	private Date lastReset;
 	private Date nextTransmission;
 
@@ -108,7 +116,7 @@ public class UsageStatistics {
 				Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 				Element root = doc.getDocumentElement();
 				String lastReset = root.getAttribute("last-reset");
-				if ((lastReset != null) && !lastReset.isEmpty()) {
+				if (lastReset != null && !lastReset.isEmpty()) {
 					try {
 						this.lastReset = getDateFormat().parse(lastReset);
 					} catch (ParseException e) {
@@ -119,12 +127,21 @@ public class UsageStatistics {
 				}
 
 				this.randomKey = root.getAttribute("random-key");
-				if ((randomKey == null) || randomKey.isEmpty()) {
+				if (randomKey == null || randomKey.isEmpty()) {
 					this.randomKey = createRandomKey();
 				}
 
+				String initialSetup = root.getAttribute("initial-setup");
+				if (initialSetup != null) {
+					try {
+						this.initialSetup = getDateFormat().parse(initialSetup);
+					} catch (ParseException e) {
+						// ignore malformed files
+					}
+				}
+
 				String nextTransmission = root.getAttribute("next-transmission");
-				if ((lastReset != null) && !lastReset.isEmpty()) {
+				if (lastReset != null && !lastReset.isEmpty()) {
 					try {
 						this.nextTransmission = getDateFormat().parse(nextTransmission);
 					} catch (ParseException e) {
@@ -139,14 +156,30 @@ public class UsageStatistics {
 					ActionStatisticsCollector.getInstance().load(actionStats);
 				}
 			} catch (Exception e) {
-				LogService.getRoot().log(
-						Level.WARNING,
-						I18N.getMessage(LogService.getRoot().getResourceBundle(),
-								"com.rapidminer.gui.tools.usagestats.UsageStatistics.loading_operator_usage_error", e), e);
+				LogService.getRoot().log(Level.WARNING, I18N.getMessage(LogService.getRoot().getResourceBundle(),
+						"com.rapidminer.gui.tools.usagestats.UsageStatistics.loading_operator_usage_error", e), e);
 			}
 		} else {
 			this.randomKey = createRandomKey();
+			this.initialSetup = new Date();
+			this.lastReset = new Date();
 		}
+	}
+
+	/**
+	 * @return the transmission interval to be used (in milliseconds)
+	 */
+	private long getTransmissionInterval() {
+		return DEFAULT_TRANSMISSION_INTERVAL;
+	}
+
+	/**
+	 * Checks whether the usage statistics should be transmitted on studio shutdown.
+	 *
+	 * @return {@code true} if the usage statistics should be transmitted
+	 */
+	boolean shouldTransmitOnShutdown() {
+		return EULADialog.getEULAAccepted();
 	}
 
 	private String createRandomKey() {
@@ -180,11 +213,20 @@ public class UsageStatistics {
 			root.setAttribute("next-transmission", getDateFormat().format(nextTransmission));
 		}
 		root.setAttribute("random-key", this.randomKey);
+		if (this.initialSetup != null) {
+			root.setAttribute("initial-setup", getDateFormat().format(initialSetup));
+		}
 		root.setAttribute("rapidminer-version", new RapidMinerVersion().toString());
 		root.setAttribute("os-name", System.getProperties().getProperty("os.name"));
 		root.setAttribute("os-version", System.getProperties().getProperty("os.version"));
+		root.setAttribute("os-cores", "" + SystemInfoUtilities.getNumberOfProcessors());
+		String osMemory = getOSMemory();
+		if (osMemory != null) {
+			root.setAttribute("os-memory", osMemory);
+		}
+		root.setAttribute("jvm-max-heap", "" + SystemInfoUtilities.getMaxHeapMemorySize());
 		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
-		if ((activeLicense != null) && (activeLicense.getLicenseID() != null)) {
+		if (activeLicense != null && activeLicense.getLicenseID() != null) {
 			root.setAttribute("lid", activeLicense.getLicenseID());
 		}
 
@@ -194,6 +236,22 @@ public class UsageStatistics {
 		return doc;
 	}
 
+	/**
+	 * @return the total memory of the os or {@code null} if it cannot be read
+	 */
+	private String getOSMemory() {
+		try {
+			Long total = SystemInfoUtilities.getTotalPhysicalMemorySize();
+			if (total != null) {
+				return total.toString();
+			}
+			return null;
+		} catch (IOException e) {
+			// cannot read total memory
+			return null;
+		}
+	}
+
 	/** Saves the statistics to a user file. */
 	public void save() {
 		if (RapidMiner.getExecutionMode().canAccessFilesystem()) {
@@ -201,12 +259,10 @@ public class UsageStatistics {
 			try {
 				LogService.getRoot().log(Level.CONFIG,
 						"com.rapidminer.gui.tools.usagestats.UsageStatistics.saving_operator_usage");
-				XMLTools.stream(getXML(), file, null);
+				XMLTools.stream(getXML(), file, StandardCharsets.UTF_8);
 			} catch (Exception e) {
-				LogService.getRoot().log(
-						Level.WARNING,
-						I18N.getMessage(LogService.getRoot().getResourceBundle(),
-								"com.rapidminer.gui.tools.usagestats.UsageStatistics.saving_operator_usage_error", e), e);
+				LogService.getRoot().log(Level.WARNING, I18N.getMessage(LogService.getRoot().getResourceBundle(),
+						"com.rapidminer.gui.tools.usagestats.UsageStatistics.saving_operator_usage_error", e), e);
 			}
 		} else {
 			LogService.getRoot().config(
@@ -224,7 +280,7 @@ public class UsageStatistics {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return true on success
 	 */
 	public boolean transferUsageStats(ProgressListener progressListener) throws Exception {
@@ -236,7 +292,7 @@ public class UsageStatistics {
 		con.setDoOutput(true);
 		con.setRequestMethod("POST");
 		WebServiceTools.setURLConnectionDefaults(con);
-		try (Writer writer = new OutputStreamWriter(con.getOutputStream())) {
+		try (Writer writer = new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8)) {
 			progressListener.setCompleted(30);
 			writer.write(xml);
 			writer.flush();
@@ -248,18 +304,19 @@ public class UsageStatistics {
 			}
 		} finally {
 			progressListener.complete();
+
 		}
 	}
 
 	/** Sets the date for the next transmission. Starts no timers. */
 	void scheduleTransmission(boolean lastAttemptFailed) {
-		this.failedToday = true;
-		this.nextTransmission = new Date(lastReset.getTime() + TRANSMISSION_INTERVAL);
+		this.failedToday = lastAttemptFailed;
+		this.nextTransmission = new Date(lastReset.getTime() + getTransmissionInterval());
 	}
 
 	/**
 	 * Returns the user key for this session.
-	 * 
+	 *
 	 * @return the user key
 	 */
 	public String getUserKey() {
@@ -275,10 +332,21 @@ public class UsageStatistics {
 	}
 
 	public void scheduleTransmissionFromNow() {
-		this.nextTransmission = new Date(System.currentTimeMillis() + TRANSMISSION_INTERVAL);
+		this.nextTransmission = new Date(System.currentTimeMillis() + getTransmissionInterval());
 	}
 
 	public boolean hasFailedToday() {
 		return failedToday;
+	}
+
+	/**
+	 * Schedules a new transmission in 10 minutes. Restarts the timer for the transmission dialog if
+	 * not in headless mode.
+	 */
+	void scheduleTransmissionSoon() {
+		this.nextTransmission = new Date(System.currentTimeMillis() + SOON_TRANSMISSION_INTERVAL);
+		if (!RapidMiner.getExecutionMode().isHeadless()) {
+			UsageStatsTransmissionDialog.startTimer();
+		}
 	}
 }

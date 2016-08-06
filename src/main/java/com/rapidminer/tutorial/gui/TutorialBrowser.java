@@ -288,6 +288,8 @@ public class TutorialBrowser extends JPanel implements Dockable {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ActionStatisticsCollector.INSTANCE.log(ActionStatisticsCollector.TYPE_GETTING_STARTED,
+						"tutorial:" + selectedTutorial.getIdentifier(), "step_" + (stepIndex + 1) + "_previous");
 				displayStep(--stepIndex);
 			}
 		});
@@ -301,6 +303,8 @@ public class TutorialBrowser extends JPanel implements Dockable {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ActionStatisticsCollector.INSTANCE.log(ActionStatisticsCollector.TYPE_GETTING_STARTED,
+						"tutorial:" + selectedTutorial.getIdentifier(), "step_" + (stepIndex + 1) + "_next");
 				displayStep(++stepIndex);
 			}
 		});
@@ -362,11 +366,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 					} else {
 						ActionStatisticsCollector.INSTANCE.log(ActionStatisticsCollector.TYPE_GETTING_STARTED,
 								"tutorial_browser", "open_remote_url");
-						try {
-							RMUrlHandler.browse(e.getURL().toURI());
-						} catch (Exception e1) {
-							SwingTools.showSimpleErrorMessage("cannot_open_browser_url", e1, e.getDescription());
-						}
+						RMUrlHandler.openInBrowser(e.getURL());
 					}
 				}
 			}

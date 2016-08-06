@@ -65,13 +65,13 @@ import com.vlsolutions.swing.docking.DockGroup;
 import com.vlsolutions.swing.docking.Dockable;
 import com.vlsolutions.swing.docking.DockingDesktop;
 
-
 /**
- * The main component class of the RapidMiner GUI. The class holds a lot of Actions that can be used
- * for the tool bar and for the menu bar. MainFrame has methods for handling the process (saving,
- * opening, creating new). It keeps track of the state of the process and enables/disables buttons.
- * It must be notified whenever the process changes and propagates this event to its children. Most
- * of the code is enclosed within the Actions.
+ * The main component class of the RapidMiner GUI. The class holds a lot of
+ * Actions that can be used for the tool bar and for the menu bar. MainFrame has
+ * methods for handling the process (saving, opening, creating new). It keeps
+ * track of the state of the process and enables/disables buttons. It must be
+ * notified whenever the process changes and propagates this event to its
+ * children. Most of the code is enclosed within the Actions.
  *
  * @author Ingo Mierswa, Simon Fischer, Sebastian Land, Marius Helf
  */
@@ -79,45 +79,58 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	private static final long serialVersionUID = 1L;
 
-	/** The property name for &quot;The pixel size of each plot in matrix plots.&quot; */
+	/**
+	 * The property name for &quot;The pixel size of each plot in matrix
+	 * plots.&quot;
+	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_MATRIXPLOT_SIZE = "rapidminer.gui.plotter.matrixplot.size";
 
 	/**
-	 * The property name for &quot;The maximum number of rows used for a plotter, using only a
-	 * sample of this size if more rows are available.&quot;
+	 * The property name for &quot;The maximum number of rows used for a
+	 * plotter, using only a sample of this size if more rows are
+	 * available.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_ROWS_MAXIMUM = "rapidminer.gui.plotter.rows.maximum";
 
 	/**
-	 * The property name for the &quot; The maximum number of examples in a data set for which
-	 * default plotter settings will be generated.&quot;
+	 * The property name for the &quot; The maximum number of examples in a data
+	 * set for which default plotter settings will be generated.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_DEFAULT_MAXIMUM = "rapidminer.gui.plotter.default.maximum";
 
 	/**
-	 * The property name for &quot;Limit number of displayed classes plotter legends. -1 for no
-	 * limit.&quot;
+	 * The property name for &quot;Limit number of displayed classes plotter
+	 * legends. -1 for no limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_CLASSLIMIT = "rapidminer.gui.plotter.legend.classlimit";
 
-	/** The property name for &quot;The color for minimum values of the plotter legend.&quot; */
+	/**
+	 * The property name for &quot;The color for minimum values of the plotter
+	 * legend.&quot;
+	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_MINCOLOR = "rapidminer.gui.plotter.legend.mincolor";
 
-	/** The property name for &quot;The color for maximum values of the plotter legend.&quot; */
+	/**
+	 * The property name for &quot;The color for maximum values of the plotter
+	 * legend.&quot;
+	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_MAXCOLOR = "rapidminer.gui.plotter.legend.maxcolor";
 
 	/**
-	 * The property name for &quot;Limit number of displayed classes for colorized plots. -1 for no
-	 * limit.&quot;
+	 * The property name for &quot;Limit number of displayed classes for
+	 * colorized plots. -1 for no limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_COLORS_CLASSLIMIT = "rapidminer.gui.plotter.colors.classlimit";
 
-	/** The property name for &quot;Maximum number of states in the undo list.&quot; */
+	/**
+	 * The property name for &quot;Maximum number of states in the undo
+	 * list.&quot;
+	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_UNDOLIST_SIZE = "rapidminer.gui.undolist.size";
 
 	/**
-	 * The property name for &quot;Maximum number of examples to use for the attribute editor. -1
-	 * for no limit.&quot;
+	 * The property name for &quot;Maximum number of examples to use for the
+	 * attribute editor. -1 for no limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_ATTRIBUTEEDITOR_ROWLIMIT = "rapidminer.gui.attributeeditor.rowlimit";
 
@@ -131,12 +144,15 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	public static final String PROPERTY_RAPIDMINER_GUI_BEEP_BREAKPOINT = "rapidminer.gui.beep.breakpoint";
 
 	/**
-	 * The property name for &quot;Limit number of displayed rows in the message viewer. -1 for no
-	 * limit.&quot;
+	 * The property name for &quot;Limit number of displayed rows in the message
+	 * viewer. -1 for no limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_MESSAGEVIEWER_ROWLIMIT = "rapidminer.gui.messageviewer.rowlimit";
 
-	/** The property name for &quot;Shows process info screen after loading?&quot; */
+	/**
+	 * The property name for &quot;Shows process info screen after
+	 * loading?&quot;
+	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PROCESSINFO_SHOW = "rapidminer.gui.processinfo.show";
 
 	public static final String PROPERTY_RAPIDMINER_GUI_SAVE_BEFORE_RUN = "rapidminer.gui.save_before_run";
@@ -144,7 +160,8 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	public static final String PROPERTY_RAPIDMINER_GUI_SAVE_ON_PROCESS_CREATION = "rapidminer.gui.save_on_process_creation";
 
 	/**
-	 * The property determining whether or not to switch to result view when results are produced.
+	 * The property determining whether or not to switch to result view when
+	 * results are produced.
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_AUTO_SWITCH_TO_RESULTVIEW = "rapidminer.gui.auto_switch_to_resultview";
 
@@ -159,15 +176,13 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	public static final int RESULTS_MODE = 1;
 	public static final int WELCOME_MODE = 2;
 
-
 	// --------------------------------------------------------------------------------
-
 
 	private final AbstractUIState state;
 
 	// DOCKING
 
-	//These are probably not required.
+	// These are probably not required.
 	public static final DockGroup DOCK_GROUP_ROOT = AbstractUIState.DOCK_GROUP_ROOT;
 	public static final DockGroup DOCK_GROUP_RESULTS = AbstractUIState.DOCK_GROUP_RESULTS;
 
@@ -182,7 +197,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	public MainFrame(final String initialPerspective) {
 		super(AbstractUIState.TITLE);
-		state = new AbstractUIState(/*initialPerspective,*/ this, getContentPane()) {
+		state = new AbstractUIState(/* initialPerspective, */ this, getContentPane()) {
 
 			@Override
 			public boolean close() {
@@ -194,14 +209,15 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 					} else {
 						locName = "unnamed";
 					}
-					switch (SwingTools.showConfirmDialog("save",
-							ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
-						case ConfirmDialog.YES_OPTION:
+					switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
+					case ConfirmDialog.YES_OPTION:
 						SaveAction.save(getProcess());
 
-						// it may happen that save() does not actually save the process,
+						// it may happen that save() does not actually save the
+						// process,
 						// because the user hits cancel in the
-						// saveAs dialog or an error occurs. In this case the process
+						// saveAs dialog or an error occurs. In this case the
+						// process
 						// won't be marked as unchanged. Thus,
 						// we return the process changed status.
 						return !isChanged();
@@ -214,11 +230,11 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 						return true;
 					default: // cancel
 						return false;
+					}
+				} else {
+					return true;
 				}
-			} else {
-				return true;
 			}
-		}
 
 			@Override
 			public void exit(final boolean relaunch) {
@@ -230,9 +246,8 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 					} else {
 						locName = "unnamed";
 					}
-					switch (SwingTools.showConfirmDialog("save",
-							ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
-						case ConfirmDialog.YES_OPTION:
+					switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
+					case ConfirmDialog.YES_OPTION:
 						SaveAction.save(process);
 						if (changed) {
 							return;
@@ -243,31 +258,29 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 					case ConfirmDialog.CANCEL_OPTION:
 					default:
 						return;
-				}
-			} else {
-				if (!relaunch) { // in this case we have already confirmed
-					final int answer = ConfirmDialog.showConfirmDialog(ApplicationFrame.getApplicationFrame(), "exit",
-								ConfirmDialog.YES_NO_OPTION,
-								RapidMinerGUI.PROPERTY_CONFIRM_EXIT,
+					}
+				} else {
+					if (!relaunch) { // in this case we have already confirmed
+						final int answer = ConfirmDialog.showConfirmDialog(ApplicationFrame.getApplicationFrame(),
+								"exit", ConfirmDialog.YES_NO_OPTION, RapidMinerGUI.PROPERTY_CONFIRM_EXIT,
 								ConfirmDialog.YES_OPTION);
-					if (answer != ConfirmDialog.YES_OPTION) {
-						return;
+						if (answer != ConfirmDialog.YES_OPTION) {
+							return;
+						}
 					}
 				}
+				stopProcess();
+				dispose();
+				RapidMiner.quit(relaunch ? RapidMiner.ExitMode.RELAUNCH : RapidMiner.ExitMode.NORMAL);
 			}
-			stopProcess();
-			dispose();
-			RapidMiner.quit(relaunch ? RapidMiner.ExitMode.RELAUNCH
-						: RapidMiner.ExitMode.NORMAL);
-		}
 
 			@Override
 			public void updateRecentFileList() {
 				recentFilesMenu.removeAll();
-				List<ProcessLocation> recentFiles = RapidMinerGUI.getRecentFiles();
+				final List<ProcessLocation> recentFiles = RapidMinerGUI.getRecentFiles();
 				int j = 1;
 				for (final ProcessLocation recentLocation : recentFiles) {
-					JMenuItem menuItem = new JMenuItem(j + " " + recentLocation.toMenuString());
+					final JMenuItem menuItem = new JMenuItem(j + " " + recentLocation.toMenuString());
 					menuItem.setMnemonic('0' + j);
 					menuItem.addActionListener(new ActionListener() {
 
@@ -284,30 +297,29 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 			}
 
 			/**
-			 * Sets the window title (RapidMiner + filename + an asterisk if process was
-			 * modified.
+			 * Sets the window title (RapidMiner + filename + an asterisk if
+			 * process was modified.
 			 */
+			@Override
 			public void setTitle() {
 				if (hostname == null) {
 					try {
 						hostname = " @ " + InetAddress.getLocalHost().getHostName();
-					} catch (UnknownHostException e) {
+					} catch (final UnknownHostException e) {
 						hostname = "";
 					}
 				}
 
 				if (this.process != null) {
-					ProcessLocation loc = process.getProcessLocation();
+					final ProcessLocation loc = process.getProcessLocation();
 					if (loc != null) {
 						String locString = loc.toString();
-						// location string exceeding arbitrary number will be cut into repository name + /.../ + process name
+						// location string exceeding arbitrary number will be
+						// cut into repository name + /.../ + process name
 						if (locString.length() > MAX_LOCATION_TITLE_LENGTH) {
-							locString = RepositoryLocation.REPOSITORY_PREFIX +
-									process.getRepositoryLocation().getRepositoryName() +
-									RepositoryLocation.SEPARATOR +
-									"..." +
-									RepositoryLocation.SEPARATOR +
-									loc.getShortName();
+							locString = RepositoryLocation.REPOSITORY_PREFIX
+									+ process.getRepositoryLocation().getRepositoryName() + RepositoryLocation.SEPARATOR
+									+ "..." + RepositoryLocation.SEPARATOR + loc.getShortName();
 						}
 						MainFrame.this.setTitle(locString + (changed ? "*" : "") + " \u2013 " + TITLE + hostname);
 					} else {
@@ -321,33 +333,35 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(this);
 		pack();
-		//state.metaDataUpdateQueue.start();
+		// state.metaDataUpdateQueue.start();
 	}
-	
+
 	@Override
 	public void finishInitialization() {
 		state.finishInitialization();
 	}
 
 	/**
-	 * Returns a registry for {@link DataImportWizardFactory} instances. The factories are used to
-	 * populate menus such as the main import menu.
+	 * Returns a registry for {@link DataImportWizardFactory} instances. The
+	 * factories are used to populate menus such as the main import menu.
 	 *
 	 * @return the registry
 	 */
+	@Override
 	@Deprecated
 	public DataImportWizardRegistry getDataImportWizardRegistry() {
 		return state.getDataImportWizardRegistry();
 	}
 
+	@Override
 	public LogViewer getLogViewer() {
 		return state.getLogViewer();
 	}
 
-
 	/**
 	 * @return the toolbar button for running processes on the Server
 	 */
+	@Override
 	public JButton getRunRemoteToolbarButton() {
 		return state.getRunRemoteToolbarButton();
 	}
@@ -365,8 +379,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	// ===================================================
 
 	/**
-	 * Sets a new process and registers the MainFrame listener. Please note that this method does
-	 * not invoke {@link #processChanged()}. Do so if necessary.
+	 * Sets a new process and registers the MainFrame listener. Please note that
+	 * this method does not invoke {@link #processChanged()}. Do so if
+	 * necessary.
 	 *
 	 * @deprecated Use {@link #setProcess(Process, boolean)} instead
 	 */
@@ -376,18 +391,21 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	}
 
 	/**
-	 * Must be called when the process changed (such that is different from the process before).
-	 * Enables the correct actions if the process can be saved to disk.
+	 * Must be called when the process changed (such that is different from the
+	 * process before). Enables the correct actions if the process can be saved
+	 * to disk.
 	 *
-	 * @deprecated this method is no longer necessary (and does nothing) since the MainFrame
-	 *             observes the process using an Observer pattern. See {@link #processObserver}.
+	 * @deprecated this method is no longer necessary (and does nothing) since
+	 *             the MainFrame observes the process using an Observer pattern.
+	 *             See {@link #processObserver}.
 	 */
 	@Deprecated
-	public void processChanged() {}
-
+	public void processChanged() {
+	}
 
 	/**
-	 * Sets the window title (RapidMiner + filename + an asterisk if process was modified.
+	 * Sets the window title (RapidMiner + filename + an asterisk if process was
+	 * modified.
 	 */
 	public void setTitle() {
 		state.setTitle();
@@ -399,18 +417,21 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	 * Closes the current process
 	 *
 	 * @param askForConfirmation
-	 *            if <code>true</code>, will prompt the user if he really wants to close the current
-	 *            process
+	 *            if <code>true</code>, will prompt the user if he really wants
+	 *            to close the current process
 	 * @return
 	 */
+	@Override
 	public boolean close(final boolean askForConfirmation) {
 		return state.close(askForConfirmation);
 	}
 
+	@Override
 	public boolean close() {
 		return state.close();
 	}
 
+	@Override
 	public void exit(final boolean relaunch) {
 		state.exit(relaunch);
 	}
@@ -421,7 +442,8 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	}
 
 	@Override
-	public void windowOpened(final WindowEvent e) {}
+	public void windowOpened(final WindowEvent e) {
+	}
 
 	@Override
 	public void windowClosing(final WindowEvent e) {
@@ -429,21 +451,28 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	}
 
 	@Override
-	public void windowClosed(final WindowEvent e) {}
+	public void windowClosed(final WindowEvent e) {
+	}
 
 	@Override
-	public void windowIconified(final WindowEvent e) {}
+	public void windowIconified(final WindowEvent e) {
+	}
 
 	@Override
-	public void windowDeiconified(final WindowEvent e) {}
+	public void windowDeiconified(final WindowEvent e) {
+	}
 
 	@Override
-	public void windowActivated(final WindowEvent e) {}
+	public void windowActivated(final WindowEvent e) {
+	}
 
 	@Override
-	public void windowDeactivated(final WindowEvent e) {}
+	public void windowDeactivated(final WindowEvent e) {
+	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getWindow()
 	 */
 	@Override
@@ -451,15 +480,20 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return this;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.MenusUI#addMenuItem(int, int, javax.swing.JMenuItem)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.rapidminer.gui.MenusUI#addMenuItem(int, int,
+	 * javax.swing.JMenuItem)
 	 */
 	@Override
 	public void addMenuItem(final int menuIndex, final int itemIndex, final JMenuItem item) {
 		state.addMenuItem(menuIndex, itemIndex, item);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#addMenu(int, javax.swing.JMenu)
 	 */
 	@Override
@@ -467,7 +501,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.addMenu(menuIndex, menu);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#addMenuSeparator(int)
 	 */
 	@Override
@@ -475,7 +511,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.addMenuSeparator(menuIndex);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#removeMenu(int)
 	 */
 	@Override
@@ -483,7 +521,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.removeMenu(index);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#removeMenuItem(int, int)
 	 */
 	@Override
@@ -491,7 +531,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.removeMenuItem(menuIndex, itemIndex);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#getFileMenu()
 	 */
 	@Override
@@ -499,7 +541,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getFileMenu();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#getToolsMenu()
 	 */
 	@Override
@@ -508,7 +552,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getToolsMenu();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#getEditMenu()
 	 */
 	@Override
@@ -516,7 +562,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getEditMenu();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#getProcessMenu()
 	 */
 	@Override
@@ -524,7 +572,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getProcessMenu();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MenusUI#getHelpMenu()
 	 */
 	@Override
@@ -536,6 +586,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#addViewSwitchToUndo()
 	 */
 	@Override
@@ -543,7 +594,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.addViewSwitchToUndo();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#validateProcess(boolean)
 	 */
 	@Override
@@ -551,7 +604,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.validateProcess(force);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#getProcessState()
 	 */
 	@Override
@@ -559,7 +614,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getProcessState();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#getProcess()
 	 */
 	@Override
@@ -567,7 +624,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getProcess();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#newProcess()
 	 */
 	@Override
@@ -575,7 +634,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.newProcess();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#runProcess()
 	 */
 	@Override
@@ -583,15 +644,19 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.runProcess();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#runProcess(boolean)
 	 */
 	@Override
-	public void runProcess(boolean precheckBeforeExecution) {
+	public void runProcess(final boolean precheckBeforeExecution) {
 		state.runProcess(precheckBeforeExecution);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#stopProcess()
 	 */
 	@Override
@@ -599,7 +664,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.stopProcess();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#pauseProcess()
 	 */
 	@Override
@@ -607,8 +674,11 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.pauseProcess();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.ProcessState#setProcess(com.rapidminer.Process, boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.rapidminer.gui.ProcessState#setProcess(com.rapidminer.Process,
+	 * boolean)
 	 */
 	@Override
 	public void setProcess(final Process process, final boolean newProcess) {
@@ -617,14 +687,18 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.rapidminer.gui.ProcessState#setProcess(com.rapidminer.Process, boolean, boolean)
+	 * 
+	 * @see com.rapidminer.gui.ProcessState#setProcess(com.rapidminer.Process,
+	 * boolean, boolean)
 	 */
 	@Override
-	public void setProcess(Process process, boolean newProcess, boolean addToUndoList) {
+	public void setProcess(final Process process, final boolean newProcess, final boolean addToUndoList) {
 		state.setProcess(process, newProcess, addToUndoList);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#isChanged()
 	 */
 	@Override
@@ -632,7 +706,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.isChanged();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#undo()
 	 */
 	@Override
@@ -640,7 +716,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.undo();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#redo()
 	 */
 	@Override
@@ -650,6 +728,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#hasUndoSteps()
 	 */
 	@Override
@@ -659,6 +738,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#hasRedoSteps()
 	 */
 	@Override
@@ -666,25 +746,30 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.hasRedoSteps();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.ProcessState#setOpenedProcess(com.rapidminer.Process, boolean, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.ProcessState#setOpenedProcess(com.rapidminer.Process,
+	 * boolean, java.lang.String)
 	 */
 	@Override
-	public void setOpenedProcess(final Process process, final boolean showInfo,
-									final String sourceName) {
+	public void setOpenedProcess(final Process process, final boolean showInfo, final String sourceName) {
 		state.setOpenedProcess(process, showInfo, sourceName);
 	}
 
-	//Removed in 6.x
-//	/* (non-Javadoc)
-//	 * @see com.rapidminer.gui.ProcessState#saveAsTemplate()
-//	 */
-//	@Override
-//	public void saveAsTemplate() {
-//		state.saveAsTemplate();
-//	}
-//
-	/* (non-Javadoc)
+	// Removed in 6.x
+	// /* (non-Javadoc)
+	// * @see com.rapidminer.gui.ProcessState#saveAsTemplate()
+	// */
+	// @Override
+	// public void saveAsTemplate() {
+	// state.saveAsTemplate();
+	// }
+	//
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#fireProcessUpdated()
 	 */
 	@Override
@@ -692,7 +777,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.fireProcessUpdated();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.ProcessState#processHasBeenSaved()
 	 */
 	@Override
@@ -700,7 +787,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.processHasBeenSaved();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getPropertyPanel()
 	 */
 	@Override
@@ -708,16 +797,18 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getPropertyPanel();
 	}
 
-	//Changed in 6.x
-//	/* (non-Javadoc)
-//	 * @see com.rapidminer.gui.MainUIState#getMessageViewer()
-//	 */
-//	@Override
-//	public LoggingViewer getMessageViewer() {
-//		return state.getMessageViewer();
-//	}
+	// Changed in 6.x
+	// /* (non-Javadoc)
+	// * @see com.rapidminer.gui.MainUIState#getMessageViewer()
+	// */
+	// @Override
+	// public LoggingViewer getMessageViewer() {
+	// return state.getMessageViewer();
+	// }
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getNewOperatorEditor()
 	 */
 	@Override
@@ -725,7 +816,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getNewOperatorEditor();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getOperatorTree()
 	 */
 	@Override
@@ -733,7 +826,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getOperatorTree();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getActions()
 	 */
 	@Override
@@ -741,7 +836,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getActions();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getResultDisplay()
 	 */
 	@Override
@@ -749,7 +846,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getResultDisplay();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getSelectedOperators()
 	 */
 	@Override
@@ -757,7 +856,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getSelectedOperators();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getFirstSelectedOperator()
 	 */
 	@Override
@@ -765,69 +866,92 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getFirstSelectedOperator();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#addProcessEditor(com.rapidminer.gui.processeditor.ProcessEditor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.rapidminer.gui.MainUIState#addProcessEditor(com.rapidminer.gui.
+	 * processeditor.ProcessEditor)
 	 */
 	@Override
 	public void addProcessEditor(final ProcessEditor p) {
 		state.addProcessEditor(p);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#addExtendedProcessEditor(com.rapidminer.gui.processeditor.ExtendedProcessEditor)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.MainUIState#addExtendedProcessEditor(com.rapidminer.
+	 * gui.processeditor.ExtendedProcessEditor)
 	 */
 	@Override
-	public void addExtendedProcessEditor(ExtendedProcessEditor p) {
+	public void addExtendedProcessEditor(final ExtendedProcessEditor p) {
 		state.addExtendedProcessEditor(p);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.rapidminer.gui.ProcessState#removeProcessEditor(com.rapidminer.gui.processeditor.ProcessEditor)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.ProcessState#removeProcessEditor(com.rapidminer.gui.
+	 * processeditor.ProcessEditor)
 	 */
 	@Override
 	@Deprecated
-	public void removeProcessEditor(ProcessEditor p) {
+	public void removeProcessEditor(final ProcessEditor p) {
 		state.removeProcessEditor(p);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#removeExtendedProcessEditor(com.rapidminer.gui.processeditor.ExtendedProcessEditor)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.MainUIState#removeExtendedProcessEditor(com.rapidminer
+	 * .gui.processeditor.ExtendedProcessEditor)
 	 */
 	@Override
-	public void removeExtendedProcessEditor(ExtendedProcessEditor p) {
+	public void removeExtendedProcessEditor(final ExtendedProcessEditor p) {
 		state.removeExtendedProcessEditor(p);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#addProcessStorageListener(com.rapidminer.ProcessStorageListener)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.MainUIState#addProcessStorageListener(com.rapidminer.
+	 * ProcessStorageListener)
 	 */
 	@Override
-	public void addProcessStorageListener(ProcessStorageListener listener) {
+	public void addProcessStorageListener(final ProcessStorageListener listener) {
 		state.addProcessStorageListener(listener);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#removeProcessStorageListener(com.rapidminer.ProcessStorageListener)
+	 * 
+	 * @see com.rapidminer.gui.MainUIState#removeProcessStorageListener(com.
+	 * rapidminer.ProcessStorageListener)
 	 */
 	@Override
-	public void removeProcessStorageListener(ProcessStorageListener listener) {
+	public void removeProcessStorageListener(final ProcessStorageListener listener) {
 		state.removeProcessStorageListener(listener);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#selectOperator(com.rapidminer.operator.Operator)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.MainUIState#selectOperator(com.rapidminer.operator.
+	 * Operator)
 	 */
 	@Override
 	public void selectOperator(final Operator currentlySelected) {
 		state.selectOperator(currentlySelected);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#selectOperators(java.util.List)
 	 */
 	@Override
@@ -835,7 +959,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		state.selectOperators(currentlySelected);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getDockingDesktop()
 	 */
 	@Override
@@ -843,7 +969,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getDockingDesktop();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getPerspectives()
 	 */
 	@Override
@@ -852,16 +980,21 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getPerspectives();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#handleBrokenProxessXML(com.rapidminer.ProcessLocation, java.lang.String, java.lang.Exception)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.MainUIState#handleBrokenProxessXML(com.rapidminer.
+	 * ProcessLocation, java.lang.String, java.lang.Exception)
 	 */
 	@Override
-	public void handleBrokenProxessXML(final ProcessLocation location, final String xml,
-										final Exception e) {
+	public void handleBrokenProxessXML(final ProcessLocation location, final String xml, final Exception e) {
 		state.handleBrokenProxessXML(location, xml, e);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getOperatorDocViewer()
 	 */
 	@Override
@@ -869,23 +1002,31 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getOperatorDocViewer();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getProcessPanel()
 	 */
 	@Override
 	public ProcessPanel getProcessPanel() {
 		return state.getProcessPanel();
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#registerDockable(com.vlsolutions.swing.docking.Dockable)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.MainUIState#registerDockable(com.vlsolutions.swing.
+	 * docking.Dockable)
 	 */
 	@Override
 	public void registerDockable(final Dockable dockable) {
 		state.registerDockable(dockable);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getProcessContextEditor()
 	 */
 	@Override
@@ -895,6 +1036,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getRepositoryBrowser()
 	 */
 	@Override
@@ -902,7 +1044,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getRepositoryBrowser();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getXMLEditor()
 	 */
 	@Override
@@ -910,33 +1054,35 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getXMLEditor();
 	}
 
-	//Removed in 6.x
-//	/*
-//	 * (non-Javadoc)
-//	 * @see com.rapidminer.gui.MainUIState#getImportXmlFileAction()
-//	 */
-//	@Override
-//	public Action getImportXmlFileAction() {
-//		return state.getImportXmlFileAction();
-//	}
-//
-//	/* (non-Javadoc)
-//	 * @see com.rapidminer.gui.MainUIState#getImportAccessFileAction()
-//	 */
-//	@Override
-//	public Action getImportAccessFileAction() {
-//		return state.getImportAccessFileAction();
-//	}
-//
-//	/* (non-Javadoc)
-//	 * @see com.rapidminer.gui.MainUIState#getImportDatabaseTableAction()
-//	 */
-//	@Override
-//	public Action getImportDatabaseTableAction() {
-//		return state.getImportDatabaseTableAction();
-//	}
+	// Removed in 6.x
+	// /*
+	// * (non-Javadoc)
+	// * @see com.rapidminer.gui.MainUIState#getImportXmlFileAction()
+	// */
+	// @Override
+	// public Action getImportXmlFileAction() {
+	// return state.getImportXmlFileAction();
+	// }
+	//
+	// /* (non-Javadoc)
+	// * @see com.rapidminer.gui.MainUIState#getImportAccessFileAction()
+	// */
+	// @Override
+	// public Action getImportAccessFileAction() {
+	// return state.getImportAccessFileAction();
+	// }
+	//
+	// /* (non-Javadoc)
+	// * @see com.rapidminer.gui.MainUIState#getImportDatabaseTableAction()
+	// */
+	// @Override
+	// public Action getImportDatabaseTableAction() {
+	// return state.getImportDatabaseTableAction();
+	// }
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getValidateAutomaticallyAction()
 	 */
 	@Override
@@ -946,6 +1092,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getPropagateRealMetadataAction()
 	 */
 	@Override
@@ -953,17 +1100,19 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getPropagateRealMetadataAction();
 	}
 
-	//Removed in 6.x
-//	/*
-//	 * (non-Javadoc)
-//	 * @see com.rapidminer.gui.MainUIState#getRunRemoteNowAction()
-//	 */
-//	@Override
-//	public RunRemoteNowAction getRunRemoteNowAction() {
-//		return state.getRunRemoteNowAction();
-//	}
-	
-	/* (non-Javadoc)
+	// Removed in 6.x
+	// /*
+	// * (non-Javadoc)
+	// * @see com.rapidminer.gui.MainUIState#getRunRemoteNowAction()
+	// */
+	// @Override
+	// public RunRemoteNowAction getRunRemoteNowAction() {
+	// return state.getRunRemoteNowAction();
+	// }
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getRunAction()
 	 */
 	@Override
@@ -973,6 +1122,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getSaveAction()
 	 */
 	@Override
@@ -980,7 +1130,9 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getSaveAction();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getToggleExpertModeAction()
 	 */
 	@Override
@@ -988,25 +1140,31 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 		return state.getToggleExpertModeAction();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.rapidminer.gui.ProcessEndHandler#processEnded(com.rapidminer.Process, com.rapidminer.operator.IOContainer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.rapidminer.gui.ProcessEndHandler#processEnded(com.rapidminer.Process,
+	 * com.rapidminer.operator.IOContainer)
 	 */
 	@Override
 	public void processEnded(final Process process, final IOContainer results) {
 		state.processEnded(process, results);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getDockableMenu()
 	 */
 	@Override
 	public DockableMenu getDockableMenu() {
 		return state.getDockableMenu();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.rapidminer.gui.MainUIState#getButtonToolbar()
 	 */
 	@Override
@@ -1035,7 +1193,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	}
 
 	@Override
-	public void newProcess(boolean checkforUnsavedWork) {
+	public void newProcess(final boolean checkforUnsavedWork) {
 		state.newProcess(checkforUnsavedWork);
 	}
 

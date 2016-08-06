@@ -161,7 +161,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	 * Sets the window title (RapidMiner + filename + an asterisk if process was
 	 * modified.
 	 */
-	protected abstract void setTitle();
+	public abstract void setTitle();
 
 	// public abstract void processChanged();
 
@@ -2217,7 +2217,10 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	 *         execution; {@code false} otherwise
 	 */
 	private boolean doesProcessContainShowstoppers() {
-		// if any operator has a mandatory parameter with no value and no default value. As it
+		// prevent two bubbles on top of each other
+		getProcessPanel().getOperatorWarningHandler().killWarningBubble();
+
+        // if any operator has a mandatory parameter with no value and no default value. As it
 		// cannot predict execution behavior (e.g. Branch operators), this may turn up problems
 		// which would not occur during process execution
 		Pair<Operator, ParameterType> missingParamPair = ProcessTools.getOperatorWithoutMandatoryParameter(process);

@@ -37,6 +37,7 @@ import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.Policy;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -59,8 +60,10 @@ import com.rapidminer.RepositoryProcessLocation;
 import com.rapidminer.core.io.data.source.DataSourceFactoryRegistry;
 import com.rapidminer.gui.actions.OpenAction;
 import com.rapidminer.gui.autosave.AutoSave;
+import com.rapidminer.gui.dialog.EULADialog;
 import com.rapidminer.gui.docking.RapidDockableContainerFactory;
 import com.rapidminer.gui.internal.GUIStartupListener;
+import com.rapidminer.gui.license.LicenseTools;
 import com.rapidminer.gui.look.RapidLookAndFeel;
 import com.rapidminer.gui.look.fc.BookmarkIO;
 import com.rapidminer.gui.look.ui.RapidDockingUISettings;
@@ -73,6 +76,7 @@ import com.rapidminer.gui.tools.logging.LogModel;
 import com.rapidminer.gui.tools.logging.LogModelRegistry;
 import com.rapidminer.gui.tools.logging.LogViewer;
 import com.rapidminer.gui.viewer.MetaDataViewerTableModel;
+import com.rapidminer.license.LicenseManagerRegistry;
 import com.rapidminer.parameter.ParameterTypeBoolean;
 import com.rapidminer.parameter.ParameterTypeCategory;
 import com.rapidminer.parameter.ParameterTypeColor;
@@ -80,6 +84,8 @@ import com.rapidminer.parameter.ParameterTypeInt;
 import com.rapidminer.repository.MalformedRepositoryLocationException;
 import com.rapidminer.repository.RepositoryLocation;
 import com.rapidminer.repository.RepositoryManager;
+import com.rapidminer.security.PluginSandboxPolicy;
+import com.rapidminer.security.PluginSecurityManager;
 import com.rapidminer.studio.io.data.internal.file.LocalFileDataSourceFactory;
 import com.rapidminer.studio.io.data.internal.file.binary.BinaryDataSourceFactory;
 import com.rapidminer.studio.io.data.internal.file.csv.CSVDataSourceFactory;
@@ -172,8 +178,9 @@ public class RapidMinerGUI extends RapidMiner {
 		RapidMiner.registerParameter(
 				new ParameterTypeBoolean(RapidMinerGUI.PROPERTY_ADD_BREAKPOINT_RESULTS_TO_HISTORY, "", false));
 		RapidMiner.registerParameter(new ParameterTypeBoolean(PROPERTY_CONFIRM_EXIT, "", false));
-		RapidMiner.registerParameter(new ParameterTypeCategory(PROPERTY_RUN_REMOTE_NOW, "",
-				DecisionRememberingConfirmDialog.PROPERTY_VALUES, DecisionRememberingConfirmDialog.ASK));
+//Removed in 7.1 or 7.2
+//		RapidMiner.registerParameter(new ParameterTypeCategory(PROPERTY_RUN_REMOTE_NOW, "",
+//				DecisionRememberingConfirmDialog.PROPERTY_VALUES, DecisionRememberingConfirmDialog.ASK));
 		RapidMiner.registerParameter(new ParameterTypeCategory(PROPERTY_OPEN_IN_FILEBROWSER, "",
 				DecisionRememberingConfirmDialog.PROPERTY_VALUES, DecisionRememberingConfirmDialog.ASK));
 		RapidMiner.registerParameter(new ParameterTypeCategory(PROPERTY_CLOSE_ALL_RESULTS_NOW, "",
@@ -182,7 +189,7 @@ public class RapidMinerGUI extends RapidMiner {
 		RapidMiner.registerParameter(new ParameterTypeBoolean(PROPERTY_DISCONNECT_ON_DISABLE, "", true));
 		RapidMiner.registerParameter(new ParameterTypeBoolean(PROPERTY_SHOW_NO_RESULT_WARNING, "", true));
 		RapidMiner.registerParameter(new ParameterTypeCategory(RapidMinerGUI.PROPERTY_TRANSFER_USAGESTATS, "",
-				RapidMinerGUI.PROPERTY_TRANSFER_USAGESTATS_ANSWERS, UsageStatsTransmissionDialog.ASK));
+				RapidMinerGUI.PROPERTY_TRANSFER_USAGESTATS_ANSWERS, UsageStatsTransmissionDialog.ALWAYS));
 		RapidMiner.registerParameter(new ParameterTypeCategory(RapidMinerGUI.PROPERTY_DRAG_TARGET_HIGHLIGHTING, "",
 				PROPERTY_DRAG_TARGET_HIGHLIGHTING_VALUES, DRAG_TARGET_HIGHLIGHTING_FULL));
 
@@ -269,6 +276,7 @@ public class RapidMinerGUI extends RapidMiner {
 			RapidMinerGUI.saveGUIProperties();
 			UsageStatistics.getInstance().save();
 			RepositoryManager.shutdown();
+			UsageStatsTransmissionDialog.transmitOnShutdown();
 		}
 	}
 
@@ -308,8 +316,9 @@ public class RapidMinerGUI extends RapidMiner {
 
 		// store (possibly new) active license (necessary, since no
 		// ACTIVE_LICENSE_CHANGED event is fired on startup)
-//		License activeLicense = ProductConstraintManager.INSTANCE.getActiveLicense();
-//		LicenseTools.storeActiveLicenseProperties(activeLicense);
+//		LicenseManagerRegistry.INSTANCE.get().getAllActiveLicenses().forEach((l) -> {
+//			LicenseTools.storeActiveLicenseProperties(l);
+//		});
 
 		// init logging GUI
 		defaultLogModel = new LogHandlerModel(LogService.getRoot(),
@@ -350,6 +359,7 @@ public class RapidMinerGUI extends RapidMiner {
 		RepositoryManager.getInstance(null).createRepositoryIfNoneIsDefined();
 
 		RapidMiner.splashMessage("create_frame");
+
 		SwingUtilities.invokeAndWait(new Runnable() {
 
 			@Override
@@ -486,6 +496,38 @@ public class RapidMinerGUI extends RapidMiner {
 
 	public static MainUIState getMainFrame() {
 		return mainFrame;
+	}
+
+	/**
+	 * Checks whether the repository location belongs to the currently loaded process.
+	 *
+	 * @param location
+	 *            Repository location to check.
+	 * @return true if the process belonging to this entry is currently presented on the GUI, false
+	 *         otherwise.
+	 */
+	public static boolean isMainFrameProcessLocation(RepositoryLocation location) {
+		if (getMainFrame() != null && getMainFrame().getProcess() != null) {
+			RepositoryLocation currentProcessLocation = getMainFrame().getProcess().getRepositoryLocation();
+			if (location.equals(currentProcessLocation)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Resets the location of the MainFrame process without reloading it. Use only if the currently
+	 * displayed process is stored in repository, and got renamed or moved.
+	 *
+	 * @param repositoryLocation
+	 *            The new process location.
+	 */
+	public static void resetProcessLocation(RepositoryProcessLocation repositoryLocation) {
+		getMainFrame().getProcess().setProcessLocation(repositoryLocation);
+		getMainFrame().setTitle();
+		addToRecentFiles(repositoryLocation);
+		getMainFrame().updateRecentFileList();
 	}
 
 	public static void useProcessFile(final Process process) {
@@ -679,7 +721,9 @@ public class RapidMinerGUI extends RapidMiner {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.setSecurityManager(null);
+		Policy.setPolicy(new PluginSandboxPolicy());
+		System.setSecurityManager(new PluginSecurityManager());
+
 		RapidMiner.addShutdownHook(new ShutdownHook());
 		setExecutionMode(
 				System.getProperty(PROPERTY_HOME_REPOSITORY_URL) == null ? ExecutionMode.UI : ExecutionMode.WEBSTART);

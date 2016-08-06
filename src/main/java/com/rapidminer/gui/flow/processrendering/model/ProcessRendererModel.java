@@ -32,6 +32,7 @@ import java.util.WeakHashMap;
 
 import javax.swing.event.EventListenerList;
 
+import com.rapidminer.RapidMiner;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.flow.processrendering.annotations.model.OperatorAnnotation;
 import com.rapidminer.gui.flow.processrendering.annotations.model.ProcessAnnotation;
@@ -48,7 +49,10 @@ import com.rapidminer.gui.flow.processrendering.event.ProcessRendererModelEvent.
 import com.rapidminer.gui.flow.processrendering.event.ProcessRendererOperatorEvent;
 import com.rapidminer.gui.flow.processrendering.event.ProcessRendererOperatorEvent.OperatorEvent;
 import com.rapidminer.gui.flow.processrendering.view.ProcessRendererView;
+import com.rapidminer.io.process.AnnotationProcessXMLFilter;
+import com.rapidminer.io.process.BackgroundImageProcessXMLFilter;
 import com.rapidminer.io.process.GUIProcessXMLFilter;
+import com.rapidminer.io.process.ProcessLayoutXMLFilter;
 import com.rapidminer.io.process.ProcessXMLFilterRegistry;
 import com.rapidminer.operator.ExecutionUnit;
 import com.rapidminer.operator.Operator;
@@ -79,6 +83,13 @@ import com.rapidminer.tools.parameter.ParameterChangeListener;
  *
  */
 public final class ProcessRendererModel {
+
+	/** available process zoom factors */
+	private static final double[] ZOOM_FACTORS = new double[] { 0.25, 0.33, 0.5, 0.67, 0.75, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75,
+			2.0 };
+
+	/** the starting zoom index equaling no zoom */
+	private static final int ORIGINAL_ZOOM_INDEX = 6;
 
 	/** the font for the operator name */
 	public static final Font OPERATOR_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
@@ -152,6 +163,8 @@ public final class ProcessRendererModel {
 	/** the position the mouse is currently at */
 	private Point currentMousePosition;
 
+	private int zoomIndex = ORIGINAL_ZOOM_INDEX;
+
 	/**
 	 * if canImport of transfer handler has returned <code>true</code>. Will be set to false if
 	 * mouse has exited the process renderer
@@ -163,7 +176,9 @@ public final class ProcessRendererModel {
 
 	// initialize the filter responsible for reading/writing operator coordinates from/to XML
 	static {
-		ProcessXMLFilterRegistry.registerFilter(new GUIProcessXMLFilter());
+		if (!RapidMiner.getExecutionMode().isHeadless()) {
+			ProcessXMLFilterRegistry.registerFilter(new GUIProcessXMLFilter());
+		}
 	}
 
 	public ProcessRendererModel() {
@@ -174,8 +189,8 @@ public final class ProcessRendererModel {
 		this.draggedOperators = Collections.unmodifiableList(Collections.<Operator> emptyList());
 		this.processSizes = new WeakHashMap<>();
 		this.portNumbers = new WeakHashMap<>();
-		this.snapToGrid = Boolean.parseBoolean(ParameterService
-				.getParameterValue(RapidMinerGUI.PROPERTY_RAPIDMINER_GUI_SNAP_TO_GRID));
+		this.snapToGrid = Boolean
+				.parseBoolean(ParameterService.getParameterValue(RapidMinerGUI.PROPERTY_RAPIDMINER_GUI_SNAP_TO_GRID));
 		this.hoveringProcessIndex = -1;
 
 		// listen for snapToGrid changes
@@ -608,7 +623,18 @@ public final class ProcessRendererModel {
 	 * @return the size of the specified process or {@code null}
 	 */
 	public Dimension getProcessSize(ExecutionUnit process) {
-		return processSizes.get(process);
+		Dimension dim = processSizes.get(process);
+		if (dim == null) {
+			return null;
+		}
+
+		// copy dim to not allow altering of dim in map
+		dim = new Dimension(dim);
+		if (getZoomFactor() > 1.0) {
+			dim.width *= getZoomFactor();
+			dim.height *= getZoomFactor();
+		}
+		return dim;
 	}
 
 	/**
@@ -624,7 +650,93 @@ public final class ProcessRendererModel {
 		if (dim == null) {
 			return -1;
 		}
+		if (getZoomFactor() > 1.0) {
+			return dim.getWidth() * getZoomFactor();
+		}
 		return dim.getWidth();
+	}
+
+	/**
+	 * Returns the zoom factor of the process where {@code 1.0} means no zoom, values smaller equal
+	 * zooming out and values greater than {@code 1.0} equal zooming in.
+	 *
+	 * @return
+	 */
+	public double getZoomFactor() {
+		return ZOOM_FACTORS[zoomIndex];
+	}
+
+	/**
+	 * Sets the zoom factor. If not a valid zoom factor or identical to the current factor, does
+	 * nothing.
+	 *
+	 * @param zoomFactor
+	 *            factor in {@link #ZOOM_FACTORS}
+	 */
+	public void setZoomFactor(double zoomFactor) {
+		if (getZoomFactor() == zoomFactor) {
+			return;
+		}
+
+		int index = 0;
+		for (double d : ZOOM_FACTORS) {
+			if (d == zoomFactor) {
+				zoomIndex = index;
+				break;
+			}
+			index++;
+		}
+	}
+
+	/**
+	 *
+	 * @return {@code true} if it is still possible to zoom in
+	 */
+	public boolean canZoomIn() {
+		return zoomIndex < ZOOM_FACTORS.length - 1;
+	}
+
+	/**
+	 *
+	 * @return {@code true} if it is still possible to zoom out
+	 */
+	public boolean canZoomOut() {
+		return zoomIndex > 0;
+	}
+
+	/**
+	 *
+	 * @return {@code true} if it is possible to reset the zoom (aka the process is currently zoomed
+	 *         in/out)
+	 */
+	public boolean canZoomReset() {
+		return zoomIndex != ORIGINAL_ZOOM_INDEX;
+	}
+
+	/**
+	 * Tries to zoom into the process. If the largest zoom factor has already been reached, does
+	 * nothing.
+	 */
+	public void zoomIn() {
+		if (zoomIndex >= ZOOM_FACTORS.length - 1) {
+			return;
+		}
+		this.zoomIndex += 1;
+	}
+
+	/**
+	 * Tries to zoom out of the process. If the smallest zoom factor has already been reached, does
+	 * nothing.
+	 */
+	public void zoomOut() {
+		if (zoomIndex <= 0) {
+			return;
+		}
+		this.zoomIndex -= 1;
+	}
+
+	public void resetZoom() {
+		this.zoomIndex = ORIGINAL_ZOOM_INDEX;
 	}
 
 	/**
@@ -644,7 +756,8 @@ public final class ProcessRendererModel {
 		if (dim == null) {
 			return;
 		}
-		dim.setSize(width, dim.getHeight());
+		// execution unit dimensions should not use sub-pixels
+		dim.setSize(Math.round(width), dim.getHeight());
 	}
 
 	/**
@@ -659,6 +772,9 @@ public final class ProcessRendererModel {
 		Dimension dim = processSizes.get(process);
 		if (dim == null) {
 			return -1;
+		}
+		if (getZoomFactor() > 1.0) {
+			return dim.getHeight() * getZoomFactor();
 		}
 		return dim.getHeight();
 	}
@@ -680,7 +796,8 @@ public final class ProcessRendererModel {
 		if (dim == null) {
 			return;
 		}
-		dim.setSize(dim.getWidth(), height);
+		// execution unit dimensions should not use subpixels
+		dim.setSize(dim.getWidth(), Math.round(height));
 	}
 
 	/**
@@ -710,7 +827,7 @@ public final class ProcessRendererModel {
 	 *         the {@link ProcessRendererView}.
 	 */
 	public Rectangle2D getOperatorRect(Operator op) {
-		return GUIProcessXMLFilter.lookupOperatorRectangle(op);
+		return ProcessLayoutXMLFilter.lookupOperatorRectangle(op);
 	}
 
 	/**
@@ -721,7 +838,7 @@ public final class ProcessRendererModel {
 	 * @return the container. Can be {@code null} if no annotations exist for this operator
 	 */
 	public WorkflowAnnotations getOperatorAnnotations(Operator op) {
-		return GUIProcessXMLFilter.lookupOperatorAnnotations(op);
+		return AnnotationProcessXMLFilter.lookupOperatorAnnotations(op);
 	}
 
 	/**
@@ -731,7 +848,7 @@ public final class ProcessRendererModel {
 	 *            the annotation to remove
 	 */
 	public void removeOperatorAnnotation(OperatorAnnotation anno) {
-		GUIProcessXMLFilter.removeOperatorAnnotation(anno);
+		AnnotationProcessXMLFilter.removeOperatorAnnotation(anno);
 	}
 
 	/**
@@ -741,7 +858,7 @@ public final class ProcessRendererModel {
 	 *            the annotation to add
 	 */
 	public void addOperatorAnnotation(OperatorAnnotation anno) {
-		GUIProcessXMLFilter.addOperatorAnnotation(anno);
+		AnnotationProcessXMLFilter.addOperatorAnnotation(anno);
 	}
 
 	/**
@@ -752,7 +869,7 @@ public final class ProcessRendererModel {
 	 * @return the container. Can be {@code null} if no annotations exist for this process
 	 */
 	public WorkflowAnnotations getProcessAnnotations(ExecutionUnit process) {
-		return GUIProcessXMLFilter.lookupProcessAnnotations(process);
+		return AnnotationProcessXMLFilter.lookupProcessAnnotations(process);
 	}
 
 	/**
@@ -762,7 +879,7 @@ public final class ProcessRendererModel {
 	 *            the annotation to remove
 	 */
 	public void removeProcessAnnotation(ProcessAnnotation anno) {
-		GUIProcessXMLFilter.removeProcessAnnotation(anno);
+		AnnotationProcessXMLFilter.removeProcessAnnotation(anno);
 	}
 
 	/**
@@ -772,7 +889,7 @@ public final class ProcessRendererModel {
 	 *            the annotation to add
 	 */
 	public void addProcessAnnotation(ProcessAnnotation anno) {
-		GUIProcessXMLFilter.addProcessAnnotation(anno);
+		AnnotationProcessXMLFilter.addProcessAnnotation(anno);
 	}
 
 	/**
@@ -783,7 +900,7 @@ public final class ProcessRendererModel {
 	 * @return the background image. Can be {@code null} if none is set for this process
 	 */
 	public ProcessBackgroundImage getBackgroundImage(ExecutionUnit process) {
-		return GUIProcessXMLFilter.lookupBackgroundImage(process);
+		return BackgroundImageProcessXMLFilter.lookupBackgroundImage(process);
 	}
 
 	/**
@@ -793,7 +910,7 @@ public final class ProcessRendererModel {
 	 *            the process for which to remove the background image
 	 */
 	public void removeBackgroundImage(ExecutionUnit process) {
-		GUIProcessXMLFilter.removeBackgroundImage(process);
+		BackgroundImageProcessXMLFilter.removeBackgroundImage(process);
 	}
 
 	/**
@@ -803,7 +920,7 @@ public final class ProcessRendererModel {
 	 *            the image to add
 	 */
 	public void setBackgroundImage(ProcessBackgroundImage image) {
-		GUIProcessXMLFilter.setBackgroundImage(image);
+		BackgroundImageProcessXMLFilter.setBackgroundImage(image);
 	}
 
 	/**
@@ -852,7 +969,7 @@ public final class ProcessRendererModel {
 			rect.setRect(rect.getX(), rect.getY(), rect.getWidth(), height);
 		}
 
-		GUIProcessXMLFilter.setOperatorRectangle(op, rect);
+		ProcessLayoutXMLFilter.setOperatorRectangle(op, rect);
 	}
 
 	/**
@@ -863,7 +980,7 @@ public final class ProcessRendererModel {
 	 * @return the additional spacing before this port
 	 */
 	public int getPortSpacing(Port port) {
-		return GUIProcessXMLFilter.lookupPortSpacing(port);
+		return ProcessLayoutXMLFilter.lookupPortSpacing(port);
 	}
 
 	/**
@@ -878,7 +995,7 @@ public final class ProcessRendererModel {
 		if (port == null) {
 			throw new IllegalArgumentException("port must not be null!");
 		}
-		GUIProcessXMLFilter.setPortSpacing(port, spacing);
+		ProcessLayoutXMLFilter.setPortSpacing(port, spacing);
 	}
 
 	/**
@@ -891,7 +1008,7 @@ public final class ProcessRendererModel {
 		if (port == null) {
 			throw new IllegalArgumentException("port must not be null!");
 		}
-		GUIProcessXMLFilter.resetPortSpacing(port);
+		ProcessLayoutXMLFilter.resetPortSpacing(port);
 	}
 
 	/**
@@ -959,6 +1076,13 @@ public final class ProcessRendererModel {
 	 */
 	public void fireProcessSizeChanged() {
 		fireModelChanged(ModelEvent.PROCESS_SIZE_CHANGED);
+	}
+
+	/**
+	 * Fire when the process zoom level has changed.
+	 */
+	public void fireProcessZoomChanged() {
+		fireModelChanged(ModelEvent.PROCESS_ZOOM_CHANGED);
 	}
 
 	/**
