@@ -37,6 +37,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -240,6 +241,13 @@ public class Plugin {
 		return p1.getName().compareTo(p2.getName());
 	};
 
+	/**
+	 * An ordered collection of plugins sorted by the dependency order. IMPORTANT: This collection
+	 * does not respect failures during initialization, so it might contain more plugins than
+	 * {@link #ALL_PLUGINS}.
+	 */
+	private static final Collection<Plugin> PLUGIN_INITIALIZATION_ORDER = new ArrayList<>();
+
 	/** An ordered set of all plugins sorted lexically based on the plugin name. */
 	private static final Collection<Plugin> ALL_PLUGINS = new TreeSet<>(PLUGIN_COMPARATOR);
 
@@ -288,6 +296,12 @@ public class Plugin {
 		PLUGIN_BLACKLIST.put("rmx_web", upToRm711);
 		PLUGIN_BLACKLIST.put("rmx_r_scripting", upToRm711);
 		PLUGIN_BLACKLIST.put("rmx_python_scripting", upToRm711);
+
+		// RapidLabs / 3rd party extensions causing problems since Studio 7.2
+		PLUGIN_BLACKLIST.put("rmx_rapidprom", new Pair<>(null, new VersionNumber(3, 0, 7)));
+		// yes the rmx_rmx_ prefix is correct...
+		PLUGIN_BLACKLIST.put("rmx_rmx_toolkit", new Pair<>(null, new VersionNumber(1, 0, 0)));
+		PLUGIN_BLACKLIST.put("rmx_ida", new Pair<>(null, new VersionNumber(5, 1, 0)));
 	}
 
 	/** map of all plugin loading times */
@@ -997,6 +1011,9 @@ public class Plugin {
 					// then we have one more extension that is initialized, next round might find
 					// more
 					found = true;
+
+					// remember the initialization order globally
+					PLUGIN_INITIALIZATION_ORDER.add(plugin);
 				}
 				recordLoadingTime(plugin.getExtensionId(), start);
 			}
@@ -1083,9 +1100,18 @@ public class Plugin {
 
 	private static void callPluginInitMethods(String methodName, Class<?>[] arguments, Object[] argumentValues,
 			boolean useOriginalJarClassLoader) {
-		List<Plugin> plugins = new LinkedList<>(getAllPlugins());
+		for (Plugin plugin : PLUGIN_INITIALIZATION_ORDER) {
+			if (!ALL_PLUGINS.contains(plugin)) {
+				// plugin may be removed in the meantime,
+				// so skip the initialization
+				continue;
+			}
+			if (!plugin.checkDependencies(plugin, ALL_PLUGINS)) {
+				getAllPlugins().remove(plugin);
+				INCOMPATIBLE_PLUGINS.add(plugin);
+				continue;
+			}
 
-		for (Plugin plugin : plugins) {
 			long start = System.currentTimeMillis();
 			if (!plugin.callInitMethod(methodName, arguments, argumentValues, useOriginalJarClassLoader)) {
 				getAllPlugins().remove(plugin);
