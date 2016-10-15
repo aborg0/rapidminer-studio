@@ -26,9 +26,9 @@ import javax.swing.table.AbstractTableModel;
 /**
  * A table model wrapped around a {@link Wallet} used by the {@link PasswordManager} to edit user
  * credentials.
- * 
+ *
  * @author Miguel Buescher
- * 
+ *
  */
 public class CredentialsTableModel extends AbstractTableModel {
 
@@ -59,6 +59,9 @@ public class CredentialsTableModel extends AbstractTableModel {
 	@SuppressWarnings("deprecation")
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		this.listOfWalletKeys = getWallet().getKeys();
+		if (rowIndex >= listOfWalletKeys.size()) {
+			return null;
+		}
 		// uses list of keys directly which may or may not contain ID attribute, therefore this call
 		// is correct
 		UserCredential userCredential = getWallet().getEntry(listOfWalletKeys.get(rowIndex));
@@ -132,7 +135,7 @@ public class CredentialsTableModel extends AbstractTableModel {
 		// uses list of keys directly which may or may not contain ID attribute, therefore this call
 		// is correct
 		getWallet().removeEntry(listOfWalletKeys.get(index));
-		fireTableStructureChanged();
+		fireTableDataChanged();
 	}
 
 	@Override
