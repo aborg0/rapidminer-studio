@@ -90,23 +90,23 @@ dependencies {
 	embedded 'com.rapidminer.license:rapidminer-license-commons:3.2.0'
 
 	// RapidMiner API
-	compile 'com.rapidminer:rapidminer-api:0.2.0'
+	embedded 'com.rapidminer:rapidminer-api:0.2.0'
 
 	// VLDocking as docking framework (https://code.google.com/p/vldocking/)
 	embedded 'com.rapidminer.external:vldocking:1.1.1'
 
 	// Freehep for vector graphic export (http://java.freehep.org/)
-	compile('org.freehep:freehep-graphicsio-ps:2.3') {
+	embedded('org.freehep:freehep-graphicsio-ps:2.3') {
 		exclude group:'junit', module: 'junit'
 		exclude group: 'org.freehep',module: 'freehep-graphicsio-tests'
 	}
-	compile('org.freehep:freehep-graphicsio-svg:2.3') {
+	embedded('org.freehep:freehep-graphicsio-svg:2.3') {
 		exclude group:'junit', module: 'junit'
 		exclude group: 'org.freehep', module: 'freehep-graphicsio-tests'
 	}
 
 	// iText for PDF export (http://www.lowagie.com/iText/)
-	compile('com.lowagie:itext:2.1.7'){
+	embedded('com.lowagie:itext:2.1.7'){
 		exclude group: 'bouncycastle', module: 'bcmail-jdk14'
 		exclude group: 'bouncycastle', module: 'bcprov-jdk14'
 		exclude group: 'bouncycastle', module: 'bctsp-jdk14'
@@ -117,7 +117,7 @@ dependencies {
 	compile 'com.fifesoft:autocomplete:2.5.7'
 
 	// JXL for the ability to read, write, and modify old format Microsoft Excel spreadsheets (http://www.jexcelapi.org)
-	compile('net.sourceforge.jexcelapi:jxl:2.6.12') { exclude group: 'log4j', module: 'log4j' }
+	embedded('net.sourceforge.jexcelapi:jxl:2.6.12') { exclude group: 'log4j', module: 'log4j' }
 
 	// Apache POI for  manipulating various file formats based upon Office Open XML standards (http://poi.apache.org/)
 	//	compile 'org.apache.poi:poi-ooxml:3.13'
@@ -130,27 +130,27 @@ dependencies {
 	osgiRuntime('org.apache.servicemix.bundles:org.apache.servicemix.bundles.xmlresolver:1.2_5')
 
 	// JGoodies Looks for TODO (http://www.jgoodies.com/freeware/libraries/looks/)
-	compile 'com.jgoodies:looks:2.2.2'
+	embedded 'com.jgoodies:looks:2.2.2'
 
 	// JUNG for displaying graphs and trees (http://jung.sourceforge.net/)
-	compile 'net.sf.jung:jung-visualization:2.0.1'
-	compile 'net.sf.jung:jung-graph-impl:2.0.1'
+	embedded 'net.sf.jung:jung-visualization:2.0.1'
+	embedded 'net.sf.jung:jung-graph-impl:2.0.1'
 
 	// JFreeChart for chart rendering (http://www.jfree.org/jfreechart/)
 	compile 'org.jfree:jfreechart:1.0.17'
 
 	// Java Mail API for mail sending
-	compile 'javax.mail:mail:1.4.7'
+	embedded 'javax.mail:mail:1.4.7'
 
 	// Groovy for 'Execute Script' operator (http://groovy.codehaus.org/)
 	compile 'org.codehaus.groovy:groovy-all:2.3.3'
 
 	// SwingX for various Swing components (https://swingx.java.net/)
-	compile 'org.swinglabs.swingx:swingx-all:1.6.5'
+	embedded 'org.swinglabs.swingx:swingx-all:1.6.5'
 
 	// XStreams for generic XML serialization (http://xstream.codehaus.org/)
 //	compile 'com.thoughtworks.xstream:xstream:1.4.7'
-	compile ('org.apache.servicemix.bundles:org.apache.servicemix.bundles.xstream:1.4.8_1') {
+	embedded ('org.apache.servicemix.bundles:org.apache.servicemix.bundles.xstream:1.4.8_1') {
 //		exclude group: 'xpp3', module: 'xpp3_min'
 	}
 	//osgiRuntime 'org.apache.servicemix.bundles:org.apache.servicemix.bundles.xpp3:1.1.4c_7'
@@ -191,7 +191,7 @@ dependencies {
 	embedded 'com.rapidminer.external:jgraphx:2.1.0.2'
 
 	// JMathPlot for 2D and 3D plots like Box plot, Stick plot, etc. (https://code.google.com/p/jmathplot/)
-	compile 'com.rapidminer.external:jmathplot:1.0.0'
+	embedded 'com.rapidminer.external:jmathplot:1.0.0'
 	
 	// Microba adds a Swing date picker (http://microba.sf.net/)
 	embedded 'com.github.tdbear:microba:0.4.4.3'
@@ -208,8 +208,8 @@ dependencies {
 jar {
 	manifest {
 	//com.sun.management should be provided.
-    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,*'
-    	instruction '-exportcontents', 'com.vlsolutions.swing.docking,com.vlsolutions.swing.docking.ui,com.vlsolutions.swing.docking.animation,com.vlsolutions.swing.docking.event,com.vlsolutions.swing.docking.ws,com.vlsolutions.swing.toolbars'
+    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!jxl.*,!org.apache.commons.collections15.*,!org.freehep.*,!org.math.plot.*,*'
+    	instruction '-exportcontents', 'com.vlsolutions.swing.docking,com.vlsolutions.swing.docking.ui,com.vlsolutions.swing.docking.animation,com.vlsolutions.swing.docking.event,com.vlsolutions.swing.docking.ws,com.vlsolutions.swing.toolbars,jxl,jxl.biff,jxl.format,jxl.read.biff,jxl.write,'
 		instruction 'Bundle-RequiredExecutionEnvironment', 'JavaSE-1.8'
 		instruction 'Require-Capability', 'osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.7))"'
 	}
