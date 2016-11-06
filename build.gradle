@@ -137,7 +137,7 @@ dependencies {
 	embedded 'net.sf.jung:jung-graph-impl:2.0.1'
 
 	// JFreeChart for chart rendering (http://www.jfree.org/jfreechart/)
-	compile 'org.jfree:jfreechart:1.0.17'
+	embedded 'org.jfree:jfreechart:1.0.17'
 
 	// Java Mail API for mail sending
 	embedded 'javax.mail:mail:1.4.7'
@@ -208,7 +208,7 @@ dependencies {
 jar {
 	manifest {
 	//com.sun.management should be provided.
-    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!jxl.*,!org.apache.commons.collections15.*,!org.freehep.*,!org.math.plot.*,!com.lowagie.text.*,!edu.uci.ics.jung.*,!Jama,!org.bouncycastle.*,!org.jdesktop.swingx.*,!org.jgraph.*,*'
+    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!jxl.*,!org.apache.commons.collections15.*,!org.freehep.*,!org.math.plot.*,!com.lowagie.text.*,!edu.uci.ics.jung.*,!Jama,!org.bouncycastle.*,!org.jdesktop.swingx.*,!org.jgraph.*,!org.jfree.*,*'
     	instruction '-exportcontents', 'com.vlsolutions.swing.docking,com.vlsolutions.swing.docking.ui,com.vlsolutions.swing.docking.animation,com.vlsolutions.swing.docking.event,com.vlsolutions.swing.docking.ws,com.vlsolutions.swing.toolbars,jxl,jxl.biff,jxl.format,jxl.read.biff,jxl.write,'
 		instruction 'Bundle-RequiredExecutionEnvironment', 'JavaSE-1.8'
 		instruction 'Require-Capability', 'osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.7))"'
