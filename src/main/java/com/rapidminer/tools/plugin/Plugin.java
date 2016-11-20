@@ -99,6 +99,7 @@ import com.rapidminer.tools.ResourceSource;
 import com.rapidminer.tools.Tools;
 import com.rapidminer.tools.WebServiceTools;
 import com.rapidminer.tools.container.Pair;
+import com.rapidminer.tools.usagestats.ActionStatisticsCollector;
 
 
 /**
@@ -1329,13 +1330,19 @@ public class Plugin {
 				logLevel = Level.WARNING;
 			}
 
+			String identifier;
 			if (plugin != null) {
 				LogService.getRoot().log(logLevel, "com.rapidminer.tools.plugin.Plugin.loading_time",
 						new Object[] { plugin.getName(), value });
+				identifier = plugin.getExtensionId();
 			} else {
 				LogService.getRoot().log(logLevel, "com.rapidminer.tools.plugin.Plugin.loading_time_failure",
 						new Object[] { entry.getKey(), value });
+				identifier = entry.getKey();
 			}
+
+			ActionStatisticsCollector.INSTANCE.log(ActionStatisticsCollector.TYPE_CONSTANT,
+					ActionStatisticsCollector.VALUE_EXTENSION_INITIALIZATION, identifier);
 		}
 	}
 
