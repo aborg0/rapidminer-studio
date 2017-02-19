@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2001-2016 by RapidMiner and the contributors
+ * Copyright (C) 2001-2017 by RapidMiner and the contributors
  *
  * Complete list of developers available at our web site:
  *
@@ -298,8 +298,8 @@ public class Plugin {
 		PLUGIN_BLACKLIST.put("rmx_r_scripting", upToRm711);
 		PLUGIN_BLACKLIST.put("rmx_python_scripting", upToRm711);
 
-		// Radoop uses an outdated signature of getAllPlugins() method
-		PLUGIN_BLACKLIST.put("rmx_radoop", upToRm711);
+		// Radoop depends on Parallel Decision Tree in Concurrency Extension
+		PLUGIN_BLACKLIST.put("rmx_radoop", new Pair<>(null, new VersionNumber(7, 3, 0)));
 
 		// RapidLabs / 3rd party extensions causing problems since Studio 7.2
 		PLUGIN_BLACKLIST.put("rmx_rapidprom", new Pair<>(null, new VersionNumber(3, 0, 7)));

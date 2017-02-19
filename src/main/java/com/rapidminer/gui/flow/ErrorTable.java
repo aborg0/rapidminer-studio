@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2001-2016 by RapidMiner and the contributors
+ * Copyright (C) 2001-2017 by RapidMiner and the contributors
  *
  * Complete list of developers available at our web site:
  *
@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
- */
+*/
 package com.rapidminer.gui.flow;
 
 import java.awt.BorderLayout;
@@ -46,7 +46,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.AbstractUIState;
 import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.processeditor.ProcessEditor;
 import com.rapidminer.gui.tools.ExtendedJScrollPane;
@@ -78,10 +78,10 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
+		public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus,
+				final int row, final int column) {
 			if (value instanceof ProcessSetupError) {
-				JLabel label = (JLabel) super.getTableCellRendererComponent(table, ((ProcessSetupError) value).getMessage(),
+				final JLabel label = (JLabel) super.getTableCellRendererComponent(table, ((ProcessSetupError) value).getMessage(),
 						isSelected, hasFocus, row, column);
 				switch (((ProcessSetupError) value).getSeverity()) {
 					case WARNING:
@@ -96,18 +96,18 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 
 				return label;
 			} else if (value instanceof Port) {
-				JLabel label = (JLabel) super.getTableCellRendererComponent(table, ((Port) value).getSpec(), isSelected,
+				final JLabel label = (JLabel) super.getTableCellRendererComponent(table, ((Port) value).getSpec(), isSelected,
 						hasFocus, row, column);
 				label.setIcon(((Port) value).getPorts().getOwner().getOperator().getOperatorDescription().getSmallIcon());
 				return label;
 			} else if (value instanceof Operator) {
-				JLabel label = (JLabel) super.getTableCellRendererComponent(table, ((Operator) value).getName(), isSelected,
+				final JLabel label = (JLabel) super.getTableCellRendererComponent(table, ((Operator) value).getName(), isSelected,
 						hasFocus, row, column);
 				label.setIcon(((Operator) value).getOperatorDescription().getSmallIcon());
 				return label;
 			} else {
 				if (column == 1) {
-					JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+					final JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
 							column);
 					if (value == null) {
 						label.setIcon(IMAGE_NO_QUICKFIX);
@@ -116,16 +116,16 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 					if (value instanceof List) {
 						label.setIcon(IMAGE_QUICKFIX);
 						label.setText(I18N.getMessage(I18N.getGUIBundle(), "gui.errortable.choose_quickfix.label",
-								((List) value).size()));
+								((List<?>) value).size()));
 					}
 					if (value instanceof QuickFix) {
-						QuickFix quickFix = (QuickFix) value;
+						final QuickFix quickFix = (QuickFix) value;
 						label.setIcon((Icon) quickFix.getAction().getValue(Action.SMALL_ICON));
 						label.setText(quickFix.toString());
 					}
 					return label;
 				} else {
-					JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+					final JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
 							column);
 					label.setIcon(null);
 					return label;
@@ -139,16 +139,16 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public TableCellRenderer getCellRenderer(int row, int column) {
+		public TableCellRenderer getCellRenderer(final int row, final int column) {
 			return iconRenderer;
 		}
 
 		@Override
-		public void populatePopupMenu(JPopupMenu menu) {
-			List<? extends QuickFix> fixes = errors.get(getSelectedRow()).getQuickFixes();
+		public void populatePopupMenu(final JPopupMenu menu) {
+			final List<? extends QuickFix> fixes = errors.get(getSelectedRow()).getQuickFixes();
 			if (!fixes.isEmpty()) {
-				JMenu fixMenu = new ResourceMenu("quick_fixes");
-				for (QuickFix fix : fixes) {
+				final JMenu fixMenu = new ResourceMenu("quick_fixes");
+				for (final QuickFix fix : fixes) {
 					fixMenu.add(fix.getAction());
 				}
 				menu.add(fixMenu);
@@ -164,27 +164,28 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 				private static final long serialVersionUID = -2000774622129683602L;
 
 				@Override
-				public String getToolTipText(MouseEvent e) {
-					java.awt.Point p = e.getPoint();
-					int index = columnModel.getColumnIndexAtX(p.x);
-					int realIndex = columnModel.getColumn(index).getModelIndex();
+				public String getToolTipText(final MouseEvent e) {
+					final java.awt.Point p = e.getPoint();
+					final int index = columnModel.getColumnIndexAtX(p.x);
+					final int realIndex = columnModel.getColumn(index).getModelIndex();
 					return COLUMN_TOOLTIPS[realIndex];
 				};
 			};
 		};
 
 		@Override
-		public String getToolTipText(MouseEvent e) {
-			Point p = e.getPoint();
-			int realColumnIndex = convertColumnIndexToModel(columnAtPoint(p));
-			int rowIndex = rowAtPoint(p);
+		public String getToolTipText(final MouseEvent e) {
+			final Point p = e.getPoint();
+			final int realColumnIndex = convertColumnIndexToModel(columnAtPoint(p));
+			final int rowIndex = rowAtPoint(p);
 			if (rowIndex >= 0 && rowIndex < getRowCount() && realColumnIndex == 1) {
-				Object value = getModel().getValueAt(rowIndex, realColumnIndex);
+				final Object value = getModel().getValueAt(rowIndex, realColumnIndex);
 				if (value == null) {
 					return I18N.getMessage(I18N.getGUIBundle(), "gui.errortable.no_quickfix_available.tip");
 				}
 				if (value instanceof List) {
-					return I18N.getMessage(I18N.getGUIBundle(), "gui.errortable.choose_quickfix.tip", ((List) value).size());
+					return I18N.getMessage(I18N.getGUIBundle(), "gui.errortable.choose_quickfix.tip",
+							((List<?>) value).size());
 				}
 				if (value instanceof QuickFix) {
 					return ((QuickFix) value).toString();
@@ -199,12 +200,12 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public String getColumnName(int col) {
+		public String getColumnName(final int col) {
 			return COLUMN_NAMES[col];
 		}
 
 		@Override
-		public boolean isCellEditable(int row, int col) {
+		public boolean isCellEditable(final int row, final int col) {
 			return false;
 		}
 
@@ -219,13 +220,13 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		}
 
 		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			ProcessSetupError error = errors.get(rowIndex);
+		public Object getValueAt(final int rowIndex, final int columnIndex) {
+			final ProcessSetupError error = errors.get(rowIndex);
 			switch (columnIndex) {
 				case 0:
 					return error;
 				case 1:
-					List<? extends QuickFix> fixes = error.getQuickFixes();
+					final List<? extends QuickFix> fixes = error.getQuickFixes();
 					if (fixes.size() > 1) {
 						return fixes;
 					}
@@ -271,7 +272,7 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 
 	private final DockKey DOCK_KEY = new ResourceDockKey(ERROR_TABLE_DOCK_KEY);
 	{
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 	}
 
 	private final MainUIState mainFrame;
@@ -287,12 +288,12 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		private static final long serialVersionUID = -1454330266199555397L;
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			updateErrors();
 		}
 	});
 
-	private List<ProcessSetupError> errors = new LinkedList<ProcessSetupError>();
+	private List<ProcessSetupError> errors = new LinkedList<>();
 
 	public ErrorTable(final MainUIState mainFrame) {
 		super(new BorderLayout());
@@ -311,11 +312,11 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		headerLabel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
 		table.setBorder(null);
-		JScrollPane scrollPane = new ExtendedJScrollPane(table);
+		final JScrollPane scrollPane = new ExtendedJScrollPane(table);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		add(scrollPane, BorderLayout.CENTER);
 
-		ViewToolBar toolBar = new ViewToolBar();
+		final ViewToolBar toolBar = new ViewToolBar();
 		toolBar.add(onlyCurrent);
 		onlyCurrent.setText(null);
 		toolBar.add(headerLabel);
@@ -325,12 +326,12 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		table.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(final MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					switch (table.getSelectedColumn()) {
 					// quick fixes
 						case 1:
-							List<? extends QuickFix> quickFixes = errors.get(table.getSelectedRow()).getQuickFixes();
+							final List<? extends QuickFix> quickFixes = errors.get(table.getSelectedRow()).getQuickFixes();
 							if (quickFixes.size() == 1) {
 								quickFixes.get(0).apply();
 							}
@@ -339,8 +340,8 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 							}
 							break;
 						default:
-							ProcessSetupError error = errors.get(table.getSelectedRow());
-							Operator op = error.getOwner().getOperator();
+							final ProcessSetupError error = errors.get(table.getSelectedRow());
+							final Operator op = error.getOwner().getOperator();
 							ErrorTable.this.mainFrame.selectOperator(op);
 							// other
 					}
@@ -350,19 +351,19 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 	}
 
 	@Override
-	public void processChanged(Process process) {
+	public void processChanged(final Process process) {
 		currentProcess = process;
 		updateErrors();
 	}
 
 	@Override
-	public void processUpdated(Process process) {
+	public void processUpdated(final Process process) {
 		currentProcess = process;
 		updateErrors();
 	}
 
 	@Override
-	public void setSelection(List<Operator> selection) {
+	public void setSelection(final List<Operator> selection) {
 		this.currentOperator = selection.isEmpty() ? null : selection.get(0);
 		updateErrors();
 	}
@@ -387,8 +388,8 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 		}
 	}
 
-	private void fill(Operator root) {
-		int numTotal = root.getProcess().getRootOperator().getErrorList().size();
+	private void fill(final Operator root) {
+		final int numTotal = root.getProcess().getRootOperator().getErrorList().size();
 		errors = root.getErrorList();
 		String errorString;
 		switch (errors.size()) {

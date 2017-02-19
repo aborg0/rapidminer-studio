@@ -88,10 +88,10 @@ dependencies {
 	embedded 'com.rapidminer.license:rapidminer-license-commons:3.2.0'
 
 	// RapidMiner API
-	embedded 'com.rapidminer:rapidminer-api:0.2.0'
+	embedded 'com.rapidminer:rapidminer-api:0.2.1'
 	
 	// Alphanumeric sorting
-	embedded 'com.rapidminer.external:alphanumeric-sorting:1.0'
+	embedded 'com.rapidminer.external:alphanumeric-sorting:1.0.1'
 
 	// VLDocking as docking framework (https://code.google.com/p/vldocking/)
 	embedded 'com.rapidminer.external:vldocking:1.1.1'
@@ -228,7 +228,7 @@ jar {
     }
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '2.12' }
+task wrapper(type: Wrapper) { gradleVersion = '2.14.1' }
 
 apply from: 'gradle/wsimport.gradle'
 apply from: 'gradle/props.gradle'

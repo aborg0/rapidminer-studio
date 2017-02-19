@@ -1296,7 +1296,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 		// ask for confirmation before stopping the currently running process and opening a new one!
 		if (getProcessState() == Process.PROCESS_STATE_RUNNING || getProcessState() == Process.PROCESS_STATE_PAUSED) {
 			if (SwingTools.showConfirmDialog("close_running_process",
-					ConfirmDialog.YES_NO_OPTION) == ConfirmDialog.NO_OPTION) {
+					ConfirmDialog.YES_NO_OPTION) != ConfirmDialog.YES_OPTION) {
 				return;
 			}
 		}
@@ -1692,7 +1692,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 						if (RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_RUNNING ||
 								RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_PAUSED) {
 							if (SwingTools.showConfirmDialog("close_running_process",
-									ConfirmDialog.YES_NO_OPTION) == ConfirmDialog.NO_OPTION) {
+									ConfirmDialog.YES_NO_OPTION) != ConfirmDialog.YES_OPTION) {
 								return false;
 							}
 						}

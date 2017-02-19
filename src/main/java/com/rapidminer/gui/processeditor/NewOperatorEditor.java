@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2001-2016 by RapidMiner and the contributors
+ * Copyright (C) 2001-2017 by RapidMiner and the contributors
  *
  * Complete list of developers available at our web site:
  *
@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
- */
+*/
 package com.rapidminer.gui.processeditor;
 
 import java.awt.BorderLayout;
@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.AbstractUIState;
 import com.rapidminer.gui.dnd.DragListener;
 import com.rapidminer.gui.tools.ResourceDockKey;
 import com.vlsolutions.swing.docking.DockKey;
@@ -53,7 +53,7 @@ public class NewOperatorEditor extends JPanel implements TreeSelectionListener, 
 	 * The drag listener will be registered at the operator tree and will receive drag start events
 	 * if a drag has started and drag stopped events if dragging has stopped again
 	 */
-	public NewOperatorEditor(DragListener dragListener) {
+	public NewOperatorEditor(final DragListener dragListener) {
 		super(new BorderLayout());
 		// will cause the tree half to keep fixed size during resizing
 		setBorder(null);
@@ -68,7 +68,7 @@ public class NewOperatorEditor extends JPanel implements TreeSelectionListener, 
 	}
 
 	@Override
-	public void valueChanged(TreeSelectionEvent e) {
+	public void valueChanged(final TreeSelectionEvent e) {
 		// do nothing
 	}
 
@@ -86,7 +86,7 @@ public class NewOperatorEditor extends JPanel implements TreeSelectionListener, 
 	}
 
 	{
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 	}
 
 	public boolean shouldAutoConnectNewOperatorsInputs() {
@@ -96,7 +96,7 @@ public class NewOperatorEditor extends JPanel implements TreeSelectionListener, 
 	public boolean shouldAutoConnectNewOperatorsOutputs() {
 		return newOperatorGroupTree.shouldAutoConnectNewOperatorsOutputs();
 	}
-	
+
 	public NewOperatorGroupTree getNewOperatorGroupTree() {
 		return newOperatorGroupTree;
 	}

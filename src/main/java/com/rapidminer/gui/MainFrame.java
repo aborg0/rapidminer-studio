@@ -1,21 +1,21 @@
 /**
- * Copyright (C) 2001-2015 by RapidMiner and the contributors
- *
+ * Copyright (C) 2001-2017 by RapidMiner and the contributors
+ * 
  * Complete list of developers available at our web site:
- *
+ * 
  * http://rapidminer.com
- *
+ * 
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU Affero General Public License as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Affero General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
- */
+*/
 package com.rapidminer.gui;
 
 import java.awt.Component;
@@ -66,71 +66,58 @@ import com.vlsolutions.swing.docking.Dockable;
 import com.vlsolutions.swing.docking.DockingDesktop;
 
 /**
- * The main component class of the RapidMiner GUI. The class holds a lot of
- * Actions that can be used for the tool bar and for the menu bar. MainFrame has
- * methods for handling the process (saving, opening, creating new). It keeps
- * track of the state of the process and enables/disables buttons. It must be
- * notified whenever the process changes and propagates this event to its
- * children. Most of the code is enclosed within the Actions.
+ * The main component class of the RapidMiner GUI. The class holds a lot of Actions that can be used
+ * for the tool bar and for the menu bar. MainFrame has methods for handling the process (saving,
+ * opening, creating new). It keeps track of the state of the process and enables/disables buttons.
+ * It must be notified whenever the process changes and propagates this event to its children. Most
+ * of the code is enclosed within the Actions.
  *
  * @author Ingo Mierswa, Simon Fischer, Sebastian Land, Marius Helf
  */
+@SuppressWarnings("deprecation")
 public class MainFrame extends ApplicationFrame implements WindowListener, MainUIState, ProcessEndHandler {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * The property name for &quot;The pixel size of each plot in matrix
-	 * plots.&quot;
-	 */
+	/** The property name for &quot;The pixel size of each plot in matrix plots.&quot; */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_MATRIXPLOT_SIZE = "rapidminer.gui.plotter.matrixplot.size";
 
 	/**
-	 * The property name for &quot;The maximum number of rows used for a
-	 * plotter, using only a sample of this size if more rows are
-	 * available.&quot;
+	 * The property name for &quot;The maximum number of rows used for a plotter, using only a
+	 * sample of this size if more rows are available.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_ROWS_MAXIMUM = "rapidminer.gui.plotter.rows.maximum";
 
 	/**
-	 * The property name for the &quot; The maximum number of examples in a data
-	 * set for which default plotter settings will be generated.&quot;
+	 * The property name for the &quot; The maximum number of examples in a data set for which
+	 * default plotter settings will be generated.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_DEFAULT_MAXIMUM = "rapidminer.gui.plotter.default.maximum";
 
 	/**
-	 * The property name for &quot;Limit number of displayed classes plotter
-	 * legends. -1 for no limit.&quot;
+	 * The property name for &quot;Limit number of displayed classes plotter legends. -1 for no
+	 * limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_CLASSLIMIT = "rapidminer.gui.plotter.legend.classlimit";
 
-	/**
-	 * The property name for &quot;The color for minimum values of the plotter
-	 * legend.&quot;
-	 */
+	/** The property name for &quot;The color for minimum values of the plotter legend.&quot; */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_MINCOLOR = "rapidminer.gui.plotter.legend.mincolor";
 
-	/**
-	 * The property name for &quot;The color for maximum values of the plotter
-	 * legend.&quot;
-	 */
+	/** The property name for &quot;The color for maximum values of the plotter legend.&quot; */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_MAXCOLOR = "rapidminer.gui.plotter.legend.maxcolor";
 
 	/**
-	 * The property name for &quot;Limit number of displayed classes for
-	 * colorized plots. -1 for no limit.&quot;
+	 * The property name for &quot;Limit number of displayed classes for colorized plots. -1 for no
+	 * limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_COLORS_CLASSLIMIT = "rapidminer.gui.plotter.colors.classlimit";
 
-	/**
-	 * The property name for &quot;Maximum number of states in the undo
-	 * list.&quot;
-	 */
+	/** The property name for &quot;Maximum number of states in the undo list.&quot; */
 	public static final String PROPERTY_RAPIDMINER_GUI_UNDOLIST_SIZE = "rapidminer.gui.undolist.size";
 
 	/**
-	 * The property name for &quot;Maximum number of examples to use for the
-	 * attribute editor. -1 for no limit.&quot;
+	 * The property name for &quot;Maximum number of examples to use for the attribute editor. -1
+	 * for no limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_ATTRIBUTEEDITOR_ROWLIMIT = "rapidminer.gui.attributeeditor.rowlimit";
 
@@ -144,15 +131,12 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	public static final String PROPERTY_RAPIDMINER_GUI_BEEP_BREAKPOINT = "rapidminer.gui.beep.breakpoint";
 
 	/**
-	 * The property name for &quot;Limit number of displayed rows in the message
-	 * viewer. -1 for no limit.&quot;
+	 * The property name for &quot;Limit number of displayed rows in the message viewer. -1 for no
+	 * limit.&quot;
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_MESSAGEVIEWER_ROWLIMIT = "rapidminer.gui.messageviewer.rowlimit";
 
-	/**
-	 * The property name for &quot;Shows process info screen after
-	 * loading?&quot;
-	 */
+	/** The property name for &quot;Shows process info screen after loading?&quot; */
 	public static final String PROPERTY_RAPIDMINER_GUI_PROCESSINFO_SHOW = "rapidminer.gui.processinfo.show";
 
 	public static final String PROPERTY_RAPIDMINER_GUI_SAVE_BEFORE_RUN = "rapidminer.gui.save_before_run";
@@ -160,8 +144,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	public static final String PROPERTY_RAPIDMINER_GUI_SAVE_ON_PROCESS_CREATION = "rapidminer.gui.save_on_process_creation";
 
 	/**
-	 * The property determining whether or not to switch to result view when
-	 * results are produced.
+	 * The property determining whether or not to switch to result view when results are produced.
 	 */
 	public static final String PROPERTY_RAPIDMINER_GUI_AUTO_SWITCH_TO_RESULTVIEW = "rapidminer.gui.auto_switch_to_resultview";
 

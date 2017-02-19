@@ -1,6 +1,5 @@
-
 /**
- * Copyright (C) 2001-2016 by RapidMiner and the contributors
+ * Copyright (C) 2001-2017 by RapidMiner and the contributors
  *
  * Complete list of developers available at our web site:
  *
@@ -16,7 +15,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
- */
+*/
 package com.rapidminer.gui.tools.dialogs;
 
 import java.awt.BorderLayout;
@@ -58,12 +57,12 @@ import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.RMUrlHandler;
 import com.rapidminer.tools.Tools;
 
+
 /**
- * The error message dialog. Several buttons are provided in addition to the
- * error message. Details about the exception can be shown and an edit button
- * can jump to the source code if an editor was defined in the properties /
- * settings. In case of a non-expected error (i.e. all non-user errors) a button
- * for sending a bug report is also provided.
+ * The error message dialog. Several buttons are provided in addition to the error message. Details
+ * about the exception can be shown and an edit button can jump to the source code if an editor was
+ * defined in the properties / settings. In case of a non-expected error (i.e. all non-user errors)
+ * a button for sending a bug report is also provided.
  *
  * @author Ingo Mierswa, Simon Fischer, Tobias Malbrecht, Marco Boeck
  */
@@ -82,20 +81,17 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	private final JComponent mainComponent = new JPanel(new BorderLayout());
 
 	/**
-	 * Creates a dialog with the internationalized I18n-message from the given
-	 * key and a panel for detailed stack trace.
+	 * Creates a dialog with the internationalized I18n-message from the given key and a panel for
+	 * detailed stack trace.
 	 *
 	 * @param key
-	 *            the I18n-key which will be used to display the
-	 *            internationalized message
+	 *            the I18n-key which will be used to display the internationalized message
 	 * @param error
 	 *            the exception associated to this message
 	 * @param arguments
-	 *            additional arguments for the internationalized message, which
-	 *            replace <code>{0}</code>, <code>{1}</code>, etcpp.
-	 * @deprecated use
-	 *             {@link #ExtendedErrorDialog(Window, String, Throwable, Object...)}
-	 *             instead
+	 *            additional arguments for the internationalized message, which replace
+	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
+	 * @deprecated use {@link #ExtendedErrorDialog(Window, String, Throwable, Object...)} instead
 	 */
 	@Deprecated
 	public ExtendedErrorDialog(final String key, final Throwable error, final Object... arguments) {
@@ -103,45 +99,37 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	}
 
 	/**
-	 * Creates a dialog with the internationalized I18n-message from the given
-	 * key and a panel for detailed stack trace.
+	 * Creates a dialog with the internationalized I18n-message from the given key and a panel for
+	 * detailed stack trace.
 	 *
 	 * @param key
-	 *            the I18n-key which will be used to display the
-	 *            internationalized message
+	 *            the I18n-key which will be used to display the internationalized message
 	 * @param error
 	 *            the exception associated to this message
 	 * @param displayExceptionMessage
-	 *            indicates if the exception message can be shown using the
-	 *            details button.
+	 *            indicates if the exception message can be shown using the details button.
 	 * @param arguments
-	 *            additional arguments for the internationalized message, which
-	 *            replace <code>{0}</code>, <code>{1}</code>, etcpp.
-	 * @deprecated use
-	 *             {@link #ExtendedErrorDialog(Window, String, Throwable, boolean, Object...)}
+	 *            additional arguments for the internationalized message, which replace
+	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
+	 * @deprecated use {@link #ExtendedErrorDialog(Window, String, Throwable, boolean, Object...)}
 	 *             instead
 	 */
 	@Deprecated
-	public ExtendedErrorDialog(final String key, final Throwable error, final boolean displayExceptionMessage,
-			final Object... arguments) {
+	public ExtendedErrorDialog(final String key, final Throwable error, final boolean displayExceptionMessage, final Object... arguments) {
 		this(ApplicationFrame.getApplicationFrame(), key, error, displayExceptionMessage, arguments);
 	}
 
 	/**
-	 * Creates a dialog with the internationalized I18n-message from the given
-	 * key.
+	 * Creates a dialog with the internationalized I18n-message from the given key.
 	 *
 	 * @param key
-	 *            the I18n-key which will be used to display the
-	 *            internationalized message
+	 *            the I18n-key which will be used to display the internationalized message
 	 * @param errorMessage
 	 *            the error message associated to this message
 	 * @param arguments
-	 *            additional arguments for the internationalized message, which
-	 *            replace <code>{0}</code>, <code>{1}</code>, etcpp.
-	 * @deprecated use
-	 *             {@link #ExtendedErrorDialog(Window, String, String, Object...)}
-	 *             instead
+	 *            additional arguments for the internationalized message, which replace
+	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
+	 * @deprecated use {@link #ExtendedErrorDialog(Window, String, String, Object...)} instead
 	 */
 	@Deprecated
 	public ExtendedErrorDialog(final String key, final String errorMessage, final Object... arguments) {
@@ -149,19 +137,18 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	}
 
 	/**
-	 * Creates a dialog with the internationalized I18n-message from the given
-	 * key and a panel for detailed stack trace.
+	 * Creates a dialog with the internationalized I18n-message from the given key and a panel for
+	 * detailed stack trace.
 	 *
 	 * @param owner
 	 *            the owner window in which the dialog is displayed
 	 * @param key
-	 *            the I18n-key which will be used to display the
-	 *            internationalized message
+	 *            the I18n-key which will be used to display the internationalized message
 	 * @param error
 	 *            the exception associated to this message
 	 * @param arguments
-	 *            additional arguments for the internationalized message, which
-	 *            replace <code>{0}</code>, <code>{1}</code>, etcpp.
+	 *            additional arguments for the internationalized message, which replace
+	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
 	 * @since 6.5.0
 	 */
 	public ExtendedErrorDialog(final Window owner, final String key, final Throwable error, final Object... arguments) {
@@ -169,26 +156,24 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	}
 
 	/**
-	 * Creates a dialog with the internationalized I18n-message from the given
-	 * key and a panel for detailed stack trace.
+	 * Creates a dialog with the internationalized I18n-message from the given key and a panel for
+	 * detailed stack trace.
 	 *
 	 * @param owner
 	 *            the owner window in which the dialog is displayed
 	 * @param key
-	 *            the I18n-key which will be used to display the
-	 *            internationalized message
+	 *            the I18n-key which will be used to display the internationalized message
 	 * @param error
 	 *            the exception associated to this message
 	 * @param displayExceptionMessage
-	 *            indicates if the exception message can be shown using the
-	 *            details button.
+	 *            indicates if the exception message can be shown using the details button.
 	 * @param arguments
-	 *            additional arguments for the internationalized message, which
-	 *            replace <code>{0}</code>, <code>{1}</code>, etcpp.
+	 *            additional arguments for the internationalized message, which replace
+	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
 	 * @since 6.5.0
 	 */
-	public ExtendedErrorDialog(final Window owner, final String key, final Throwable error,
-			final boolean displayExceptionMessage, final Object... arguments) {
+	public ExtendedErrorDialog(final Window owner, final String key, final Throwable error, final boolean displayExceptionMessage,
+			final Object... arguments) {
 		super(owner, "error." + key, ModalityType.APPLICATION_MODAL, arguments);
 		this.error = error;
 
@@ -218,23 +203,20 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	}
 
 	/**
-	 * Creates a dialog with the internationalized I18n-message from the given
-	 * key.
+	 * Creates a dialog with the internationalized I18n-message from the given key.
 	 *
 	 * @param owner
 	 *            the owner window in which the dialog is displayed
 	 * @param key
-	 *            the I18n-key which will be used to display the
-	 *            internationalized message
+	 *            the I18n-key which will be used to display the internationalized message
 	 * @param errorMessage
 	 *            the error message associated to this message
 	 * @param arguments
-	 *            additional arguments for the internationalized message, which
-	 *            replace <code>{0}</code>, <code>{1}</code>, etcpp.
+	 *            additional arguments for the internationalized message, which replace
+	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
 	 * @since 6.5.0
 	 */
-	public ExtendedErrorDialog(final Window owner, final String key, final String errorMessage,
-			final Object... arguments) {
+	public ExtendedErrorDialog(final Window owner, final String key, final String errorMessage, final Object... arguments) {
 		super(owner, "error." + key, ModalityType.APPLICATION_MODAL, arguments);
 
 		final boolean hasError = errorMessage != null && !errorMessage.isEmpty();
@@ -253,8 +235,8 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	}
 
 	/**
-	 * Creates a Panel for the error details and attaches the exception to it,
-	 * but doesn't add the Panel to the dialog.
+	 * Creates a Panel for the error details and attaches the exception to it, but doesn't add the
+	 * Panel to the dialog.
 	 *
 	 * @param error
 	 * @return
@@ -268,8 +250,8 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	}
 
 	/**
-	 * Creates a Panel for the error details and attaches the error message to
-	 * it, but doesn't add the Panel to the dialog.
+	 * Creates a Panel for the error details and attaches the error message to it, but doesn't add
+	 * the Panel to the dialog.
 	 *
 	 * @param squaredError
 	 * @return
@@ -290,20 +272,19 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 * @param hasError
 	 * @param isBug
 	 * @param detailedPane
-	 *            the Panel which will be shown, if the user clicks on the 'Show
-	 *            Details' Button
+	 *            the Panel which will be shown, if the user clicks on the 'Show Details' Button
 	 * @param error
 	 *            The error occurred
 	 * @return
 	 */
 	@SuppressWarnings("unused") // Contains Bugzilla code for later usage
-	private Collection<AbstractButton> getButtons(final boolean hasError, final boolean isBug,
-			final JComponent detailedPane, final Throwable error) {
+	private Collection<AbstractButton> getButtons(final boolean hasError, final boolean isBug, final JComponent detailedPane,
+			final Throwable error) {
 		final Collection<AbstractButton> buttons = new LinkedList<>();
 		if (hasError && !(error instanceof RepositoryException)) {
 			final JToggleButton showDetailsButton = new JToggleButton(
-					I18N.getMessage(I18N.getGUIBundle(), "gui.dialog.error.show_details.label"), SwingTools.createIcon(
-							"24/" + I18N.getMessage(I18N.getGUIBundle(), "gui.dialog.error.show_details.icon")));
+					I18N.getMessage(I18N.getGUIBundle(), "gui.dialog.error.show_details.label"), SwingTools
+							.createIcon("24/" + I18N.getMessage(I18N.getGUIBundle(), "gui.dialog.error.show_details.icon")));
 			showDetailsButton.setSelected(false);
 			showDetailsButton.addActionListener(new ActionListener() {
 
@@ -336,7 +317,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 		/*
 		 * Disable the Bugzilla functionality
 		 */
-		boolean useBugzilla = false;
+		final boolean useBugzilla = false;
 
 		/*
 		 * Link to the RapidMiner community, can be removed when JIRA issue collection is ready
@@ -347,7 +328,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					RMUrlHandler.openInBrowser(I18N.getMessage(I18N.getGUIBundle(), "gui.action.report_bug.url"));
 				}
 			});
@@ -369,8 +350,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					// in case of UserError, ask if the user really wants to
-					// send a bugreport
+					// in case of UserError, ask if the user really wants to send a bugreport
 					// because it's likely not a bug
 					if (error instanceof UserError) {
 						if (SwingTools.showConfirmDialog("send_bugreport.confirm",
@@ -441,8 +421,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 					// }.start();
 				}
 			});
-			// don't show "Send bugreport" button if this dialog is shown when
-			// RM is only embedded
+			// don't show "Send bugreport" button if this dialog is shown when RM is only embedded
 			if (!RapidMiner.getExecutionMode().equals(ExecutionMode.EMBEDDED_WITH_UI)) {
 				buttons.add(sendReport);
 			}
@@ -453,22 +432,20 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	}
 
 	/**
-	 * Returns <code>true</code> if this is a "real" bug, <code>false</code>
-	 * otherwise.
+	 * Returns <code>true</code> if this is a "real" bug, <code>false</code> otherwise.
 	 *
 	 * @param t
 	 * @return
 	 */
 	private boolean isBugReportException(final Throwable t) {
 		return t instanceof RuntimeException || t instanceof Error;
-		// return !(t instanceof NoBugError || t instanceof XMLException || t
-		// instanceof
+		// return !(t instanceof NoBugError || t instanceof XMLException || t instanceof
 		// RepositoryException);
 	}
 
 	/**
-	 * Overrides the {@link ButtonDialog} method to add the exception message to
-	 * the internationalized message
+	 * Overrides the {@link ButtonDialog} method to add the exception message to the
+	 * internationalized message
 	 */
 	@Override
 	protected String getInfoText() {
@@ -478,8 +455,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 			infoText.append(super.getInfoText());
 			infoText.append("</div>");
 
-			// if already arguments are given, we can expect already a detailed
-			// error message
+			// if already arguments are given, we can expect already a detailed error message
 			if (arguments.length == 0 && error.getMessage() != null && error.getMessage().length() > 0) {
 				infoText.append("<br/>");
 				infoText.append(Tools.escapeHTML(error.getMessage()));
@@ -506,12 +482,12 @@ public class ExtendedErrorDialog extends ButtonDialog {
 		}
 	}
 
-	private class StackTraceList extends JList {
+	private class StackTraceList extends JList<Object> {
 
 		private static final long serialVersionUID = -2482220036723949144L;
 
 		public StackTraceList(final Throwable t) {
-			super(new DefaultListModel());
+			super(new DefaultListModel<>());
 			setFont(getFont().deriveFont(Font.PLAIN));
 			setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			appendAllStackTraces(t);
@@ -532,8 +508,8 @@ public class ExtendedErrorDialog extends ButtonDialog {
 			});
 		}
 
-		private DefaultListModel model() {
-			return (DefaultListModel) getModel();
+		private DefaultListModel<Object> model() {
+			return (DefaultListModel<Object>) getModel();
 		}
 
 		private void appendAllStackTraces(Throwable throwable) {
