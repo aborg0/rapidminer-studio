@@ -1,18 +1,18 @@
 /**
  * Copyright (C) 2001-2017 by RapidMiner and the contributors
- *
+ * 
  * Complete list of developers available at our web site:
- *
+ * 
  * http://rapidminer.com
- *
+ * 
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU Affero General Public License as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Affero General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
 */
@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
@@ -38,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -48,9 +50,11 @@ import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.PerspectiveModel;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ExtendedJScrollPane;
+import com.rapidminer.gui.tools.ProgressThread;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.components.LinkLocalButton;
+import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.UserError;
 import com.rapidminer.repository.RepositoryException;
 import com.rapidminer.tools.I18N;
@@ -94,7 +98,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 * @deprecated use {@link #ExtendedErrorDialog(Window, String, Throwable, Object...)} instead
 	 */
 	@Deprecated
-	public ExtendedErrorDialog(final String key, final Throwable error, final Object... arguments) {
+	public ExtendedErrorDialog(String key, Throwable error, Object... arguments) {
 		this(key, error, false, arguments);
 	}
 
@@ -115,7 +119,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 *             instead
 	 */
 	@Deprecated
-	public ExtendedErrorDialog(final String key, final Throwable error, final boolean displayExceptionMessage, final Object... arguments) {
+	public ExtendedErrorDialog(String key, Throwable error, boolean displayExceptionMessage, Object... arguments) {
 		this(ApplicationFrame.getApplicationFrame(), key, error, displayExceptionMessage, arguments);
 	}
 
@@ -132,7 +136,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 * @deprecated use {@link #ExtendedErrorDialog(Window, String, String, Object...)} instead
 	 */
 	@Deprecated
-	public ExtendedErrorDialog(final String key, final String errorMessage, final Object... arguments) {
+	public ExtendedErrorDialog(String key, String errorMessage, Object... arguments) {
 		this(ApplicationFrame.getApplicationFrame(), key, errorMessage, arguments);
 	}
 
@@ -151,7 +155,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
 	 * @since 6.5.0
 	 */
-	public ExtendedErrorDialog(final Window owner, final String key, final Throwable error, final Object... arguments) {
+	public ExtendedErrorDialog(Window owner, String key, Throwable error, Object... arguments) {
 		this(owner, key, error, false, arguments);
 	}
 
@@ -172,13 +176,13 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
 	 * @since 6.5.0
 	 */
-	public ExtendedErrorDialog(final Window owner, final String key, final Throwable error, final boolean displayExceptionMessage,
-			final Object... arguments) {
+	public ExtendedErrorDialog(Window owner, String key, Throwable error, boolean displayExceptionMessage,
+			Object... arguments) {
 		super(owner, "error." + key, ModalityType.APPLICATION_MODAL, arguments);
 		this.error = error;
 
-		final boolean hasError = error != null;
-		final JComponent detailedPane = hasError ? createDetailPanel(error) : null;
+		boolean hasError = error != null;
+		JComponent detailedPane = hasError ? createDetailPanel(error) : null;
 
 		if (error != null && error instanceof UserError && ((UserError) error).getOperator() != null) {
 			final String opName = ((UserError) error).getOperator().getName();
@@ -187,13 +191,10 @@ public class ExtendedErrorDialog extends ButtonDialog {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void actionPerformed(final ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {
 					final MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 					mainFrame.getPerspectiveController().showPerspective(PerspectiveModel.DESIGN);
-					mainFrame.selectOperator(mainFrame.getProcess().getOperator(opName));
-					mainFrame.getProcessPanel().getProcessRenderer().getModel()
-							.setDisplayedChain(mainFrame.getProcess().getOperator(opName).getParent());
-					mainFrame.getProcessPanel().getProcessRenderer().getModel().fireDisplayedChainChanged();
+					mainFrame.selectAndShowOperator(mainFrame.getProcess().getOperator(opName), true);
 				}
 			}), BorderLayout.NORTH);
 		}
@@ -216,18 +217,18 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 *            <code>{0}</code>, <code>{1}</code>, etcpp.
 	 * @since 6.5.0
 	 */
-	public ExtendedErrorDialog(final Window owner, final String key, final String errorMessage, final Object... arguments) {
+	public ExtendedErrorDialog(Window owner, String key, String errorMessage, Object... arguments) {
 		super(owner, "error." + key, ModalityType.APPLICATION_MODAL, arguments);
 
-		final boolean hasError = errorMessage != null && !errorMessage.isEmpty();
-		final JScrollPane detailedPane = hasError ? createDetailPanel(errorMessage) : null;
+		boolean hasError = errorMessage != null && !errorMessage.isEmpty();
+		JScrollPane detailedPane = hasError ? createDetailPanel(errorMessage) : null;
 
 		layoutDefault(mainComponent, SIZE, getButtons(hasError, false, detailedPane, null));
 	}
 
 	@Override
 	protected Icon getInfoIcon() {
-		final String configuredIcon = I18N.getMessageOrNull(I18N.getGUIBundle(), getKey() + ".icon");
+		String configuredIcon = I18N.getMessageOrNull(I18N.getGUIBundle(), getKey() + ".icon");
 		if (configuredIcon != null) {
 			return super.getInfoIcon();
 		}
@@ -241,9 +242,9 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 * @param error
 	 * @return
 	 */
-	private JComponent createDetailPanel(final Throwable error) {
-		final StackTraceList stl = new StackTraceList(error);
-		final JScrollPane detailPane = new ExtendedJScrollPane(stl);
+	private JComponent createDetailPanel(Throwable error) {
+		StackTraceList stl = new StackTraceList(error);
+		JScrollPane detailPane = new ExtendedJScrollPane(stl);
 		detailPane.setPreferredSize(new Dimension(getWidth(), 200));
 		detailPane.setBorder(null);
 		return detailPane;
@@ -256,12 +257,12 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 * @param squaredError
 	 * @return
 	 */
-	private JScrollPane createDetailPanel(final String errorMessage) {
+	private JScrollPane createDetailPanel(String errorMessage) {
 
-		final JTextArea textArea = new JTextArea(errorMessage);
+		JTextArea textArea = new JTextArea(errorMessage);
 		textArea.setLineWrap(true);
 		textArea.setEditable(false);
-		final JScrollPane detailPane = new ExtendedJScrollPane(textArea);
+		JScrollPane detailPane = new ExtendedJScrollPane(textArea);
 		detailPane.setPreferredSize(new Dimension(getWidth(), 200));
 		return detailPane;
 	}
@@ -278,9 +279,9 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 * @return
 	 */
 	@SuppressWarnings("unused") // Contains Bugzilla code for later usage
-	private Collection<AbstractButton> getButtons(final boolean hasError, final boolean isBug, final JComponent detailedPane,
+	private Collection<AbstractButton> getButtons(boolean hasError, boolean isBug, final JComponent detailedPane,
 			final Throwable error) {
-		final Collection<AbstractButton> buttons = new LinkedList<>();
+		Collection<AbstractButton> buttons = new LinkedList<>();
 		if (hasError && !(error instanceof RepositoryException)) {
 			final JToggleButton showDetailsButton = new JToggleButton(
 					I18N.getMessage(I18N.getGUIBundle(), "gui.dialog.error.show_details.label"), SwingTools
@@ -291,16 +292,16 @@ public class ExtendedErrorDialog extends ButtonDialog {
 				private boolean detailsShown = false;
 
 				@Override
-				public void actionPerformed(final ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {
 					if (detailsShown) {
-						final int width2 = ExtendedErrorDialog.this.getWidth();
+						int width2 = ExtendedErrorDialog.this.getWidth();
 						mainComponent.remove(detailedPane);
 
 						ExtendedErrorDialog.this
 								.setPreferredSize(new Dimension(width2, ExtendedErrorDialog.this.getHeight() - 150));
 						pack();
 					} else {
-						final int width2 = ExtendedErrorDialog.this.getWidth();
+						int width2 = ExtendedErrorDialog.this.getWidth();
 						mainComponent.add(detailedPane, BorderLayout.CENTER);
 
 						ExtendedErrorDialog.this
@@ -317,7 +318,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 		/*
 		 * Disable the Bugzilla functionality
 		 */
-		final boolean useBugzilla = false;
+		boolean useBugzilla = false;
 
 		/*
 		 * Link to the RapidMiner community, can be removed when JIRA issue collection is ready
@@ -328,7 +329,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void actionPerformed(final ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {
 					RMUrlHandler.openInBrowser(I18N.getMessage(I18N.getGUIBundle(), "gui.action.report_bug.url"));
 				}
 			});
@@ -349,11 +350,11 @@ public class ExtendedErrorDialog extends ButtonDialog {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void actionPerformed(final ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {
 					// in case of UserError, ask if the user really wants to send a bugreport
 					// because it's likely not a bug
 					if (error instanceof UserError) {
-						if (SwingTools.showConfirmDialog("send_bugreport.confirm",
+						if (SwingTools.showConfirmDialog(ExtendedErrorDialog.this, "send_bugreport.confirm",
 								ConfirmDialog.YES_NO_OPTION) == ConfirmDialog.NO_OPTION) {
 							return;
 						}
@@ -437,7 +438,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	 * @param t
 	 * @return
 	 */
-	private boolean isBugReportException(final Throwable t) {
+	private boolean isBugReportException(Throwable t) {
 		return t instanceof RuntimeException || t instanceof Error;
 		// return !(t instanceof NoBugError || t instanceof XMLException || t instanceof
 		// RepositoryException);
@@ -450,7 +451,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 	@Override
 	protected String getInfoText() {
 		if (error != null) {
-			final StringBuilder infoText = new StringBuilder();
+			StringBuilder infoText = new StringBuilder();
 			infoText.append("<div>");
 			infoText.append(super.getInfoText());
 			infoText.append("</div>");
@@ -472,7 +473,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 
 		private final StackTraceElement ste;
 
-		private FormattedStackTraceElement(final StackTraceElement ste) {
+		private FormattedStackTraceElement(StackTraceElement ste) {
 			this.ste = ste;
 		}
 
@@ -486,7 +487,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 
 		private static final long serialVersionUID = -2482220036723949144L;
 
-		public StackTraceList(final Throwable t) {
+		public StackTraceList(Throwable t) {
 			super(new DefaultListModel<>());
 			setFont(getFont().deriveFont(Font.PLAIN));
 			setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -494,7 +495,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 			addListSelectionListener(new ListSelectionListener() {
 
 				@Override
-				public void valueChanged(final ListSelectionEvent e) {
+				public void valueChanged(ListSelectionEvent e) {
 					if (getSelectedIndex() >= 0) {
 						if (!(getSelectedValue() instanceof FormattedStackTraceElement)) {
 							editButton.setEnabled(false);
@@ -523,7 +524,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 			}
 		}
 
-		private void appendStackTrace(final Throwable throwable) {
+		private void appendStackTrace(Throwable throwable) {
 			model().addElement("Exception: " + throwable.getClass().getName());
 			model().addElement("Message: " + throwable.getMessage());
 			model().addElement("Stack trace:" + Tools.getLineSeparator());

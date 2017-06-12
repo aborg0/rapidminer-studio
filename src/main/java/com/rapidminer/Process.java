@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2001-2017 by RapidMiner and the contributors
- * 
+ *
  * Complete list of developers available at our web site:
- * 
+ *
  * http://rapidminer.com
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU Affero General Public License as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
-*/
+ */
 package com.rapidminer;
 
 import java.io.File;
@@ -32,6 +32,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +55,8 @@ import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.datatable.DataTable;
 import com.rapidminer.datatable.SimpleDataTable;
 import com.rapidminer.example.table.AttributeFactory;
+import com.rapidminer.gui.tools.ProgressThread;
+import com.rapidminer.gui.tools.ProgressThreadStoppedException;
 import com.rapidminer.io.process.XMLImporter;
 import com.rapidminer.license.violation.LicenseViolation;
 import com.rapidminer.operator.Annotations;
@@ -920,6 +923,33 @@ public class Process extends AbstractObservable<Process> implements Cloneable {
 		AttributeFactory.resetNameCounters();
 
 		getLogger().fine("Process initialised.");
+
+		// add process start macro value here already to have it available for root parameters
+		// can be overwritten if it is passed to the run() method via the macro map
+		getMacroHandler().addMacro(MacroHandler.PROCESS_START,
+				MacroHandler.DATE_FORMAT.get().format(new Date(System.currentTimeMillis())));
+	}
+
+	/**
+	 * Checks whether input data was specified in the process context. Will return true if at least
+	 * one input port has specified data.
+	 *
+	 * @param firstPort
+	 *            The first port to check
+	 * @return true if at least one input port has specified data.
+	 */
+	private boolean checkForInitialData(int firstPort) {
+		for (int i = firstPort; i < context.getInputRepositoryLocations().size(); i++) {
+			String location = context.getInputRepositoryLocations().get(i);
+			if (location == null || location.length() == 0) {
+				continue;
+			}
+			if (i >= rootOperator.getSubprocess(0).getInnerSources().getNumberOfPorts()) {
+				break;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -931,55 +961,103 @@ public class Process extends AbstractObservable<Process> implements Cloneable {
 	 *            parameter of the run() method.
 	 */
 	protected void loadInitialData(final int firstPort) throws UserError {
+		loadInitialData(firstPort, null);
+	}
+
+	/**
+	 * Loads results from the repository if specified in the {@link ProcessContext}. Will also show
+	 * the progress of loading if a {@link ProgressListener} is specified.
+	 *
+	 * @param firstPort
+	 *            Specifies the first port which is read from the ProcessContext. This enables the
+	 *            possibility to skip ports for which input is already specified via the input
+	 *            parameter of the run() method.
+	 * @param progressListener
+	 *            The progress listener for loading the data. Can be null.
+	 */
+	protected void loadInitialData(final int firstPort, ProgressListener progressListener) throws UserError {
 		ProcessContext context = getContext();
 		if (context.getInputRepositoryLocations().isEmpty()) {
+			if (progressListener != null) {
+				progressListener.complete();
+			}
 			return;
+		}
+		if (progressListener != null) {
+			progressListener.setTotal(context.getInputRepositoryLocations().size() - firstPort - 1);
+			progressListener.setCompleted(0);
 		}
 		getLogger()
 				.info("Loading initial data" + (firstPort > 0 ? " (starting at port " + (firstPort + 1) + ")" : "") + ".");
 		for (int i = firstPort; i < context.getInputRepositoryLocations().size(); i++) {
+			if (shouldStop()) {
+				return;
+			}
 			String location = context.getInputRepositoryLocations().get(i);
 			if (location == null || location.length() == 0) {
 				getLogger().fine("Input #" + (i + 1) + " not specified.");
-			} else {
-				if (i >= rootOperator.getSubprocess(0).getInnerSources().getNumberOfPorts()) {
-					getLogger().warning("No input port available for process input #" + (i + 1) + ": " + location);
-				} else {
-					OutputPort port = rootOperator.getSubprocess(0).getInnerSources().getPortByIndex(i);
-					RepositoryLocation loc;
-					try {
-						loc = resolveRepositoryLocation(location);
-					} catch (MalformedRepositoryLocationException e1) {
-						throw new PortUserError(port, 325, e1.getMessage());
-					} catch (UserError e1) {
-						throw new PortUserError(port, 325, e1.getMessage());
-					}
-					try {
-						Entry entry = loc.locateEntry();
-						if (entry == null) {
-							throw new PortUserError(port, 312, loc, "Entry does not exist.");
-						}
-						if (entry instanceof IOObjectEntry) {
-							getLogger().info("Assigning " + loc + " to input port " + port.getSpec() + ".");
-							// only deliver the data if the port is really connected
-							if (port.isConnected()) {
-								port.deliver(((IOObjectEntry) entry).retrieveData(null));
-							}
-						} else if (entry instanceof BlobEntry) {
-							getLogger().info("Assigning " + loc + " to input port " + port.getSpec() + ".");
-							// only deliver the data if the port is really connected
-							if (port.isConnected()) {
-								port.deliver(new RepositoryBlobObject(loc));
-							}
-						} else {
-							getLogger().info("Cannot assigning " + loc + " to input port " + port.getSpec()
-									+ ": Repository location does not reference an IOObject entry.");
-							throw new PortUserError(port, 312, loc, "Not an IOObject entry.");
-						}
-					} catch (RepositoryException e) {
-						throw new PortUserError(port, 312, loc, e.getMessage());
-					}
+				if (progressListener != null) {
+					progressListener.setCompleted(i - firstPort + 1);
 				}
+				continue;
+			}
+			if (i >= rootOperator.getSubprocess(0).getInnerSources().getNumberOfPorts()) {
+				getLogger().warning("No input port available for process input #" + (i + 1) + ": " + location);
+				int rest = context.getInputRepositoryLocations().size() - i - 1;
+				if (rest != 0) {
+					getLogger().warning("Aborting loading " + rest + " more process input(s)");
+				}
+				if (progressListener != null) {
+					progressListener.complete();
+				}
+				break;
+			}
+			OutputPort port = rootOperator.getSubprocess(0).getInnerSources().getPortByIndex(i);
+			RepositoryLocation loc;
+			try {
+				loc = resolveRepositoryLocation(location);
+			} catch (MalformedRepositoryLocationException | UserError e1) {
+				if (progressListener != null) {
+					progressListener.complete();
+				}
+				throw new PortUserError(port, 325, e1.getMessage());
+			}
+			try {
+				Entry entry = loc.locateEntry();
+				if (entry == null) {
+					if (progressListener != null) {
+						progressListener.complete();
+					}
+					throw new PortUserError(port, 312, loc, "Entry does not exist.");
+				}
+				if (entry instanceof IOObjectEntry) {
+					getLogger().info("Assigning " + loc + " to input port " + port.getSpec() + ".");
+					// only deliver the data if the port is really connected
+					if (port.isConnected()) {
+						port.deliver(((IOObjectEntry) entry).retrieveData(null));
+					}
+				} else if (entry instanceof BlobEntry) {
+					getLogger().info("Assigning " + loc + " to input port " + port.getSpec() + ".");
+					// only deliver the data if the port is really connected
+					if (port.isConnected()) {
+						port.deliver(new RepositoryBlobObject(loc));
+					}
+				} else {
+					getLogger().info("Cannot assigning " + loc + " to input port " + port.getSpec()
+							+ ": Repository location does not reference an IOObject entry.");
+					if (progressListener != null) {
+						progressListener.complete();
+					}
+					throw new PortUserError(port, 312, loc, "Not an IOObject entry.");
+				}
+				if (progressListener != null) {
+					progressListener.setCompleted(i - firstPort + 1);
+				}
+			} catch (RepositoryException e) {
+				if (progressListener != null) {
+					progressListener.complete();
+				}
+				throw new PortUserError(port, 312, loc, e.getMessage());
 			}
 		}
 	}
@@ -1152,7 +1230,17 @@ public class Process extends AbstractObservable<Process> implements Cloneable {
 			logVerbosity = LogService.OFF;
 		}
 		logVerbosity = Math.min(logVerbosity, myVerbosity);
-		getLogger().setLevel(WrapperLoggingHandler.LEVELS[logVerbosity]);
+
+		prepareRun(logVerbosity);
+
+		// apply macros
+		applyContextMacros();
+		if (macroMap != null) {
+			for (Map.Entry<String, String> entry : macroMap.entrySet()) {
+				getMacroHandler().addMacro(entry.getKey(), entry.getValue());
+			}
+		}
+
 		String logFilename = rootOperator.getParameter(ProcessRootOperator.PARAMETER_LOGFILE);
 		Handler logHandler = null;
 		if (logFilename != null) {
@@ -1169,26 +1257,48 @@ public class Process extends AbstractObservable<Process> implements Cloneable {
 			getLogger().addHandler(logHandler);
 		}
 
-		setProcessState(PROCESS_STATE_RUNNING);
-		prepareRun(logVerbosity);
-
 		long start = System.currentTimeMillis();
 
-		// load data as specified in process context
-		int firstInput = 0;
-		if (input != null) {
-			firstInput = input.getIOObjects().length;
-		}
-		loadInitialData(firstInput);
+		rootOperator.processStarts();
 
-		// macros
-		applyContextMacros();
-		if (macroMap != null) {
-			for (Map.Entry<String, String> entry : macroMap.entrySet()) {
-				getMacroHandler().addMacro(entry.getKey(), entry.getValue());
+		final int firstInput = input != null ? input.getIOObjects().length : 0;
+		if (checkForInitialData(firstInput)) {
+			// load data as specified in process context
+			ProgressThread pt = new ProgressThread("load_context_data", false) {
+
+				@Override
+				public void run() {
+					try {
+						loadInitialData(firstInput, getProgressListener());
+						setLastInitException(null);
+					} catch (ProgressThreadStoppedException ptse) {
+						// do nothing, it's checked below (pt.isCancelled)
+					} catch (Exception e) {
+						setLastInitException(e);
+					}
+				}
+			};
+			pt.setShowDialogTimerDelay(5000);
+			pt.setStartDialogShowTimer(true);
+
+			pt.startAndWait();
+			if (lastInitException != null) {
+				Throwable e = lastInitException;
+				lastInitException = null;
+				finishProcess(logHandler);
+				OperatorException oe;
+				if (e instanceof OperatorException) {
+					oe = (OperatorException) e;
+				} else {
+					oe = new OperatorException("context_problem_other", e, e.getMessage());
+				}
+				throw oe;
+			}
+			if (pt.isCancelled() || shouldStop()) {
+				finishProcess(logHandler);
+				throw new ProcessStoppedException();
 			}
 		}
-		rootOperator.processStarts();
 
 		if (name != null) {
 			getLogger().info("Process " + name + " starts");
@@ -1235,14 +1345,38 @@ public class Process extends AbstractObservable<Process> implements Cloneable {
 			}
 			throw e;
 		} finally {
-			stop();
-			tearDown();
-			if (logHandler != null) {
-				getLogger().removeHandler(logHandler);
-				logHandler.close();
-			}
-			ActionStatisticsCollector.getInstance().logExecutionFinished(this);
+			finishProcess(logHandler);
 		}
+	}
+
+	/** The last thrown exception during context loading */
+	private Exception lastInitException;
+
+	/**
+	 * Sets the last thrown exception that occurred during context data loading. This is necessary,
+	 * since the {@link ProgressThread#startAndWait()} method does not throw exceptions from the run
+	 * method of the {@link ProgressThread}.
+	 *
+	 * @param e
+	 *            the exception that was thrown
+	 */
+	private void setLastInitException(Exception e) {
+		this.lastInitException = e;
+	}
+
+	/**
+	 * Finishes the process and cleans up everything, including GUI.
+	 *
+	 * @since 7.4
+	 */
+	private void finishProcess(Handler logHandler) {
+		stop();
+		tearDown();
+		if (logHandler != null) {
+			getLogger().removeHandler(logHandler);
+			logHandler.close();
+		}
+		ActionStatisticsCollector.getInstance().logExecutionFinished(this);
 	}
 
 	/** This method is invoked after a process has finished. */

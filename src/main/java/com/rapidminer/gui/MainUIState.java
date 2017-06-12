@@ -11,6 +11,7 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
+import com.rapidminer.Process;
 import com.rapidminer.ProcessLocation;
 import com.rapidminer.ProcessStorageListener;
 import com.rapidminer.core.io.data.source.DataSourceFactoryRegistry;
@@ -237,4 +238,22 @@ public interface MainUIState extends MenusUI, ProcessState {
 	 * @return the toolbar containg e.g. process run buttons
 	 */
 	public JToolBar getButtonToolbar();
+
+	/**
+	 * Selects and shows a single given operator. Will switch the displayed chain either to the
+	 * parent or the selected chain, depending on the provided flag. This can be used to easily
+	 * update the view. Convenience method.
+	 *
+	 * @param currentlySelected
+	 * @param showParent
+	 * @since 7.5
+	 * @see #selectOperators(List)
+	 * @see #selectOperator(Operator)
+	 */
+	public void selectAndShowOperator(Operator currentlySelected, boolean showParent);
+
+	/**
+	 * @param process
+	 */
+	public void setOpenedProcess(Process process);
 }

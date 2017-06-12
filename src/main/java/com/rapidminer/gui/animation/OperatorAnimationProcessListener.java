@@ -22,6 +22,7 @@ import com.rapidminer.Process;
 import com.rapidminer.gui.GeneralProcessListener;
 import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
+import com.rapidminer.gui.flow.processrendering.model.ProcessRendererModel;
 import com.rapidminer.operator.Operator;
 
 
@@ -40,6 +41,10 @@ public class OperatorAnimationProcessListener extends GeneralProcessListener {
 
 	public OperatorAnimationProcessListener(final MainUIState mainFrame) {
 		super(mainFrame);
+	}
+
+	public OperatorAnimationProcessListener(ProcessRendererModel processModel) {
+		super(processModel);
 	}
 
 	@Override

@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2001-2017 by RapidMiner and the contributors
- *
+ * 
  * Complete list of developers available at our web site:
- *
+ * 
  * http://rapidminer.com
- *
+ * 
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU Affero General Public License as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Affero General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
- */
+*/
 package com.rapidminer.tools;
 
 import java.awt.Desktop;
@@ -85,7 +85,7 @@ public class RMUrlHandler {
 			if (suffix.startsWith("operator/")) {
 				String opName = suffix.substring("operator/".length());
 				MainUIState mainFrame = RapidMinerGUI.getMainFrame();
-				mainFrame.selectOperator(mainFrame.getProcess().getOperator(opName));
+				mainFrame.selectAndShowOperator(mainFrame.getProcess().getOperator(opName), true);
 				return true;
 			}
 			Action action = ACTION_MAP.get(suffix);
@@ -229,7 +229,7 @@ public class RMUrlHandler {
 	private static void showBrowserUnavailableMessage(String uri) {
 		ButtonDialog dialog = BrowserUnavailableDialogFactory.createNewDialog(uri);
 		dialog.setVisible(true);
-			LOGGER.log(Level.SEVERE, "Failed to open web page in browser, browsing is not supported on this platform.");
+		LOGGER.log(Level.SEVERE, "Failed to open web page in browser, browsing is not supported on this platform.");
 
 	}
 }

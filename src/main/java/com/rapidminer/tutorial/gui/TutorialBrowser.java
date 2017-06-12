@@ -1,18 +1,18 @@
 /**
  * Copyright (C) 2001-2017 by RapidMiner and the contributors
- *
+ * 
  * Complete list of developers available at our web site:
- *
+ * 
  * http://rapidminer.com
- *
+ * 
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU Affero General Public License as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Affero General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
 */
@@ -181,20 +181,20 @@ public class TutorialBrowser extends JPanel implements Dockable {
 	 * @param tutorialSelector
 	 *            the selector which should be observed
 	 */
-	public TutorialBrowser(final TutorialSelector tutorialSelector) {
+	public TutorialBrowser(TutorialSelector tutorialSelector) {
 		this.tutorialSelector = tutorialSelector;
 		initGUI();
 		tutorialObserver = new Observer<Tutorial>() {
 
 			@Override
-			public void update(final Observable<Tutorial> observable, final Tutorial tutorial) {
+			public void update(Observable<Tutorial> observable, Tutorial tutorial) {
 				selectedTutorial = tutorial;
 				nextTutorial = null;
 
 				// find next tutorial
 				if (selectedTutorial != null) {
-					final List<Tutorial> tutorials = selectedTutorial.getGroup().getTutorials();
-					final int currIndex = tutorials.indexOf(selectedTutorial);
+					List<Tutorial> tutorials = selectedTutorial.getGroup().getTutorials();
+					int currIndex = tutorials.indexOf(selectedTutorial);
 					if (currIndex != -1 && currIndex + 1 < tutorials.size()) {
 						nextTutorial = tutorials.get(currIndex + 1);
 					}
@@ -225,10 +225,10 @@ public class TutorialBrowser extends JPanel implements Dockable {
 	}
 
 	private Component createHeaderPanel() {
-		final JPanel buttonPanel = new JPanel(new GridBagLayout());
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
 		buttonPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Colors.TAB_BORDER));
 
-		final GridBagConstraints gbc = new GridBagConstraints();
+		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(10, 10, 10, 0);
 		gbc.gridx = 0;
 
@@ -252,23 +252,23 @@ public class TutorialBrowser extends JPanel implements Dockable {
 		{
 			gbc.gridx += 1;
 			gbc.insets = new Insets(10, 0, 10, 0);
-			final JLabel backToTutorialsIcon = new JLabel(String.format(ICON_TEMPLATE, LINK_COLOR_HEX, Ionicon.HOME.getHtml()));
+			JLabel backToTutorialsIcon = new JLabel(String.format(ICON_TEMPLATE, LINK_COLOR_HEX, Ionicon.HOME.getHtml()));
 			buttonPanel.add(backToTutorialsIcon, gbc);
 
-			final LinkLocalButton backToTutorialsButton = new LinkLocalButton(new ResourceAction("tutorials.view_all_tutorials") {
+			LinkLocalButton backToTutorialsButton = new LinkLocalButton(new ResourceAction("tutorials.view_all_tutorials") {
 
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void actionPerformed(final ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {
 					try {
 						StartupDialogRegistry.INSTANCE.showStartupDialog(ToolbarButton.TUTORIAL);
-					} catch (final NoStartupDialogRegistreredException e1) {
+					} catch (NoStartupDialogRegistreredException e1) {
 						SwingTools.showVerySimpleErrorMessage("tutorials_not_available");
 					}
 				}
 			});
-			final HTMLEditorKit htmlKit = (HTMLEditorKit) backToTutorialsButton.getEditorKit();
+			HTMLEditorKit htmlKit = (HTMLEditorKit) backToTutorialsButton.getEditorKit();
 			htmlKit.getStyleSheet().addRule(LINK_STYLE);
 			gbc.gridx += 1;
 			gbc.insets = new Insets(10, 0, 10, 10);
@@ -278,7 +278,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 	}
 
 	private Component createFooterPanel() {
-		final JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 5));
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 5));
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		previousStepButton = new JButton();
@@ -287,7 +287,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void actionPerformed(final ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				ActionStatisticsCollector.INSTANCE.log(ActionStatisticsCollector.TYPE_GETTING_STARTED,
 						"tutorial:" + selectedTutorial.getIdentifier(), "step_" + (stepIndex + 1) + "_previous");
 				displayStep(--stepIndex);
@@ -302,7 +302,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void actionPerformed(final ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				ActionStatisticsCollector.INSTANCE.log(ActionStatisticsCollector.TYPE_GETTING_STARTED,
 						"tutorial:" + selectedTutorial.getIdentifier(), "step_" + (stepIndex + 1) + "_next");
 				displayStep(++stepIndex);
@@ -312,7 +312,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 		nextStepButton.setHorizontalTextPosition(SwingConstants.LEFT);
 		buttonPanel.add(nextStepButton);
 
-		final JPanel footer = new JPanel(new BorderLayout());
+		JPanel footer = new JPanel(new BorderLayout());
 		footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Colors.TAB_BORDER));
 		footer.add(buttonPanel, BorderLayout.CENTER);
 
@@ -320,7 +320,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 	}
 
 	private Component createContentPanel() {
-		final JPanel contentPanel = new JPanel();
+		JPanel contentPanel = new JPanel();
 		contentPanel.setOpaque(false);
 
 		jEditorPane = new JEditorPane();
@@ -329,17 +329,17 @@ public class TutorialBrowser extends JPanel implements Dockable {
 		scrollPane = new ExtendedJScrollPane(jEditorPane);
 		scrollPane.setBorder(null);
 
-		final HTMLEditorKit kit = new HTMLEditorKit();
+		HTMLEditorKit kit = new HTMLEditorKit();
 		jEditorPane.setEditorKit(kit);
 		jEditorPane.setMargin(new Insets(0, 0, 0, 0));
 
-		final Document doc = kit.createDefaultDocument();
+		Document doc = kit.createDefaultDocument();
 		jEditorPane.setDocument(doc);
 		jEditorPane.setText(String.format(INFO_TEMPLATE, NO_TUTORIAL_SELECTED));
 		jEditorPane.addHyperlinkListener(new HyperlinkListener() {
 
 			@Override
-			public void hyperlinkUpdate(final HyperlinkEvent e) {
+			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 					if (NEXT_TUTORIAL_URL.equals(e.getDescription())) {
 						ActionStatisticsCollector.INSTANCE.log(ActionStatisticsCollector.TYPE_GETTING_STARTED,
@@ -347,14 +347,14 @@ public class TutorialBrowser extends JPanel implements Dockable {
 						if (nextTutorial == null) {
 							try {
 								StartupDialogRegistry.INSTANCE.showStartupDialog(ToolbarButton.TUTORIAL);
-							} catch (final NoStartupDialogRegistreredException e1) {
+							} catch (NoStartupDialogRegistreredException e1) {
 								SwingTools.showVerySimpleErrorMessage("tutorials_not_available");
 							}
 						} else {
 							try {
 								final MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 								final Process tutorialProcess = nextTutorial.makeProcess();
-								mainFrame.setOpenedProcess(tutorialProcess, false, null);
+								mainFrame.setOpenedProcess(tutorialProcess);
 								TutorialManager.INSTANCE.completedTutorial(nextTutorial.getIdentifier());
 								tutorialSelector.setSelectedTutorial(nextTutorial);
 							} catch (RuntimeException | MalformedRepositoryLocationException | IOException
@@ -383,7 +383,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 		} else {
 			tutorialNameLabel.setText(String.format(HEADLINE_TEMPLATE, tutorial.getTitle()));
 			jEditorPane.setText(String.format(INFO_TEMPLATE, DISPLAY_TUTORIAL_STEPS));
-			final ProgressThread thread = new ProgressThread(PROGRESS_THREAD_ID) {
+			ProgressThread thread = new ProgressThread(PROGRESS_THREAD_ID) {
 
 				@Override
 				public void run() {
@@ -400,9 +400,9 @@ public class TutorialBrowser extends JPanel implements Dockable {
 						}
 
 						final List<String> steps = new ArrayList<>();
-						final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-						final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-						final org.w3c.dom.Document doc = dBuilder.parse(new InputSource(stepFileStream));
+						DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+						DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+						org.w3c.dom.Document doc = dBuilder.parse(new InputSource(stepFileStream));
 						doc.getDocumentElement().normalize();
 
 						// enrich document information
@@ -411,25 +411,25 @@ public class TutorialBrowser extends JPanel implements Dockable {
 						enrichNodeList(doc.getElementsByTagName(XML_TAG_TASKS));
 						enrichNodeList(doc.getElementsByTagName(XML_TAG_QUESTIONS));
 
-						final TransformerFactory tFactory = TransformerFactory.newInstance();
-						final Transformer transformer = tFactory
+						TransformerFactory tFactory = TransformerFactory.newInstance();
+						Transformer transformer = tFactory
 								.newTransformer(new StreamSource(Tools.getResourceInputStream(XSL_FILE_PATH)));
-						final NodeList stepList = doc.getElementsByTagName(XML_TAG_STEP);
+						NodeList stepList = doc.getElementsByTagName(XML_TAG_STEP);
 						for (int i = 0; i < stepList.getLength(); i++) {
-							final Node nNode = stepList.item(i);
+							Node nNode = stepList.item(i);
 
 							// enrich step node
 							((Element) nNode).setAttribute(XML_ATTRIBUTE_INDEX, String.valueOf(i + 1));
 							((Element) nNode).setAttribute(XML_ATTRIBUTE_TOTAL, String.valueOf(stepList.getLength()));
 
-							final DOMImplementationLS lsImpl = (DOMImplementationLS) nNode.getOwnerDocument().getImplementation()
+							DOMImplementationLS lsImpl = (DOMImplementationLS) nNode.getOwnerDocument().getImplementation()
 									.getFeature("LS", "3.0");
-							final LSSerializer lsSerializer = lsImpl.createLSSerializer();
+							LSSerializer lsSerializer = lsImpl.createLSSerializer();
 							lsSerializer.getDomConfig().setParameter("xml-declaration", false);
 
-							final String currentStep = lsSerializer.writeToString(nNode);
-							final ByteArrayOutputStream output = new ByteArrayOutputStream();
-							final org.w3c.dom.Document document = dBuilder.parse(new InputSource(new StringReader(currentStep)));
+							String currentStep = lsSerializer.writeToString(nNode);
+							ByteArrayOutputStream output = new ByteArrayOutputStream();
+							org.w3c.dom.Document document = dBuilder.parse(new InputSource(new StringReader(currentStep)));
 							transformer.transform(new DOMSource(document), new StreamResult(output));
 
 							steps.add(output.toString(UTF_8.name()));
@@ -441,7 +441,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 								displaySteps(steps);
 							}
 						});
-					} catch (final Exception e) {
+					} catch (Exception e) {
 						LogService.getRoot().log(Level.WARNING,
 								"com.rapidminer.tutorial.gui.TutorialBrowser.failed_to_load_stepfile",
 								new Object[] { tutorial.getTitle(), e });
@@ -462,9 +462,9 @@ public class TutorialBrowser extends JPanel implements Dockable {
 		}
 	}
 
-	private void enrichNodeList(final NodeList nList) {
+	private void enrichNodeList(NodeList nList) {
 		for (int i = 0; i < nList.getLength(); i++) {
-			final Node nNode = nList.item(i);
+			Node nNode = nList.item(i);
 			switch (nNode.getNodeName()) {
 				case XML_TAG_ICON:
 					((Element) nNode).setAttribute(XML_ATTRIBUTE_IMAGE, SwingTools.getIconPath(nNode.getTextContent()));
@@ -497,7 +497,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 		}
 	}
 
-	private void displaySteps(final List<String> steps) {
+	private void displaySteps(List<String> steps) {
 		this.steps = steps;
 		this.stepIndex = -1;
 		if (steps != null && steps.size() > 0) {

@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
-*/
+ */
 package com.rapidminer.gui.plotter;
 
 import java.awt.Color;
@@ -38,8 +38,13 @@ public class ColorProvider {
 	private static Color minColor;
 	private static Color maxColor;
 
-	public static final Color MIN_DEFAULT_COLOR = new Color(58, 58, 255);
-	public static final Color MAX_DEFAULT_COLOR = new Color(255, 48, 48);
+	/** used as default before Studio 7.5 */
+	private static final Color MIN_DEFAULT_COLOR_PRE_75 = new Color(58, 58, 255);
+	/** used as default before Studio 7.5 */
+	private static final Color MAX_DEFAULT_COLOR_PRE_75 = new Color(255, 48, 48);
+
+	public static final Color MIN_DEFAULT_COLOR = new Color(73, 144, 226);
+	public static final Color MAX_DEFAULT_COLOR = new Color(232, 76, 61);
 
 	static {
 		// update colors when user changes them in the settings
@@ -67,7 +72,7 @@ public class ColorProvider {
 		boolean fixed = false;
 		// this was the previous default and we cannot detect if the user has ever changed it so we
 		// force the new scheme here
-		if (minColor.equals(Color.BLUE)) {
+		if (minColor.equals(Color.BLUE) || minColor.equals(MIN_DEFAULT_COLOR_PRE_75)) {
 			ParameterService.setParameterValue(MainFrame.PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_MINCOLOR,
 					ParameterTypeColor.color2String(MIN_DEFAULT_COLOR));
 			fixed = true;
@@ -75,7 +80,7 @@ public class ColorProvider {
 		maxColor = getColorFromProperty(MainFrame.PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_MAXCOLOR, MAX_DEFAULT_COLOR);
 		// this was the previous default and we cannot detect if the user has ever changed it so we
 		// force the new scheme here
-		if (maxColor.equals(Color.RED)) {
+		if (maxColor.equals(Color.RED) || maxColor.equals(MAX_DEFAULT_COLOR_PRE_75)) {
 			ParameterService.setParameterValue(MainFrame.PROPERTY_RAPIDMINER_GUI_PLOTTER_LEGEND_MAXCOLOR,
 					ParameterTypeColor.color2String(MAX_DEFAULT_COLOR));
 			fixed = true;

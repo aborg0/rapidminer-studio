@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2001-2017 by RapidMiner and the contributors
- * 
+ *
  * Complete list of developers available at our web site:
- * 
+ *
  * http://rapidminer.com
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU Affero General Public License as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
-*/
+ */
 package com.rapidminer.gui;
 
 import java.awt.Component;
@@ -25,7 +25,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -72,7 +75,7 @@ import com.vlsolutions.swing.docking.DockingDesktop;
  * It must be notified whenever the process changes and propagates this event to its children. Most
  * of the code is enclosed within the Actions.
  *
- * @author Ingo Mierswa, Simon Fischer, Sebastian Land, Marius Helf
+ * @author Ingo Mierswa, Simon Fischer, Sebastian Land, Marius Helf, Jan Czogalla
  */
 @SuppressWarnings("deprecation")
 public class MainFrame extends ApplicationFrame implements WindowListener, MainUIState, ProcessEndHandler {
@@ -184,8 +187,85 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 			@Override
 			public boolean close() {
-				if (changed) {
-					final ProcessLocation loc = process.getProcessLocation();
+				if (!isChanged()) {
+					return true;
+				}
+				ProcessLocation loc = getProcess().getProcessLocation();
+				String locName;
+				if (loc != null) {
+					locName = loc.getShortName();
+				} else {
+					locName = "unnamed";
+				}
+				switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
+					case ConfirmDialog.YES_OPTION:
+						SaveAction.save(getProcess());
+						// it may happen that save() does not actually save the process, because the
+						// user hits cancel in the
+						// saveAs dialog or an error occurs. In this case the process won't be marked as
+						// unchanged. Thus,
+						// we return the process changed status.
+						return !isChanged();
+					case ConfirmDialog.NO_OPTION:
+						// ask for confirmation before stopping the currently running process (if
+						// askForConfirmation=true)
+						if (/*askForConfirmation*/true) {
+							if (RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_RUNNING
+								|| RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_PAUSED) {
+								if (SwingTools.showConfirmDialog("close_running_process",
+										ConfirmDialog.YES_NO_OPTION) != ConfirmDialog.YES_OPTION) {
+									return false;
+								}
+							}
+						}
+						if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
+							synchronized (processThread) {
+								processThread.stopProcess();
+							}
+						}
+						return true;
+					default: // cancel
+						return false;
+				}
+//				if (changed) {
+//					final ProcessLocation loc = process.getProcessLocation();
+//					String locName;
+//					if (loc != null) {
+//						locName = loc.getShortName();
+//					} else {
+//						locName = "unnamed";
+//					}
+//					switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
+//					case ConfirmDialog.YES_OPTION:
+//						SaveAction.save(getProcess());
+//
+//						// it may happen that save() does not actually save the
+//						// process,
+//						// because the user hits cancel in the
+//						// saveAs dialog or an error occurs. In this case the
+//						// process
+//						// won't be marked as unchanged. Thus,
+//						// we return the process changed status.
+//						return !isChanged();
+//					case ConfirmDialog.NO_OPTION:
+//						if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
+//							synchronized (processThread) {
+//								processThread.stopProcess();
+//							}
+//						}
+//						return true;
+//					default: // cancel
+//						return false;
+//					}
+//				} else {
+//					return true;
+//				}
+			}
+
+			@Override
+			public void exit(final boolean relaunch) {
+				if (isChanged()) {
+					final ProcessLocation loc = getProcess().getProcessLocation();
 					String locName;
 					if (loc != null) {
 						locName = loc.getShortName();
@@ -195,44 +275,7 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 					switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
 					case ConfirmDialog.YES_OPTION:
 						SaveAction.save(getProcess());
-
-						// it may happen that save() does not actually save the
-						// process,
-						// because the user hits cancel in the
-						// saveAs dialog or an error occurs. In this case the
-						// process
-						// won't be marked as unchanged. Thus,
-						// we return the process changed status.
-						return !isChanged();
-					case ConfirmDialog.NO_OPTION:
-						if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
-							synchronized (processThread) {
-								processThread.stopProcess();
-							}
-						}
-						return true;
-					default: // cancel
-						return false;
-					}
-				} else {
-					return true;
-				}
-			}
-
-			@Override
-			public void exit(final boolean relaunch) {
-				if (changed) {
-					final ProcessLocation loc = process.getProcessLocation();
-					String locName;
-					if (loc != null) {
-						locName = loc.getShortName();
-					} else {
-						locName = "unnamed";
-					}
-					switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
-					case ConfirmDialog.YES_OPTION:
-						SaveAction.save(process);
-						if (changed) {
+						if (isChanged()) {
 							return;
 						}
 						break;
@@ -1188,5 +1231,21 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	@Override
 	public void updateToolbar() {
 		state.updateToolbar();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.rapidminer.gui.MainUIState#selectAndShowOperator(com.rapidminer.operator.Operator, boolean)
+	 */
+	@Override
+	public void selectAndShowOperator(Operator currentlySelected, boolean showParent) {
+		state.selectAndShowOperator(currentlySelected, showParent);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.rapidminer.gui.MainUIState#setOpenedProcess(com.rapidminer.Process)
+	 */
+	@Override
+	public void setOpenedProcess(Process process) {
+		state.setOpenedProcess(process);
 	}
 }

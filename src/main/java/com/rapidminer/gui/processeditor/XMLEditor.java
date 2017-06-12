@@ -143,7 +143,7 @@ public class XMLEditor extends JPanel implements ProcessEditor, Dockable {
 				.equals(RapidMinerGUI.getMainFrame().getProcess().getRootOperator().getXML(true))) {
 			Process old = RapidMinerGUI.getMainFrame().getProcess();
 			newExp.setProcessLocation(old.getProcessLocation());
-			mainFrame.setProcess(newExp, false, true);
+			mainFrame.setProcess(newExp, false);
 		}
 	}
 

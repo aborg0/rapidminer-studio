@@ -101,6 +101,7 @@ import com.rapidminer.gui.tools.dialogs.ConfirmDialog;
 import com.rapidminer.gui.tools.dialogs.DecisionRememberingConfirmDialog;
 import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardFactory;
 import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardRegistry;
+import com.rapidminer.gui.tools.ioobjectcache.IOObjectCacheViewer;
 import com.rapidminer.gui.tools.logging.LogViewer;
 import com.rapidminer.operator.IOContainer;
 import com.rapidminer.operator.Operator;
@@ -140,6 +141,120 @@ import com.vlsolutions.swing.toolbars.ToolBarContainer;
  * @author Gabor Bakos
  */
 public abstract class AbstractUIState implements MainUIState, ProcessEndHandler {
+	/**
+	 * This listener takes care of changes relevant to the {@link MainFrame} itself, such as the
+	 * {@link ProcessThread} and saving, loading or setting a process.
+	 *
+	 * @since 7.5
+	 * @author Jan Czogalla
+	 */
+	private class MainProcessListener implements ExtendedProcessEditor, ProcessStorageListener {
+
+		private Process oldProcess;
+
+		@Override
+		public void processChanged(Process process) {
+			Process currentProcess = oldProcess;
+			oldProcess = process;
+			boolean firstProcess = currentProcess == null;
+			if (!firstProcess) {
+				currentProcess.removeObserver(processObserver);
+				if (currentProcess.getProcessState() != Process.PROCESS_STATE_STOPPED) {
+					if (processThread != null) {
+						processThread.stopProcess();
+					}
+				}
+			}
+
+			if (process != null) {
+
+				synchronized (process) {
+					processThread = new ProcessThread(process);
+					process.addObserver(processObserver, true);
+					process.addBreakpointListener(breakpointListener);
+					if (VALIDATE_AUTOMATICALLY_ACTION.isSelected()) {
+						// not running at this point!
+						validateProcess(true);
+					}
+				}
+			}
+			processPanel.getProcessRenderer().repaint();
+			setTitle();
+			getStatusBar().clearSpecialText();
+			processPanel.getViewPort().firePropertyChange(ProcessPanel.SCROLLER_UPDATE, false, true);
+		}
+
+		@Override
+		public void setSelection(List<Operator> selection) {
+
+		}
+
+		@Override
+		public void processUpdated(Process process) {
+			setTitle();
+			if (getProcess().getProcessLocation() != null) {
+				AbstractUIState.this.SAVE_ACTION.setEnabled(processModel.hasChanged());
+			}
+			processPanel.getProcessRenderer().repaint();
+		}
+
+		@Override
+		public void stored(Process process) {
+			SAVE_ACTION.setEnabled(false);
+			setTitle();
+			updateRecentFileList();
+		}
+
+		@Override
+		public void opened(Process process) {
+			if (process.getImportMessage() != null && process.getImportMessage().contains("error")) {
+				SwingTools.showLongMessage("import_message", process.getImportMessage());
+			}
+
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					SAVE_ACTION.setEnabled(false);
+					setTitle();
+				}
+			});
+
+			List<UnknownParameterInformation> unknownParameters = null;
+			synchronized (process) {
+				RapidMinerGUI.useProcessFile(process);
+				unknownParameters = process.getUnknownParameters();
+			}
+
+			updateRecentFileList();
+
+			// show unsupported parameters info?
+			if (unknownParameters != null && unknownParameters.size() > 0) {
+				final UnknownParametersInfoDialog unknownParametersInfoDialog = new UnknownParametersInfoDialog(
+						AbstractUIState.this.getWindow(), unknownParameters);
+				if (SwingUtilities.isEventDispatchThread()) {
+					unknownParametersInfoDialog.setVisible(true);
+				} else {
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
+
+							@Override
+							public void run() {
+								unknownParametersInfoDialog.setVisible(true);
+							}
+						});
+					} catch (Exception e) {
+						LogService.getRoot().log(Level.WARNING, "Error opening the unknown parameter dialog: " + e, e);
+					}
+				}
+			}
+		}
+
+		@Override
+		public void processViewChanged(Process process) {}
+
+	}
+
 
 	/**
 	 * The property name for &quot;Maximum number of states in the undo
@@ -331,7 +446,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			ConfigurableDialog dialog = new ConfigurableDialog(process);
+			ConfigurableDialog dialog = new ConfigurableDialog(getProcess());
 			dialog.setVisible(true);
 		}
 	};
@@ -359,6 +474,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	protected final DockingContext dockingContext = new DockingContext();
 	protected final DockingDesktop dockingDesktop = new DockingDesktop(
 			"mainDesktop", dockingContext);
+	private final MainProcessListener mainProcessListener = new MainProcessListener();
 	protected final Actions actions = new Actions(this);
 //Removed in 7.0
 //	protected final WelcomeScreen welcomeScreen = new WelcomeScreen(this);
@@ -366,6 +482,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 			.makeResultDisplay();
 	protected final EventListenerList processEditors = new EventListenerList();
 
+	protected final ProcessPanel processPanel = new ProcessPanel(this);
 	protected final LogViewer logViewer = new LogViewer(this);
 	protected final SystemMonitor systemMonitor = new SystemMonitor();
 	
@@ -380,7 +497,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	//Removed in 6.x
 //	protected final CommentEditor commentEditor = new CommentEditor();
 	protected final ProcessContextProcessEditor processContextEditor = new ProcessContextProcessEditor();
-	protected final ProcessPanel processPanel = new ProcessPanel(this);
+	private final ProcessRendererModel processModel = processPanel.getProcessRenderer().getModel();
 //Removed in 7.0
 //	protected final ComicRenderer comicRenderer = new ComicRenderer(processPanel.getProcessRenderer(), this);
 	protected final NewOperatorEditor newOperatorEditor = new NewOperatorEditor(processPanel.getProcessRenderer().getDragListener());
@@ -388,6 +505,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	
 	protected final MacroViewer macroViewer = new MacroViewer();
 
+	private final IOObjectCacheViewer ioobjectCacheViewer = new IOObjectCacheViewer(RapidMiner.getGlobalIOObjectCache());
 	//Removed in 6.x
 //	protected final RemoteProcessViewer remoteProcessViewer = new RemoteProcessViewer();
 
@@ -514,40 +632,29 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 		}
 	};
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.rapidminer.gui.MainUIState#addViewSwitchToUndo()
+	/**
+	 * @deprecated since 7.5; a view is automatically pushed on the undo stack when using
+	 *             {@link ProcessRendererModel#setDisplayedChain(OperatorChain)}
 	 */
-	@Override
-	public void addViewSwitchToUndo() {
-		fireProcessViewChanged();
-		String xmlWithoutGUIInformation = process.getRootOperator().getXML(true, false);
-		if (lastProcessDisplayedOperatorChain != null && processPanel.getProcessRenderer().getModel().getDisplayedChain() != null &&
-				!processPanel.getProcessRenderer().getModel().getDisplayedChain().getName().equals(lastProcessDisplayedOperatorChain.getName())) {
-			addToUndoList(xmlWithoutGUIInformation, true);
-		}
-		lastProcessXML = xmlWithoutGUIInformation;
-		lastProcessDisplayedOperatorChain = processPanel.getProcessRenderer().getModel().getDisplayedChain();
-	}
+	@Deprecated
+	public void addViewSwitchToUndo() {}
 
+	/** Lets the process model check for changes in the process */
 	private void updateProcessNow() {
 		lastUpdate = System.currentTimeMillis();
-		String xmlWithoutGUIInformation = process.getRootOperator().getXML(true, false);
-		if (!xmlWithoutGUIInformation.equals(lastProcessXML)) {
-			addToUndoList(xmlWithoutGUIInformation, false);
+		if (processModel.checkForNewUndoStep()) {
 			validateProcess(false);
 		}
 		processPanel.getProcessRenderer().repaint();
-		lastProcessXML = xmlWithoutGUIInformation;
-		lastProcessDisplayedOperatorChain = processPanel.getProcessRenderer().getModel().getDisplayedChain();
 	}
 
 	@Override
 	public void validateProcess(final boolean force) {
-		if (force || process.getProcessState() != Process.PROCESS_STATE_RUNNING) {
-			metaDataUpdateQueue.validate(process, force);
+		if (force || getProcessState() != Process.PROCESS_STATE_RUNNING) {
+			metaDataUpdateQueue.validate(getProcess(), force || VALIDATE_AUTOMATICALLY_ACTION.isSelected());
+		} else {
+			processModel.fireProcessUpdated();
 		}
-		fireProcessUpdated();
 	}
 
 	public boolean isProcessRendererFocused() {
@@ -564,7 +671,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 			if (System.currentTimeMillis() - lastUpdate > 500) {
 				updateProcessNow();
 			} else {
-				if (process.getProcessState() == Process.PROCESS_STATE_RUNNING) {
+				if (getProcessState() == Process.PROCESS_STATE_RUNNING) {
 					if (!updateTimer.isRunning()) {
 						updateTimer.start();
 					}
@@ -579,13 +686,14 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 		@Override
 		public void breakpointReached(Process process, final Operator operator, final IOContainer ioContainer, int location) {
-			if (process.equals(AbstractUIState.this.process)) {
+			if (process.equals(getProcess())) {
 				RUN_ACTION.setState(process.getProcessState());
 				ProcessThread.beep("breakpoint");
 				Window window = getWindow();
 				if (window != null) {
 					window.toFront();
 				}
+				selectAndShowOperator(operator, true);
 				resultDisplay.showData(ioContainer, "Breakpoint in " + operator.getName() + ", application " + operator.getApplyCount());
 			}
 		}
@@ -593,7 +701,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 		/** Since the mainframe triggers the resume itself this method does nothing. */
 		@Override
 		public void resume() {
-			RUN_ACTION.setState(process.getProcessState());
+			RUN_ACTION.setState(getProcessState());
 		}
 	};
 
@@ -639,20 +747,21 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 		// super(MainFrame.TITLE);
 		window = frame;
 
-		addProcessEditor(actions);
-		addProcessEditor(xmlEditor);
-		//Removed in 6.x
-//		addProcessEditor(commentEditor);
-		addProcessEditor(propertyPanel);
-		addProcessEditor(operatorTree);
-		addProcessEditor(operatorDocumentationBrowser);
-		addProcessEditor(processPanel);
-		addProcessEditor(errorTable);
-		addProcessEditor(processContextEditor);
-		addProcessEditor(getStatusBar());
-		addProcessEditor(resultDisplay);
-		addProcessEditor(macroViewer);
+//		addProcessEditor(actions);
+//		addProcessEditor(xmlEditor);
+//		//Removed in 6.x
+////		addProcessEditor(commentEditor);
+//		addProcessEditor(propertyPanel);
+//		addProcessEditor(operatorTree);
+//		addProcessEditor(operatorDocumentationBrowser);
+//		addProcessEditor(processPanel);
+//		addProcessEditor(errorTable);
+//		addProcessEditor(processContextEditor);
+//		addProcessEditor(getStatusBar());
+//		addProcessEditor(resultDisplay);
+//		addProcessEditor(macroViewer);
 
+		addProcessListeners();
 		if (frame != null) {
 			frame.setTitle(AbstractUIState.TITLE);
 			SwingTools.setFrameIcon(frame);
@@ -1122,14 +1231,34 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 		});
 
 		setProcess(new Process(), true);
-		selectOperator(process.getRootOperator());
-		addToUndoList();
+//		selectOperator(process.getRootOperator());
+//		addToUndoList();
 
 //		perspectives.showPerspective(initialPerspective);
 		perspectiveController.getModel().addPerspectiveChangeListener(perspectiveChangeListener);
+		getWindow().pack();
 		metaDataUpdateQueue.start();
 	}
 
+	/**
+	 * Adds all relevant {@link ProcessEditor ProcessEditors}. Adds the {@link MainProcessListener}
+	 * as first.
+	 */
+	private void addProcessListeners() {
+		processModel.addProcessEditor(mainProcessListener);
+		processModel.addProcessStorageListener(mainProcessListener);
+		processModel.addProcessEditor(actions);
+		processModel.addProcessEditor(xmlEditor);
+		processModel.addProcessEditor(propertyPanel);
+		processModel.addProcessEditor(operatorTree);
+		processModel.addProcessEditor(operatorDocumentationBrowser);
+		processModel.addProcessEditor(processPanel);
+		processModel.addProcessEditor(errorTable);
+		processModel.addProcessEditor(processContextEditor);
+		processModel.addProcessEditor(getStatusBar());
+		processModel.addProcessEditor(resultDisplay);
+		processModel.addProcessEditor(macroViewer);
+	}
 
 	/**
 	 * Finishes the MainFrame initialization. Should be called after all extension have been
@@ -1276,6 +1405,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	
 	@Override
 	public int getProcessState() {
+		Process process = getProcess();
 		if (process == null) {
 			return Process.PROCESS_STATE_UNKNOWN;
 		} else {
@@ -1285,7 +1415,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 	@Override
 	public final Process getProcess() {
-		return this.process;
+		return processModel.getProcess();
 	}
 
 	@Override
@@ -1301,7 +1431,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 			}
 		}
 
-		ProgressThread newProcessThread = new ProgressThread("new_process") {
+		ProgressThread newProgressThread = new ProgressThread("new_process") {
 
 			@Override
 			public void run() {
@@ -1327,9 +1457,9 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 				}
 			}
 		};
-		newProcessThread.setIndeterminate(true);
-		newProcessThread.setCancelable(false);
-		newProcessThread.start();
+		newProgressThread.setIndeterminate(true);
+		newProgressThread.setCancelable(false);
+		newProgressThread.start();
 	}
 
 
@@ -1365,14 +1495,14 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 				return;
 			}
 
-			processThread = new ProcessThread(AbstractUIState.this.process);
+			processThread = new ProcessThread(getProcess());
 			try {
 				processThread.start();
 			} catch (Exception t) {
 				SwingTools.showSimpleErrorMessage("cannot_start_process", t);
 			}
 		} else {
-			process.resume();
+			getProcess().resume();
 		}
 	}
 
@@ -1416,7 +1546,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	 */
 	@Override
 	public void processEnded(final Process process, final IOContainer results) {
-		if (process.equals(AbstractUIState.this.process)) {
+		if (process.equals(getProcess())) {
 			if (results != null) {
 				SwingUtilities.invokeLater(new Runnable() {
 
@@ -1430,7 +1560,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 				});
 			}
 		}
-		if (process.equals(AbstractUIState.this.process)) {
+		if (process.equals(getProcess())) {
 			if (results != null) {
 				resultDisplay.showData(results, "Process results");
 			}
@@ -1438,67 +1568,102 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	}
 
 	/**
-	 * Sets a new process and registers the MainFrame's listeners.
+	 * Sets a (new) process.
+	 *
+	 * @param process
+	 *            the process to be set
+	 * @param newProcess
+	 *            whether the process should be treated as new
 	 */
 	public void setProcess(Process process, boolean newProcess) {
-		setProcess(process, newProcess, false);
+		setOrOpenProcess(process, newProcess, false);
 	}
 
 	/**
-	 * Sets a new process and registers the MainFrame's listeners.
+	 * Sets or loads a (new) process. Resets the undo stack for the model if necessary. <br/>
+	 * Note: It should hold: open => newProcess
 	 */
-	public void setProcess(Process process, boolean newProcess, boolean addToUndoList) {
-		final boolean firstProcess = this.process == null;
-		if (this.process != null) {
-			// this.process.getRootOperator().removeObserver(processObserver);
-			this.process.removeObserver(processObserver);
-		}
-
-		if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
-			if (processThread != null) {
-				processThread.stopProcess();
+	private void setOrOpenProcess(final Process process, final boolean newProcess, final boolean open) {
+		boolean firstProcess = getProcess() == null;
+		processModel.setProcess(process, newProcess, open);
+		if (newProcess) {
+			enableUndoAction();
+			if (!firstProcess) {
+				// VLDocking appears to get nervous when applying two perspectives while the
+				// window is not yet visible. So to avoid that we set design and then welcome
+				// during startup, avoid applying design if this is the first process we create.
+				perspectiveController.showPerspective(PerspectiveModel.DESIGN);
 			}
 		}
-
-		if (process != null) {
-			// process.getRootOperator().addObserver(processObserver, true);
-			process.addObserver(processObserver, true);
-
-			synchronized (process) {
-				this.process = process;
-				this.processThread = new ProcessThread(this.process);
-				this.process.addBreakpointListener(breakpointListener);
-				if (addToUndoList) {
-					addToUndoList(process.getRootOperator().getXML(true, false), false);
-				}
-				fireProcessChanged();
-				processPanel.getProcessRenderer().getModel().setDisplayedChain(this.getProcess().getRootOperator());
-				processPanel.getProcessRenderer().getModel().fireDisplayedChainChanged();
-				selectOperator(this.process.getRootOperator());
-				if (VALIDATE_AUTOMATICALLY_ACTION.isSelected()) {
-					validateProcess(false);
-				}
-			}
-		}
-		if (newProcess && !firstProcess) {
-			// VLDocking appears to get nervous when applying two perspectives
-			// while the
-			// window is not yet visible. So to avoid that we set design and
-			// then welcome
-			// during startup, avoid applying design if this is the first
-			// process we create.
-			perspectiveController.showPerspective(PerspectiveModel.DESIGN);
-		}
-		setTitle();
-//Removed in 7.0
-//		getStatusBar().setTrafficLight(StatusBar.TRAFFIC_LIGHT_INACTIVE);
-		getStatusBar().clearSpecialText();
+		updateProcessNow();
 	}
 
+//	/**
+//	 * Sets a new process and registers the MainFrame's listeners.
+//	 */
+//	public void setProcess(Process process, boolean newProcess, boolean addToUndoList) {
+//		final boolean firstProcess = this.process == null;
+//		if (this.process != null) {
+//			// this.process.getRootOperator().removeObserver(processObserver);
+//			this.process.removeObserver(processObserver);
+//		}
+//
+//		if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
+//			if (processThread != null) {
+//				processThread.stopProcess();
+//			}
+//		}
+//
+//		if (process != null) {
+//			// process.getRootOperator().addObserver(processObserver, true);
+//			process.addObserver(processObserver, true);
+//
+//			synchronized (process) {
+//				this.process = process;
+//				this.processThread = new ProcessThread(this.process);
+//				this.process.addBreakpointListener(breakpointListener);
+//				if (addToUndoList) {
+//					addToUndoList(process.getRootOperator().getXML(true, false), false);
+//				}
+//				fireProcessChanged();
+//				processPanel.getProcessRenderer().getModel().setDisplayedChain(this.getProcess().getRootOperator());
+//				processPanel.getProcessRenderer().getModel().fireDisplayedChainChanged();
+//				selectOperator(this.process.getRootOperator());
+//				if (VALIDATE_AUTOMATICALLY_ACTION.isSelected()) {
+//					validateProcess(false);
+//				}
+//			}
+//		}
+//		if (newProcess && !firstProcess) {
+//			// VLDocking appears to get nervous when applying two perspectives
+//			// while the
+//			// window is not yet visible. So to avoid that we set design and
+//			// then welcome
+//			// during startup, avoid applying design if this is the first
+//			// process we create.
+//			perspectiveController.showPerspective(PerspectiveModel.DESIGN);
+//		}
+//		setTitle();
+////Removed in 7.0
+////		getStatusBar().setTrafficLight(StatusBar.TRAFFIC_LIGHT_INACTIVE);
+//		getStatusBar().clearSpecialText();
+//	}
+
+	/**
+	 * Sets a new process and registers the MainFrame's listeners.
+	 *
+	 * @deprecated Since 7.5. Use {@link #setProcess(Process, boolean)} instead, since undo steps
+	 *             are automatically added when necessary.
+	 */
+	@Deprecated
+	public void setProcess(final Process process, final boolean newProcess, final boolean addToUndoList) {
+		setProcess(process, newProcess);
+	}
+	
 	/** Returns true if the process has changed since the last save. */
 	@Override
 	public boolean isChanged() {
-		return changed;
+		return processModel.hasChanged();
 	}
 
 	private boolean addToUndoList() {
@@ -1573,47 +1738,61 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 	@Override
 	public void undo() {
-		if (undoIndex > 0) {
-			undoIndex--;
-			setProcessIntoStateAt(undoIndex, true);
+//		if (undoIndex > 0) {
+//			undoIndex--;
+//			setProcessIntoStateAt(undoIndex, true);
+//		}
+//		enableUndoAction();
+		Exception e = processModel.undo();
+		if (e != null) {
+			SwingTools.showSimpleErrorMessage("while_changing_process", e);
 		}
-		enableUndoAction();
 	}
 
 	@Override
 	public void redo() {
-		if (undoIndex < undoManager.getNumberOfUndos()) {
-			undoIndex++;
-			setProcessIntoStateAt(undoIndex, false);
+//		if (undoIndex < undoManager.getNumberOfUndos()) {
+//			undoIndex++;
+//			setProcessIntoStateAt(undoIndex, false);
+//		}
+//		enableUndoAction();
+		Exception e = processModel.redo();
+		if (e != null) {
+			SwingTools.showSimpleErrorMessage("while_changing_process", e);
 		}
-		enableUndoAction();
 	}
 
-	private void enableUndoAction() {
-		if (undoIndex > 0) {
-			UNDO_ACTION.setEnabled(true);
-		} else {
-			UNDO_ACTION.setEnabled(false);
-		}
-		if (undoIndex < undoManager.getNumberOfUndos() - 1) {
-			REDO_ACTION.setEnabled(true);
-		} else {
-			REDO_ACTION.setEnabled(false);
-		}
+//	private void enableUndoAction() {
+//		if (undoIndex > 0) {
+//			UNDO_ACTION.setEnabled(true);
+//		} else {
+//			UNDO_ACTION.setEnabled(false);
+//		}
+//		if (undoIndex < undoManager.getNumberOfUndos() - 1) {
+//			REDO_ACTION.setEnabled(true);
+//		} else {
+//			REDO_ACTION.setEnabled(false);
+//		}
+//	}
+
+	public void enableUndoAction() {
+		UNDO_ACTION.setEnabled(processModel.hasUndoSteps());
+		REDO_ACTION.setEnabled(processModel.hasRedoSteps());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean hasUndoSteps() {
-		return undoIndex > 0;
+		//return undoIndex > 0;
+		return processModel.hasUndoSteps();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean hasRedoSteps() {
-		return undoIndex < undoManager.getNumberOfUndos() - 1;
+		//return undoIndex < undoManager.getNumberOfUndos() - 1;
+		return processModel.hasRedoSteps();
 	}
 
 	private void setProcessIntoStateAt(int undoIndex, boolean undo) {
@@ -1670,44 +1849,85 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	 * @return Saved?
 	 */
 	public boolean close(boolean askForConfirmation) {
-		if (changed) {
-			final ProcessLocation loc = process.getProcessLocation();
-			String locName;
-			if (loc != null) {
-				locName = loc.getShortName();
-			} else {
-				locName = "unnamed";
-			}
-			switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
-				case ConfirmDialog.YES_OPTION:
-					SaveAction.save(getProcess());
-
-					// it may happen that save() does not actually save the process, because the user hits cancel in the
-					// saveAs dialog or an error occurs. In this case the process won't be marked as unchanged. Thus,
-					// we return the process changed status.
-					return !isChanged();
-				case ConfirmDialog.NO_OPTION:
-					// ask for confirmation before stopping the currently running process (if askForConfirmation=true)
-					if (askForConfirmation) {
-						if (RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_RUNNING ||
-								RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_PAUSED) {
-							if (SwingTools.showConfirmDialog("close_running_process",
-									ConfirmDialog.YES_NO_OPTION) != ConfirmDialog.YES_OPTION) {
-								return false;
-							}
-						}
-					}
-					if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
-						synchronized (processThread) {
-							processThread.stopProcess();
-						}
-					}
-					return true;
-				default: // cancel
-					return false;
-			}
-		} else {
+//		if (changed) {
+//			final ProcessLocation loc = process.getProcessLocation();
+//			String locName;
+//			if (loc != null) {
+//				locName = loc.getShortName();
+//			} else {
+//				locName = "unnamed";
+//			}
+//			switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
+//				case ConfirmDialog.YES_OPTION:
+//					SaveAction.save(getProcess());
+//
+//					// it may happen that save() does not actually save the process, because the user hits cancel in the
+//					// saveAs dialog or an error occurs. In this case the process won't be marked as unchanged. Thus,
+//					// we return the process changed status.
+//					return !isChanged();
+//				case ConfirmDialog.NO_OPTION:
+//					// ask for confirmation before stopping the currently running process (if askForConfirmation=true)
+//					if (askForConfirmation) {
+//						if (RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_RUNNING ||
+//								RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_PAUSED) {
+//							if (SwingTools.showConfirmDialog("close_running_process",
+//									ConfirmDialog.YES_NO_OPTION) != ConfirmDialog.YES_OPTION) {
+//								return false;
+//							}
+//						}
+//					}
+//					if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
+//						synchronized (processThread) {
+//							processThread.stopProcess();
+//						}
+//					}
+//					return true;
+//				default: // cancel
+//					return false;
+//			}
+//		} else {
+//			return true;
+//		}
+		if (!isChanged()) {
 			return true;
+		}
+		ProcessLocation loc = getProcess().getProcessLocation();
+		String locName;
+		if (loc != null) {
+			locName = loc.getShortName();
+		} else {
+			locName = "unnamed";
+		}
+		switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
+			case ConfirmDialog.YES_OPTION:
+				SaveAction.save(getProcess());
+
+				// it may happen that save() does not actually save the process, because the
+				// user hits cancel in the
+				// saveAs dialog or an error occurs. In this case the process won't be marked as
+				// unchanged. Thus,
+				// we return the process changed status.
+				return !isChanged();
+			case ConfirmDialog.NO_OPTION:
+				// ask for confirmation before stopping the currently running process (if
+				// askForConfirmation=true)
+				if (askForConfirmation) {
+					if (RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_RUNNING
+							|| RapidMinerGUI.getMainFrame().getProcessState() == Process.PROCESS_STATE_PAUSED) {
+						if (SwingTools.showConfirmDialog("close_running_process",
+								ConfirmDialog.YES_NO_OPTION) != ConfirmDialog.YES_OPTION) {
+							return false;
+						}
+					}
+				}
+				if (getProcessState() != Process.PROCESS_STATE_STOPPED) {
+					synchronized (processThread) {
+						processThread.stopProcess();
+					}
+				}
+				return true;
+			default: // cancel
+				return false;
 		}
 	}
 
@@ -1715,65 +1935,76 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 		return close(true);
 	}
 
+	/**
+	 * @deprecated Since 7.5. Use {@link #setOpenedProcess(Process)}, the other parameters are
+	 *             irrelevant.
+	 */
+	@Deprecated
 	@Override
 	public void setOpenedProcess(final Process process, final boolean showInfo,
 									final String sourceName) {
-		// process changed -> clear undo history
-		resetUndo();
-		setProcess(process, true);
+//		// process changed -> clear undo history
+//		resetUndo();
+//		setProcess(process, true);
+//
+//		if (process.getImportMessage() != null && process.getImportMessage().contains("error")) {
+//			SwingTools.showLongMessage("import_message", process.getImportMessage());
+//		}
+//
+//		SwingUtilities.invokeLater(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				SAVE_ACTION.setEnabled(false);
+//			}
+//		});
+//
+//		List<UnknownParameterInformation> unknownParameters = null;
+//		synchronized (process) {
+//			RapidMinerGUI.useProcessFile(AbstractUIState.this.process);
+//			unknownParameters = process.getUnknownParameters();
+//		}
+//
+//		addToUndoList();
+//		updateRecentFileList();
+//		changed = false;
+//
+//		SwingUtilities.invokeLater(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				SAVE_ACTION.setEnabled(false);
+//				setTitle();
+//			}
+//		});
+//
+//		// show unsupported parameters info?
+//		if (unknownParameters != null && unknownParameters.size() > 0) {
+//			final UnknownParametersInfoDialog unknownParametersInfoDialog = new UnknownParametersInfoDialog(AbstractUIState.this.getWindow(),
+//					unknownParameters);
+//			if (SwingUtilities.isEventDispatchThread()) {
+//				unknownParametersInfoDialog.setVisible(true);
+//			} else {
+//				try {
+//					SwingUtilities.invokeAndWait(new Runnable() {
+//
+//						@Override
+//						public void run() {
+//							unknownParametersInfoDialog.setVisible(true);
+//						}
+//					});
+//				} catch (Exception e) {
+//					LogService.getRoot().log(Level.WARNING, "Error opening the unknown parameter dialog: " + e, e);
+//				}
+//			}
+//		}
+//		fireProcessLoaded();
+		setOpenedProcess(process);
+	}
 
-		if (process.getImportMessage() != null && process.getImportMessage().contains("error")) {
-			SwingTools.showLongMessage("import_message", process.getImportMessage());
-		}
-
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				SAVE_ACTION.setEnabled(false);
-			}
-		});
-
-		List<UnknownParameterInformation> unknownParameters = null;
-		synchronized (process) {
-			RapidMinerGUI.useProcessFile(AbstractUIState.this.process);
-			unknownParameters = process.getUnknownParameters();
-		}
-
-		addToUndoList();
-		updateRecentFileList();
-		changed = false;
-
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				SAVE_ACTION.setEnabled(false);
-				setTitle();
-			}
-		});
-
-		// show unsupported parameters info?
-		if (unknownParameters != null && unknownParameters.size() > 0) {
-			final UnknownParametersInfoDialog unknownParametersInfoDialog = new UnknownParametersInfoDialog(AbstractUIState.this.getWindow(),
-					unknownParameters);
-			if (SwingUtilities.isEventDispatchThread()) {
-				unknownParametersInfoDialog.setVisible(true);
-			} else {
-				try {
-					SwingUtilities.invokeAndWait(new Runnable() {
-
-						@Override
-						public void run() {
-							unknownParametersInfoDialog.setVisible(true);
-						}
-					});
-				} catch (Exception e) {
-					LogService.getRoot().log(Level.WARNING, "Error opening the unknown parameter dialog: " + e, e);
-				}
-			}
-		}
-		fireProcessLoaded();
+	/** Opens the specified process. */
+	public void setOpenedProcess(final Process process) {
+		setOrOpenProcess(process, true, true);
 	}
 
 	private void resetUndo() {
@@ -1803,8 +2034,8 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 //NEW
 	public void exit(final boolean relaunch) {
-		if (changed) {
-			ProcessLocation loc = process.getProcessLocation();
+		if (isChanged()) {
+			ProcessLocation loc = getProcess().getProcessLocation();
 			String locName;
 			if (loc != null) {
 				locName = loc.getShortName();
@@ -1813,8 +2044,8 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 			}
 			switch (SwingTools.showConfirmDialog("save", ConfirmDialog.YES_NO_CANCEL_OPTION, locName)) {
 				case ConfirmDialog.YES_OPTION:
-					SaveAction.save(process);
-					if (changed) {
+					SaveAction.save(getProcess());
+					if (isChanged()) {
 						return;
 					}
 					break;
@@ -1887,29 +2118,35 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	// / LISTENERS
 
 	public List<Operator> getSelectedOperators() {
-		return processPanel.getProcessRenderer().getModel().getSelectedOperators();
+		//return processPanel.getProcessRenderer().getModel().getSelectedOperators();
+		return processModel.getSelectedOperators();
 	}
 
 	public Operator getFirstSelectedOperator() {
-		return processPanel.getProcessRenderer().getModel().getSelectedOperators().isEmpty() ? null
-				: processPanel.getProcessRenderer().getModel().getSelectedOperators().get(0);
-		}
+//		return processPanel.getProcessRenderer().getModel().getSelectedOperators().isEmpty() ? null
+//				: processPanel.getProcessRenderer().getModel().getSelectedOperators().get(0);
+		List<Operator> selectedOperators = processModel.getSelectedOperators();
+		return selectedOperators.isEmpty() ? null : selectedOperators.get(0);
+	}
 
 	public void addProcessEditor(final ProcessEditor p) {
-		processEditors.add(ProcessEditor.class, p);
+		//processEditors.add(ProcessEditor.class, p);
+		processModel.addProcessEditor(p);
 	}
 
 	@Override
 	public void addExtendedProcessEditor(final ExtendedProcessEditor p) {
-		processEditors.add(ExtendedProcessEditor.class, p);
+		//processEditors.add(ExtendedProcessEditor.class, p);
+		processModel.addProcessEditor(p);
 	}
 
 	/**
 	 * @deprecated use {@link #removeExtendedProcessEditor(ExtendedProcessEditor)} instead.
 	 */
-//	@Deprecated
+	@Deprecated
 	public void removeProcessEditor(final ProcessEditor p) {
-		processEditors.remove(ProcessEditor.class, p);
+//		processEditors.remove(ProcessEditor.class, p);
+		processModel.removeProcessEditor(p);
 	}
 
 	/**
@@ -1919,23 +2156,41 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	 */
 	@Override
 	public void removeExtendedProcessEditor(final ExtendedProcessEditor p) {
-		processEditors.remove(ExtendedProcessEditor.class, p);
+//		processEditors.remove(ExtendedProcessEditor.class, p);
+		processModel.removeProcessEditor(p);
 	}
 
 	@Override
 	public void addProcessStorageListener(ProcessStorageListener listener) {
-		storageListeners.add(listener);
+//		storageListeners.add(listener);
+		processModel.addProcessStorageListener(listener);
 	}
 
 	@Override
 	public void removeProcessStorageListener(ProcessStorageListener listener) {
-		storageListeners.remove(listener);
+//		storageListeners.remove(listener);
+		processModel.removeProcessStorageListener(listener);
+	}
+
+	@Override
+	public void selectAndShowOperator(Operator currentlySelected, boolean showParent) {
+		if (currentlySelected == null) {
+			currentlySelected = getProcess().getRootOperator();
+		}
+		OperatorChain parent = currentlySelected.getParent();
+		// if this is not a chain, it can not be displayed as such!
+		showParent |= !(currentlySelected instanceof OperatorChain);
+		// root chain has no parent
+		showParent &= parent != null;
+		OperatorChain dispChain = showParent ? parent : (OperatorChain) currentlySelected;
+		processModel.setDisplayedChainAndFire(dispChain);
+		selectOperators(Collections.singletonList(currentlySelected));
 	}
 
 	@Override
 	public void selectOperator(Operator currentlySelected) {
 		if (currentlySelected == null) {
-			currentlySelected = process.getRootOperator();
+			currentlySelected = getProcess().getRootOperator();
 		}
 		selectOperators(Collections.singletonList(currentlySelected));
 	}
@@ -1943,20 +2198,23 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 	@Override
 	public void selectOperators(List<Operator> currentlySelected) {
 		if (currentlySelected == null) {
-			currentlySelected = Collections.<Operator> singletonList(process.getRootOperator());
+			currentlySelected = Collections.<Operator> singletonList(getProcess().getRootOperator());
 		}
 		for (Operator op : currentlySelected) {
 			Process selectedProcess = op.getProcess();
-			if (selectedProcess == null || selectedProcess != process) {
+			if (selectedProcess == null || selectedProcess != getProcess()) {
 				SwingTools.showVerySimpleErrorMessage("op_deleted", op.getName());
 				return;
 			}
 		}
 
-		ProcessRendererModel model = processPanel.getProcessRenderer().getModel();
-		model.clearOperatorSelection();
-		model.addOperatorsToSelection(currentlySelected);
-		model.fireOperatorSelectionChanged(currentlySelected);
+//		ProcessRendererModel model = processPanel.getProcessRenderer().getModel();
+//		model.clearOperatorSelection();
+//		model.addOperatorsToSelection(currentlySelected);
+//		model.fireOperatorSelectionChanged(currentlySelected);
+		processModel.clearOperatorSelection();
+		processModel.addOperatorsToSelection(currentlySelected);
+		processModel.fireOperatorSelectionChanged(currentlySelected);
 	}
 
 	//Removed in 6.x
@@ -1974,13 +2232,14 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 	@Override
 	public void fireProcessUpdated() {
-		for (final ProcessEditor editor : processEditors
-				.getListeners(ProcessEditor.class)) {
-			editor.processUpdated(process);
-		}
-		for (ExtendedProcessEditor editor : processEditors.getListeners(ExtendedProcessEditor.class)) {
-			editor.processUpdated(process);
-		}
+//		for (final ProcessEditor editor : processEditors
+//				.getListeners(ProcessEditor.class)) {
+//			editor.processUpdated(process);
+//		}
+//		for (ExtendedProcessEditor editor : processEditors.getListeners(ExtendedProcessEditor.class)) {
+//			editor.processUpdated(process);
+//		}
+		processModel.fireProcessUpdated();
 	}
 
 
@@ -2068,23 +2327,24 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 	@Override
 	public void processHasBeenSaved() {
-		SAVE_ACTION.setEnabled(false);
-		changed = false;
-		setTitle();
-		updateRecentFileList();
-		fireProcessStored();
-
-		//Removed in 6.x
-//		// update RUN_REMOTE_NOW action enabled state
-//		try {
-//			if (process.getRepositoryLocation() != null && process.getRepositoryLocation().getRepository() instanceof RemoteRepository) {
-//				RUN_REMOTE_NOW_ACTION.setEnabled(true);
-//			} else {
-//				RUN_REMOTE_NOW_ACTION.setEnabled(false);
-//			}
-//		} catch (RepositoryException e) {
-//			RUN_REMOTE_NOW_ACTION.setEnabled(false);
-//		}
+//		SAVE_ACTION.setEnabled(false);
+//		changed = false;
+//		setTitle();
+//		updateRecentFileList();
+//		fireProcessStored();
+//
+//		//Removed in 6.x
+////		// update RUN_REMOTE_NOW action enabled state
+////		try {
+////			if (process.getRepositoryLocation() != null && process.getRepositoryLocation().getRepository() instanceof RemoteRepository) {
+////				RUN_REMOTE_NOW_ACTION.setEnabled(true);
+////			} else {
+////				RUN_REMOTE_NOW_ACTION.setEnabled(false);
+////			}
+////		} catch (RepositoryException e) {
+////			RUN_REMOTE_NOW_ACTION.setEnabled(false);
+////		}
+		processModel.processHasBeenSaved();
 	}
 
 	@Override
@@ -2223,6 +2483,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
         // if any operator has a mandatory parameter with no value and no default value. As it
 		// cannot predict execution behavior (e.g. Branch operators), this may turn up problems
 		// which would not occur during process execution
+		Process process = getProcess();
 		Pair<Operator, ParameterType> missingParamPair = ProcessTools.getOperatorWithoutMandatoryParameter(process);
 		if (missingParamPair != null) {
 			// if there is already one of these, kill

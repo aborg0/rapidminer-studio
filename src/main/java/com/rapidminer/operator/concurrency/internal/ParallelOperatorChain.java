@@ -1,33 +1,33 @@
 /**
  * Copyright (C) 2001-2017 by RapidMiner and the contributors
- * 
+ *
  * Complete list of developers available at our web site:
- * 
+ *
  * http://rapidminer.com
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU Affero General Public License as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
-*/
+ */
 package com.rapidminer.operator.concurrency.internal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.rapidminer.example.ExampleSet;
+import com.rapidminer.example.utils.ExampleSets;
 import com.rapidminer.operator.ExecutionUnit;
 import com.rapidminer.operator.IOObject;
 import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.OperatorChain;
 import com.rapidminer.operator.OperatorDescription;
-import com.rapidminer.operator.preprocessing.MaterializeDataInMemory;
 import com.rapidminer.parameter.ParameterType;
 import com.rapidminer.parameter.ParameterTypeBoolean;
 import com.rapidminer.parameter.UndefinedParameterError;
@@ -93,22 +93,23 @@ public abstract class ParallelOperatorChain extends OperatorChain {
 	}
 
 	/**
-	 * This method returns a copy or clone of the given {@link IOObject}. Copiess are simply
-	 * references on the same objects if the object is immutable. ExampleSets are provided by cloned
-	 * reference or materialized, depending on parameter.
+	 * This method returns a copy or clone of the given {@link IOObject}. Copies are simply
+	 * references on the same objects if the object is immutable. For ExampleSets the behavior
+	 * depends on the second parameter. If requested, ExampleSets are checked for their
+	 * thread-safety and materialized if necessary.
 	 *
 	 * @param inputData
-	 * @param materializeIfPossible
-	 *            if {@code true}, {@link ExampleSet}s will be materialized instead of cloned
+	 * @param materializeUnsafeExampleSets
+	 *            if {@code true}, ExampleSets that are not thread-safe are materialized
 	 * @return
 	 * @throws UndefinedParameterError
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T extends IOObject> T getDataCopy(IOObject input, boolean materializeIfPossible)
+	protected <T extends IOObject> T getDataCopy(IOObject input, boolean materializeUnsafeExampleSets)
 			throws UndefinedParameterError {
-		if (materializeIfPossible && input instanceof ExampleSet) {
+		if (materializeUnsafeExampleSets && input instanceof ExampleSet) {
 			ExampleSet set = (ExampleSet) input;
-			return (T) MaterializeDataInMemory.materializeExampleSet(set);
+			return (T) ExampleSets.createThreadSafeCopy(set);
 		} else {
 			if (input != null) {
 				return (T) input.copy();

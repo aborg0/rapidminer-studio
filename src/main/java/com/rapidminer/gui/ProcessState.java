@@ -89,6 +89,11 @@ public interface ProcessState {
 	 */
 	public boolean hasRedoSteps();
 
+	/**
+	 * @deprecated Since 7.5. Use {@link #setOpenedProcess(Process)}, the other parameters are
+	 *             irrelevant.
+	 */
+	@Deprecated
 	public void setOpenedProcess(Process process, boolean showInfo,
 			final String sourceName);
 
