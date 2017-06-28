@@ -46,8 +46,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.rapidminer.gui.license.LicenseTools;
-import com.rapidminer.license.License;
 import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.LogService;
 import com.rapidminer.tools.Tools;
@@ -115,7 +113,7 @@ public class SplashScreen extends JPanel implements ActionListener {
 	private List<Pair<BufferedImage, Long>> extensionIcons = Collections
 			.synchronizedList(new LinkedList<Pair<BufferedImage, Long>>());
 	private long lastExtensionAdd = 0;
-	private License license;
+//	private License license;
 	private String productEdition;
 	private String productName;
 
@@ -280,19 +278,19 @@ public class SplashScreen extends JPanel implements ActionListener {
 		}
 
 		// draw bottom text
-		if (license != null) {
-			g.setFont(FONT_SANS_SERIF_11);
-			StringBuilder builder = new StringBuilder();
-			builder.append(productEdition);
-			if (license.getLicenseUser().getName() != null) {
-				builder.append(" ");
-				builder.append(I18N.getGUILabel("registered_to", license.getLicenseUser().getName()));
-			}
-			drawString(g, builder.toString(), y);
+//		if (license != null) {
+//			g.setFont(FONT_SANS_SERIF_11);
+//			StringBuilder builder = new StringBuilder();
+//			builder.append(productEdition);
+//			if (license.getLicenseUser().getName() != null) {
+//				builder.append(" ");
+//				builder.append(I18N.getGUILabel("registered_to", license.getLicenseUser().getName()));
+//			}
+//			drawString(g, builder.toString(), y);
+//			y += 15;
+//		} else {
 			y += 15;
-		} else {
-			y += 15;
-		}
+//		}
 		g.setFont(FONT_SANS_SERIF_11);
 		drawString(g, properties.getProperty("copyright"), y);
 	}
@@ -355,12 +353,12 @@ public class SplashScreen extends JPanel implements ActionListener {
 		repaint();
 	}
 
-	/**
-	 * @param license
-	 *            the currently active license
-	 */
-	public void setLicense(License license) {
-		this.license = license;
-		this.productEdition = I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license));
-	}
+//	/**
+//	 * @param license
+//	 *            the currently active license
+//	 */
+//	public void setLicense(License license) {
+//		this.license = license;
+//		this.productEdition = I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license));
+//	}
 }

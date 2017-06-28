@@ -60,7 +60,6 @@ import javax.swing.SwingUtilities;
 import com.rapidminer.BreakpointListener;
 import com.rapidminer.Process;
 import com.rapidminer.ProcessLocation;
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.actions.ConnectPortToRepositoryAction;
@@ -100,9 +99,6 @@ import com.rapidminer.gui.tools.ResourceMenu;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.components.ToolTipWindow;
 import com.rapidminer.gui.tools.components.ToolTipWindow.TooltipLocation;
-import com.rapidminer.license.LicenseEvent;
-import com.rapidminer.license.LicenseEvent.LicenseEventType;
-import com.rapidminer.license.LicenseManagerListener;
 import com.rapidminer.operator.ExecutionUnit;
 import com.rapidminer.operator.IOObject;
 import com.rapidminer.operator.Operator;
@@ -867,15 +863,15 @@ public class ProcessRendererView extends JPanel implements PrintableComponent {
 
 		// we need to know when the license changes because operators may become
 		// supported/unsupported
-		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
-
-			@Override
-			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
-				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
-					ProcessRendererView.this.repaint();
-				}
-			}
-		});
+//		ProductConstraintManager.INSTANCE.registerLicenseManagerListener(new LicenseManagerListener() {
+//
+//			@Override
+//			public <S, C> void handleLicenseEvent(final LicenseEvent<S, C> event) {
+//				if (event.getType() == LicenseEventType.ACTIVE_LICENSE_CHANGED) {
+//					ProcessRendererView.this.repaint();
+//				}
+//			}
+//		});
 
 		// add some actions to the action map of this component
 		((ResourceAction) mainFrame.getActions().TOGGLE_BREAKPOINT[BreakpointListener.BREAKPOINT_AFTER]).addToActionMap(this,

@@ -20,12 +20,9 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.JFrame;
 
 import com.rapidminer.RapidMiner;
-import com.rapidminer.core.license.ProductConstraintManager;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.dialogs.AboutBox;
 
@@ -47,7 +44,7 @@ public class AboutAction extends ResourceAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new AboutBox(mainFrame, RapidMiner.getLongVersion(), ProductConstraintManager.INSTANCE.getActiveLicense())
+		new AboutBox(mainFrame, "RapidMiner", RapidMiner.getLongVersion(), "", "", "", true, null)
 				.setVisible(true);
 	}
 

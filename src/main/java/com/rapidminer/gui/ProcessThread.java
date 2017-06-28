@@ -24,8 +24,6 @@ import java.util.logging.Level;
 import com.rapidminer.NoBugError;
 import com.rapidminer.Process;
 import com.rapidminer.RapidMiner;
-import com.rapidminer.core.license.DatabaseConstraintViolationException;
-import com.rapidminer.core.license.LicenseViolationException;
 import com.rapidminer.gui.tools.ProcessGUITools;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.operator.IOContainer;
@@ -70,22 +68,6 @@ public class ProcessThread extends Thread {
 				final ProcessEndHandler peh = (ProcessEndHandler) mainFrame;
 				peh.processEnded(process, results);
 			}
-		} catch (DatabaseConstraintViolationException ex) {
-			// Check DatabaseConstraintViolationException first as it is a subclass of
-			// the more general LicenseViolationException
-			if (ex.getOperatorName() != null) {
-				LogService.getRoot().log(Level.SEVERE,
-						"com.rapidminer.gui.ProcessThread.database_constraint_violation_exception_in_operator",
-						new Object[] { ex.getDatabaseURL(), ex.getOperatorName() });
-			} else {
-				LogService.getRoot().log(Level.SEVERE,
-						"com.rapidminer.gui.ProcessThread.database_constraint_violation_exception",
-						new Object[] { ex.getDatabaseURL() });
-			}
-		} catch (LicenseViolationException ex) {
-			LogService.getRoot().log(Level.SEVERE,
-					"com.rapidminer.gui.ProcessThread.operator_constraint_violation_exception",
-					new Object[] { ex.getOperatorName() });
 		} catch (ProcessStoppedException ex) {
 			process.getLogger().info(ex.getMessage());
 			// here the process ended method is not called ! let the thread finish the

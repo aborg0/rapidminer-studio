@@ -52,13 +52,10 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import com.rapidminer.gui.ApplicationFrame;
-import com.rapidminer.gui.license.LicenseTools;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.VersionNumber;
 import com.rapidminer.gui.tools.VersionNumber.VersionNumberExcpetion;
 import com.rapidminer.gui.tools.components.LinkRemoteButton;
-import com.rapidminer.license.License;
-import com.rapidminer.license.StudioLicenseConstants;
 import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.LogService;
 import com.rapidminer.tools.PlatformUtilities;
@@ -326,12 +323,12 @@ public class AboutBox extends JDialog {
 		this(owner, createProperties(productName, productVersion, licensor, url, text, renderTextNextToLogo), productLogo);
 	}
 
-	public AboutBox(Frame owner, String productVersion, License license, Image productLogo) {
-		this(owner, createProperties(productVersion, license), productLogo);
+	public AboutBox(Frame owner, String productVersion/*, License license*/, Image productLogo) {
+		this(owner, createProperties(productVersion/*, license*/), productLogo);
 	}
 
-	public AboutBox(Frame owner, String productVersion, License license) {
-		this(owner, createProperties(productVersion, license), null);
+	public AboutBox(Frame owner, String productVersion/*, License license*/) {
+		this(owner, createProperties(productVersion/*, license*/), null);
 	}
 
 	public AboutBox(Frame owner, Properties properties, Image productLogo) {
@@ -402,7 +399,7 @@ public class AboutBox extends JDialog {
 		return properties;
 	}
 
-	private static Properties createProperties(String productVersion, License license) {
+	private static Properties createProperties(String productVersion/*, License license*/) {
 		Properties properties = new Properties();
 		try {
 			URL propUrl = Tools.getResource(PROPERTY_FILE);
@@ -415,18 +412,18 @@ public class AboutBox extends JDialog {
 			LogService.getRoot().log(Level.SEVERE, "com.rapidminer.gui.tools.dialogs.AboutBox.reading_splash_screen_error",
 					e.getMessage());
 		}
-		properties.setProperty("name", LicenseTools.translateProductName(license));
+//		properties.setProperty("name", LicenseTools.translateProductName(license));
 		properties.setProperty("version", productVersion);
-		if (StudioLicenseConstants.PRODUCT_ID.equals(license.getProductId())
+		if (true//StudioLicenseConstants.PRODUCT_ID.equals(license.getProductId())
 				&& PlatformUtilities.getReleaseRevision() != null) {
 			properties.setProperty("revision", PlatformUtilities.getReleaseRevision());
 			properties.setProperty("platform", PlatformUtilities.getReleasePlatform().toString());
 		}
-		properties.setProperty("edition",
-				I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license)));
-		if (license.getLicenseUser().getName() != null) {
-			properties.setProperty("registered_to", license.getLicenseUser().getName());
-		}
+//		properties.setProperty("edition",
+//				I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license)));
+//		if (license.getLicenseUser().getName() != null) {
+//			properties.setProperty("registered_to", license.getLicenseUser().getName());
+//		}
 		Plugin.initAboutTexts(properties);
 		return properties;
 	}

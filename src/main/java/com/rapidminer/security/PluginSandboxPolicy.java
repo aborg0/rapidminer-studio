@@ -44,8 +44,6 @@ import javax.sound.sampled.AudioPermission;
 import javax.xml.bind.DatatypeConverter;
 
 import com.rapidminer.RapidMiner;
-import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.license.StudioLicenseConstants;
 import com.rapidminer.operator.ScriptingOperator;
 import com.rapidminer.security.internal.InternalPluginClassLoader;
 import com.rapidminer.tools.LogService;
@@ -241,10 +239,7 @@ public final class PluginSandboxPolicy extends Policy {
 	private static PermissionCollection createUnsignedPermissions(final PluginClassLoader loader) {
 		final Permissions permissions = new Permissions();
 
-		if (ProductConstraintManager.INSTANCE.isInitialized()) {
-			boolean isAllowed = ProductConstraintManager.INSTANCE.getActiveLicense()
-					.getPrecedence() >= StudioLicenseConstants.UNLIMITED_LICENSE_PRECEDENCE
-					|| ProductConstraintManager.INSTANCE.isTrialLicense();
+			boolean isAllowed = true;
 			boolean isEnabled = Boolean.parseBoolean(
 					ParameterService.getParameterValue(RapidMiner.PROPERTY_RAPIDMINER_UPDATE_ADDITIONAL_PERMISSIONS));
 			if (isAllowed && isEnabled) {
@@ -266,7 +261,6 @@ public final class PluginSandboxPolicy extends Policy {
 				permissions.add(new RuntimePermission("setFactory"));
 				permissions.add(new PropertyPermission("*", "write"));
 			}
-		}
 
 		permissions.add(new RuntimePermission("shutdownHooks"));
 
@@ -326,23 +320,17 @@ public final class PluginSandboxPolicy extends Policy {
 	 * @return the permissions, never {@code null}
 	 */
 	private static PermissionCollection createGroovySourcePermissions() {
-		if (ProductConstraintManager.INSTANCE.isInitialized()) {
-			if (ProductConstraintManager.INSTANCE.getActiveLicense()
-					.getPrecedence() >= StudioLicenseConstants.UNLIMITED_LICENSE_PRECEDENCE
-					|| ProductConstraintManager.INSTANCE.isTrialLicense()) {
-				return createAllPermissions();
-			}
-		}
+		return createAllPermissions();
 
-		Permissions permissions = new Permissions();
-
-		// grant some permissions because the script is something the user himself created
-		permissions.add(new PropertyPermission("*", "read, write"));
-		permissions.add(new FilePermission("<<ALL FILES>>", "read, write, delete"));
-
-		addCommonPermissions(permissions);
-
-		return permissions;
+//		Permissions permissions = new Permissions();
+//
+//		// grant some permissions because the script is something the user himself created
+//		permissions.add(new PropertyPermission("*", "read, write"));
+//		permissions.add(new FilePermission("<<ALL FILES>>", "read, write, delete"));
+//
+//		addCommonPermissions(permissions);
+//
+//		return permissions;
 	}
 
 	/**
