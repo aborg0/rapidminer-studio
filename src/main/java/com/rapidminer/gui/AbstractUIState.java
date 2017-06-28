@@ -1236,7 +1236,9 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler 
 
 //		perspectives.showPerspective(initialPerspective);
 		perspectiveController.getModel().addPerspectiveChangeListener(perspectiveChangeListener);
-		getWindow().pack();
+		if (getWindow() != null) {
+			getWindow().pack();
+		}
 		metaDataUpdateQueue.start();
 	}
 
