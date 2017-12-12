@@ -60,7 +60,6 @@ import com.rapidminer.tools.Ontology;
 import com.rapidminer.tools.OperatorResourceConsumptionHandler;
 import com.rapidminer.tools.RandomGenerator;
 
-
 /**
  * This operator will sample the given example set without replacement. Three modes are available:
  * Absolute returning a determined number, relative returning a determined fraction of the input set

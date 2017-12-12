@@ -60,7 +60,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.AbstractUIState;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.OperatorDocToHtmlConverter;
 import com.rapidminer.gui.OperatorDocumentationBrowser;
 import com.rapidminer.gui.actions.ToggleAction;
@@ -131,7 +132,7 @@ public class OperatorPropertyPanel extends PropertyPanel implements Dockable, Pr
 	private final DockKey DOCK_KEY = new ResourceDockKey(PROPERTY_EDITOR_DOCK_KEY);
 
 	{
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 	}
 
 	private JPanel dockableComponent;
@@ -177,8 +178,11 @@ public class OperatorPropertyPanel extends PropertyPanel implements Dockable, Pr
 	private final ResourceLabel compatibilityLabel = new ResourceLabel("compatibility_level");
 	private final JPanel compatibilityPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
-	public OperatorPropertyPanel(final MainFrame mainFrame) {
+	private final MainUIState mainFrame;
+
+	public OperatorPropertyPanel(final MainUIState mainFrame) {
 		super();
+		this.mainFrame = mainFrame;
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
 		changeCompatibility = new LinkLocalButton(createCompatibilityAction(PlatformUtilities.getReleaseVersion()));
@@ -188,7 +192,7 @@ public class OperatorPropertyPanel extends PropertyPanel implements Dockable, Pr
 
 			@Override
 			public void loggedActionPerformed(ActionEvent e) {
-				TOGGLE_EXPERT_MODE_ACTION.actionPerformed(null);
+				mainFrame.getToggleExpertModeAction().actionPerformed(null);
 			}
 		});
 		hideAdvancedParameters = new LinkLocalButton(new ResourceAction(true, "parameters.hide_advanced") {
@@ -197,7 +201,7 @@ public class OperatorPropertyPanel extends PropertyPanel implements Dockable, Pr
 
 			@Override
 			public void loggedActionPerformed(ActionEvent e) {
-				TOGGLE_EXPERT_MODE_ACTION.actionPerformed(null);
+				mainFrame.getToggleExpertModeAction().actionPerformed(null);
 			}
 		});
 
@@ -361,11 +365,11 @@ public class OperatorPropertyPanel extends PropertyPanel implements Dockable, Pr
 	}
 
 	public boolean isExpertMode() {
-		return TOGGLE_EXPERT_MODE_ACTION.isSelected();
+		return mainFrame.getToggleExpertModeAction().isSelected();
 	}
 
 	public void setExpertMode(boolean isExpert) {
-		TOGGLE_EXPERT_MODE_ACTION.setSelected(isExpert);
+		mainFrame.getToggleExpertModeAction().setSelected(isExpert);
 	}
 
 	@Override

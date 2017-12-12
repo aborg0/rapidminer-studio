@@ -67,7 +67,6 @@ import com.rapidminer.tools.GroupTree;
 import com.rapidminer.tools.I18N;
 import com.rapidminer.tools.OperatorService;
 
-
 /**
  * A dialog for adding new operators to the currently selected operator chain of the operator tree.
  * The new operator can be searched by name, by groups, by input types, and by output types (or

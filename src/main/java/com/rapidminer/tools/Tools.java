@@ -80,7 +80,7 @@ import org.xml.sax.SAXException;
 
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RepositoryProcessLocation;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.ProcessState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.VersionNumber;
 import com.rapidminer.io.process.XMLImporter;
@@ -202,7 +202,7 @@ public class Tools {
 					.getParameterValue(RapidMiner.PROPERTY_RAPIDMINER_GENERAL_FRACTIONDIGITS_NUMBERS);
 			numberDigits = Integer.parseInt(numberDigitsString);
 		} catch (NumberFormatException e) {
-		}
+	}
 		numberOfFractionDigits = numberDigits;
 		epsilonDisplayValue = Math.min(SMALLEST_MACHINE_EPSILON, 1.0 / Math.pow(10, numberOfFractionDigits));
 		NUMBER_FORMAT = new DecimalFormat(getDecimalFormatPattern(numberDigits),
@@ -863,7 +863,7 @@ public class Tools {
 		Charset result = null;
 
 		if (RapidMiner.getExecutionMode().hasMainFrame()) {
-			MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+            ProcessState mainFrame = RapidMinerGUI.getMainFrame();
 			if (mainFrame != null) {
 				com.rapidminer.Process process = mainFrame.getProcess();
 				if (process != null) {

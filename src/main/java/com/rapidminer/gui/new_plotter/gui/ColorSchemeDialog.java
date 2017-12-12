@@ -1092,7 +1092,7 @@ public class ColorSchemeDialog extends ButtonDialog implements PlotConfiguration
 		// retrieve data for showing example data
 		try {
 			ExampleSet exampleSet = (ExampleSet) ((IOObjectEntry) new RepositoryLocation("//Samples/data/Iris")
-					.locateEntry()).retrieveData(null);
+				.locateEntry()).retrieveData(null);
 			dataTable = new DataTableExampleSetAdapter(exampleSet, null);
 		} catch (MalformedRepositoryLocationException e) {
 			return;

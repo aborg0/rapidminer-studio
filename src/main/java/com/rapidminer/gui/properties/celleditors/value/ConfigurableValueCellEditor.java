@@ -138,5 +138,4 @@ public class ConfigurableValueCellEditor extends AbstractSuggestionBoxValueCellE
 		}
 		return list;
 	}
-
 }

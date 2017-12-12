@@ -43,7 +43,6 @@ import com.rapidminer.parameter.ParameterTypeDouble;
 import com.rapidminer.parameter.ParameterTypeInt;
 import com.rapidminer.parameter.conditions.EqualTypeCondition;
 
-
 /**
  * An implementation of Support Vector Clustering based on {@rapidminer.cite BenHur/etal/2001a}.
  * This operator will create a cluster attribute if not present yet.

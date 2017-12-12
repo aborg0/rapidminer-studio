@@ -61,11 +61,15 @@ public class ProcessThread extends Thread {
 
 	@Override
 	public void run() {
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		try {
 			IOContainer results = process.run();
 			beep("success");
 			process.getRootOperator().sendEmail(results, null);
-			RapidMinerGUI.getMainFrame().processEnded(process, results);
+			if (mainFrame instanceof ProcessEndHandler) {
+				final ProcessEndHandler peh = (ProcessEndHandler) mainFrame;
+				peh.processEnded(process, results);
+			}
 		} catch (DatabaseConstraintViolationException ex) {
 			// Check DatabaseConstraintViolationException first as it is a subclass of
 			// the more general LicenseViolationException
@@ -143,7 +147,10 @@ public class ProcessThread extends Thread {
 					}
 				}
 			}
-			RapidMinerGUI.getMainFrame().processEnded(this.process, null);
+			if (mainFrame instanceof ProcessEndHandler) {
+				final ProcessEndHandler peh = (ProcessEndHandler) mainFrame;
+				peh.processEnded(this.process, null);
+			}
 		} finally {
 			if (process.getProcessState() != Process.PROCESS_STATE_STOPPED) {
 				process.stop();

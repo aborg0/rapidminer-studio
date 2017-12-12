@@ -41,7 +41,6 @@ import com.rapidminer.gui.tools.dialogs.ButtonDialog.ButtonDialogBuilder.Default
 import com.rapidminer.tools.Ontology;
 import com.rapidminer.tools.Tools;
 
-
 /**
  * A visualizer which shows the attribute values of an example. This is the most simple visualizer
  * which should work in all cases.
