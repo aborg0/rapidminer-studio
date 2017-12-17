@@ -358,7 +358,7 @@ public class RapidMinerGUI extends RapidMiner {
 		RapidMiner.splashMessage("plaf");
 
 		setupToolTipManager();
-		setupGUI();
+//		setupGUI();
 		FontTools.checkAndSetFallbackUIFont();
 
 		// check whether current EULA has been accepted

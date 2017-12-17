@@ -65,7 +65,12 @@ public class AllPluginsClassLoader extends ClassLoader {
 	 */
 	@Override
 	public URL getResource(String name) {
-		URL url = super.getResource(name);
+		URL url;
+		try {
+			url = super.getResource(name);
+		} catch (NullPointerException e) {
+			url = null;
+		}
 		if (url != null) {
 			return url;
 		}

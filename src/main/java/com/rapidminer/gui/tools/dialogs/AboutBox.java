@@ -421,7 +421,8 @@ public class AboutBox extends JDialog {
 		if (StudioLicenseConstants.PRODUCT_ID.equals(license.getProductId())
 				&& PlatformUtilities.getReleaseRevision() != null) {
 			properties.setProperty("revision", PlatformUtilities.getReleaseRevision());
-			properties.setProperty("platform", PlatformUtilities.getReleasePlatform().toString());
+			// "" + to handle null values.
+			properties.setProperty("platform", "" + PlatformUtilities.getReleasePlatform());
 		}
 		properties.setProperty("edition",
 				I18N.getGUILabel("license_edition", LicenseTools.translateProductEdition(license)));
