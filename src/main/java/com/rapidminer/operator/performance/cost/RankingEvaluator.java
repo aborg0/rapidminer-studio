@@ -140,7 +140,7 @@ public class RankingEvaluator extends Operator {
 			}
 		}
 		return errorCount;
-	}	
+	}
 
 	@Override
 	public List<ParameterType> getParameterTypes() {

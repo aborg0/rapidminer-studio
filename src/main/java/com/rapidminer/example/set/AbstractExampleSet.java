@@ -58,7 +58,6 @@ import com.rapidminer.tools.Ontology;
 import com.rapidminer.tools.Tools;
 import com.rapidminer.tools.XMLException;
 
-
 /**
  * Implements wrapper methods of abstract example set. Implements all ResultObject methods.<br>
  *

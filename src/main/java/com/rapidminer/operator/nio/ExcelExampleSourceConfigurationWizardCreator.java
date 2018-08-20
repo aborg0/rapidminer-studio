@@ -43,7 +43,7 @@ public class ExcelExampleSourceConfigurationWizardCreator extends AbstractConfig
 	public void createConfigurationWizard(ParameterType type, ConfigurationListener listener) {
 		ExcelExampleSource sourceOperator = (ExcelExampleSource) listener;
 		DataImportWizardBuilder builder = new DataImportWizardBuilder();
-		JDialog wizard = builder.forOperator(sourceOperator, ExcelDataSourceFactory.EXCEL_DATA_SOURCE_FACTORY_I18N_KEY).build(RapidMinerGUI.getMainFrame()).getDialog();
+		JDialog wizard = builder.forOperator(sourceOperator, ExcelDataSourceFactory.EXCEL_DATA_SOURCE_FACTORY_I18N_KEY).build(RapidMinerGUI.getMainFrame().getWindow()).getDialog();
 		wizard.setVisible(true);
 
 	}

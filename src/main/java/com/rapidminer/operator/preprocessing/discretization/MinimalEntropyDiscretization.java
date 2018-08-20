@@ -56,7 +56,6 @@ import com.rapidminer.tools.OperatorResourceConsumptionHandler;
 import com.rapidminer.tools.OperatorService;
 import com.rapidminer.tools.math.MathFunctions;
 
-
 /**
  * <p>
  * This operator discretizes all numeric attributes in the dataset into nominal attributes. The

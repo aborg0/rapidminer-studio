@@ -100,7 +100,7 @@ public final class GlobalSearchPanel extends JPanel {
 				return showFilterMenu();
 			} else {
 				hideComponents();
-				return RapidMinerGUI.getMainFrame();
+				return RapidMinerGUI.getMainFrame() == null ? null : RapidMinerGUI.getMainFrame().getWindow();
 			}
 		}
 
@@ -111,7 +111,7 @@ public final class GlobalSearchPanel extends JPanel {
 				return searchField;
 			} else {
 				hideComponents();
-				return RapidMinerGUI.getMainFrame();
+				return RapidMinerGUI.getMainFrame() == null ? null : RapidMinerGUI.getMainFrame().getWindow();
 			}
 		}
 
@@ -573,22 +573,24 @@ public final class GlobalSearchPanel extends JPanel {
 		setFocusTraversalPolicy(new GSPanelFocusTraversalPolicy());
 
 		SwingUtilities.invokeLater(() -> {
-			RapidMinerGUI.getMainFrame().addComponentListener(new ComponentAdapter() {
-				@Override
-				public void componentResized(ComponentEvent e) {
-					hideResultdialog();
-				}
+			if (RapidMinerGUI.getMainFrame() != null && RapidMinerGUI.getMainFrame().getWindow() != null) {
+				RapidMinerGUI.getMainFrame().getWindow().addComponentListener(new ComponentAdapter() {
+					@Override
+					public void componentResized(ComponentEvent e) {
+						hideResultdialog();
+					}
 
-				@Override
-				public void componentHidden(ComponentEvent e) {
-					hideResultdialog();
-				}
+					@Override
+					public void componentHidden(ComponentEvent e) {
+						hideResultdialog();
+					}
 
-				@Override
-				public void componentMoved(ComponentEvent e) {
-					hideResultdialog();
-				}
-			});
+					@Override
+					public void componentMoved(ComponentEvent e) {
+						hideResultdialog();
+					}
+				});
+			}
 		});
 	}
 
@@ -621,7 +623,9 @@ public final class GlobalSearchPanel extends JPanel {
 							if (e.isShiftDown()) {
 								GlobalSearchPanel.this.searchField.requestFocusInWindow();
 							} else {
-								RapidMinerGUI.getMainFrame().requestFocusInWindow();
+								if (RapidMinerGUI.getMainFrame() != null && RapidMinerGUI.getMainFrame().getWindow() != null) {
+									RapidMinerGUI.getMainFrame().getWindow().requestFocusInWindow();
+								}
 							}
 							hideFiltermenu();
 							e.consume();
@@ -683,11 +687,13 @@ public final class GlobalSearchPanel extends JPanel {
 	 */
 	private void hideGlobalSearchResults(FocusEvent e) {
 		SwingUtilities.invokeLater(() -> {
-			final Component focusOwner = RapidMinerGUI.getMainFrame().getFocusOwner();
-			if (focusOwner != resultDialogFocusHolder && focusOwner != searchField && e.getOppositeComponent() != null) {
-				hideResultdialog();
-				logGlobalSearchFocusLost();
-				resultDialogFocusHolder.putClientProperty(MOUSE_FOCUS_TRIGGER, null);
+			if (RapidMinerGUI.getMainFrame() != null && RapidMinerGUI.getMainFrame().getWindow() != null) {
+				final Component focusOwner = RapidMinerGUI.getMainFrame().getWindow().getFocusOwner();
+				if (focusOwner != resultDialogFocusHolder && focusOwner != searchField && e.getOppositeComponent() != null) {
+					hideResultdialog();
+					logGlobalSearchFocusLost();
+					resultDialogFocusHolder.putClientProperty(MOUSE_FOCUS_TRIGGER, null);
+				}
 			}
 		});
 	}

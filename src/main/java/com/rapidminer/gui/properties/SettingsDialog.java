@@ -222,7 +222,6 @@ public class SettingsDialog extends ButtonDialog {
 		final DocumentListener filterListener = new DocumentListener() {
 
 			private Timer updateTimer;
-
 			{
 				updateTimer = new Timer(FILTER_TIMER_DELAY, filterAction);
 				updateTimer.setRepeats(false);

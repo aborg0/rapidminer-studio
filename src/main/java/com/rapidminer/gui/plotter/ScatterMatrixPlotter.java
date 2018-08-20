@@ -42,7 +42,6 @@ import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.tools.LogService;
 import com.rapidminer.tools.ParameterService;
 
-
 /**
  * A scatter plot matrix which uses the {@link ScatterPlotter} for each of the plots.
  *

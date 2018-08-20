@@ -20,9 +20,13 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.JFrame;
+
 import com.rapidminer.RapidMiner;
 import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.dialogs.AboutBox;
@@ -36,7 +40,6 @@ public class AboutAction extends ResourceAction {
 
 	private static final long serialVersionUID = 1L;
 
-
 	public AboutAction() {
 		super("about");
 		setCondition(EDIT_IN_PROGRESS, DONT_CARE);
@@ -46,13 +49,13 @@ public class AboutAction extends ResourceAction {
 	 * @deprecated use {@link #AboutAction()} instead
 	 */
 	@Deprecated
-	public AboutAction(MainFrame mainFrame) {
+	public AboutAction(MainUIState mainFrame) {
 		this();
 	}
 
 	@Override
 	public void loggedActionPerformed(ActionEvent e) {
-		new AboutBox(RapidMinerGUI.getMainFrame(), RapidMiner.getLongVersion(), ProductConstraintManager.INSTANCE.getActiveLicense())
+		new AboutBox(RapidMinerGUI.getMainFrame().getWindow(), RapidMiner.getLongVersion(), ProductConstraintManager.INSTANCE.getActiveLicense())
 				.setVisible(true);
 	}
 

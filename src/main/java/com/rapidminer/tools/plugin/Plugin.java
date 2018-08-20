@@ -79,6 +79,7 @@ import com.rapidminer.RapidMiner;
 import com.rapidminer.RapidMiner.ExecutionMode;
 import com.rapidminer.RapidMinerVersion;
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.flow.processrendering.draw.ProcessDrawUtils;
 import com.rapidminer.gui.properties.SettingsItem;
@@ -373,7 +374,7 @@ public class Plugin {
 		fetchPluginData();
 		this.classLoader.setPluginKey(getExtensionId());
 
-		if (!RapidMiner.getExecutionMode().isHeadless()) {
+		if (!RapidMiner.getExecutionMode().isHeadless() && RapidMiner.getSplashScreen() != null) {
 			RapidMiner.getSplashScreen().addExtension(this);
 		}
 	}
@@ -1302,7 +1303,7 @@ public class Plugin {
 	 * This method will try to invoke the method void initGui(MainFrame) of PluginInit class of
 	 * every plugin.
 	 */
-	public static void initPluginGuis(MainFrame mainframe) {
+	public static void initPluginGuis(MainUIState mainframe) {
 		callPluginInitMethods("initGui", new Class[] { MainFrame.class }, new Object[] { mainframe }, false);
 	}
 

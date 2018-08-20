@@ -42,6 +42,7 @@ import javax.swing.border.Border;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
+import com.rapidminer.gui.MainUIState;
 import org.apache.lucene.document.Document;
 
 import com.rapidminer.gui.MainFrame;
@@ -212,7 +213,7 @@ public class OperatorGlobalSearchGUIProvider implements GlobalSearchableGUIProvi
 
 		try {
 			Operator operator = OperatorService.getOperatorDescription(operatorKey).createOperatorInstance();
-			MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+			MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 			mainFrame.getActions().insert(Collections.singletonList(operator));
 			mainFrame.getPerspectiveController().showPerspective(PerspectiveModel.DESIGN);
 

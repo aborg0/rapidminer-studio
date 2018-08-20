@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.flow.processrendering.draw.ProcessDrawUtils;
 import com.rapidminer.gui.flow.processrendering.model.ProcessRendererModel;
@@ -65,7 +66,7 @@ public class ReplaceOperatorMenu extends OperatorMenu {
 
 	/** The currently selected operator will be replaced by the given operator. */
 	private void replace(Operator operator) {
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		List<Operator> selection = mainFrame.getSelectedOperators();
 		if (selection.isEmpty()) {
 			return;

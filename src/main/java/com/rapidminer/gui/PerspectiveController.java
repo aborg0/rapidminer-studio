@@ -173,7 +173,7 @@ public class PerspectiveController {
 				ActionStatisticsCollector.getInstance().stopTimer(oldPerspective);
 			}
 			switchTo.apply(context);
-			RapidMinerGUI.getMainFrame().RESTORE_PERSPECTIVE_ACTION.setEnabled(!switchTo.isUserDefined());
+			RapidMinerGUI.getMainFrame().getRestorePerspectiveAction().setEnabled(!switchTo.isUserDefined());
 			ActionStatisticsCollector.getInstance().startTimer(switchTo, ActionStatisticsCollector.TYPE_PERSPECTIVE,
 					switchTo.getName(), null);
 			ActionStatisticsCollector.getInstance().log(ActionStatisticsCollector.TYPE_PERSPECTIVE, switchTo.getName(),
@@ -351,7 +351,7 @@ public class PerspectiveController {
 	 */
 	@Deprecated
 	public Action getRestoreDefaultAction() {
-		return RapidMinerGUI.getMainFrame().RESTORE_PERSPECTIVE_ACTION;
+		return RapidMinerGUI.getMainFrame().getRestorePerspectiveAction();
 	}
 
 	/**

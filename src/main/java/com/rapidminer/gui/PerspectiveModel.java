@@ -94,7 +94,7 @@ public class PerspectiveModel extends AbstractObservable<List<Perspective>> {
 	/**
 	 * Removes the given perspective from the model.
 	 *
-	 * @param name
+	 * @param p
 	 *            the perspective which should be removed
 	 */
 	public void deletePerspective(final Perspective p) {
@@ -133,7 +133,7 @@ public class PerspectiveModel extends AbstractObservable<List<Perspective>> {
 		WSDockKey repositoryKey = new WSDockKey(RepositoryBrowser.REPOSITORY_BROWSER_DOCK_KEY);
 		WSDockKey newOperatorEditorKey = new WSDockKey(NewOperatorEditor.NEW_OPERATOR_DOCK_KEY);
 		WSDockKey operatorHelpKey = new WSDockKey(OperatorDocumentationBrowser.OPERATOR_HELP_DOCK_KEY);
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		DockKey resultDockKey = null;
 		DockKey processPanelDockKey = null;
 		if (mainFrame != null) {

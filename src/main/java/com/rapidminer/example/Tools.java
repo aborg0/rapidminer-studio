@@ -46,7 +46,6 @@ import com.rapidminer.tools.OperatorService;
 import com.rapidminer.tools.RandomGenerator;
 import com.rapidminer.tools.math.sampling.OrderedSamplingWithoutReplacement;
 
-
 /**
  * Provides some tools for calculation of certain measures and feature generation.
  *

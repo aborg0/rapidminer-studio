@@ -79,7 +79,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import com.rapidminer.RapidMiner;
 import com.rapidminer.gui.ApplicationFrame;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.look.fc.Bookmark;
 import com.rapidminer.gui.look.fc.BookmarkIO;
@@ -88,7 +88,6 @@ import com.rapidminer.gui.tools.components.ToolTipWindow.TipProvider;
 import com.rapidminer.gui.tools.components.ToolTipWindow.TooltipLocation;
 import com.rapidminer.gui.tools.dialogs.ConfirmDialog;
 import com.rapidminer.gui.tools.dialogs.ErrorDialog;
-import com.rapidminer.gui.tools.dialogs.ExtendedErrorDialog;
 import com.rapidminer.gui.tools.dialogs.InputDialog;
 import com.rapidminer.gui.tools.dialogs.InputValidator;
 import com.rapidminer.gui.tools.dialogs.LongMessageDialog;
@@ -1235,14 +1234,6 @@ public class SwingTools {
 			LogService.getRoot().log(Level.WARNING, I18N.getMessage(LogService.getRoot().getResourceBundle(),
 					"com.rapidminer.gui.tools.SwingTools.show_simple_get_message", e.getMessage()), e);
 		}
-		invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ExtendedErrorDialog dialog = new ExtendedErrorDialog(owner, key, e, displayExceptionMessage, arguments);
-				dialog.setVisible(true);
-			}
-		});
 	}
 
 	/**
@@ -1287,15 +1278,6 @@ public class SwingTools {
 	 */
 	public static void showSimpleErrorMessage(final Window owner, final String key, final String errorMessage,
 			final Object... arguments) {
-		invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ExtendedErrorDialog dialog = new ExtendedErrorDialog(owner, key, errorMessage, arguments);
-				dialog.setVisible(true);
-			}
-		});
-
 		// if debug mode is enabled, print throwable into logger
 		if (ParameterService.getParameterValue(RapidMiner.PROPERTY_RAPIDMINER_GENERAL_DEBUGMODE).equals("true")) {
 			LogService.getRoot().log(Level.WARNING, errorMessage);
@@ -1346,14 +1328,6 @@ public class SwingTools {
 		if (ParameterService.getParameterValue(RapidMiner.PROPERTY_RAPIDMINER_GENERAL_DEBUGMODE).equals("true")) {
 			LogService.getRoot().log(Level.SEVERE, e.getMessage(), e);
 		}
-		invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ExtendedErrorDialog dialog = new ExtendedErrorDialog(owner, key, e, displayExceptionMessage, objects);
-				dialog.setVisible(true);
-			}
-		});
 	}
 
 	/**
@@ -1505,7 +1479,7 @@ public class SwingTools {
 	private static File chooseFile(Component parent, String i18nKey, File file, boolean open, boolean onlyDirs,
 			FileFilter[] fileFilters, boolean acceptAllFiles) {
 		if (parent == null) {
-			parent = RapidMinerGUI.getMainFrame();
+			parent = RapidMinerGUI.getMainFrame().getWindow();
 		}
 		String key = "file_chooser." + (i18nKey != null ? i18nKey : open ? onlyDirs ? "open_directory" : "open" : "save");
 		JFileChooser fileChooser = createFileChooser(key, file, onlyDirs, fileFilters);
@@ -1867,7 +1841,7 @@ public class SwingTools {
 	}
 
 	public static void setProcessEditorsEnabled(final boolean enabled) {
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		setEnabledRecursive(mainFrame.getProcessPanel().getComponent(), enabled);
 		setEnabledRecursive(mainFrame.getPropertyPanel().getComponent(), enabled);
 		setEnabledRecursive(mainFrame.getOperatorTree(), enabled);

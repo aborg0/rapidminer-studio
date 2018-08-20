@@ -18,16 +18,15 @@
 */
 package com.rapidminer.gui.actions;
 
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+
 import com.rapidminer.FileProcessLocation;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.SwingTools;
-
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-
 
 /**
  * Action to export a process to a file.
@@ -45,7 +44,7 @@ public class ExportProcessAction extends ResourceAction {
 
 	@Override
 	public void loggedActionPerformed(ActionEvent e) {
-		File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame(), "export_process", null, false, false, new String[] {
+		File file = SwingTools.chooseFile(RapidMinerGUI.getMainFrame().getWindow(), "export_process", null, false, false, new String[] {
 				RapidMiner.PROCESS_FILE_EXTENSION, "xml" }, new String[] { "Process File", "Process File" });
 		if (file == null) {
 			return;

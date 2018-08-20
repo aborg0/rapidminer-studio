@@ -40,6 +40,7 @@ import com.rapidminer.Process;
 import com.rapidminer.ProcessListener;
 import com.rapidminer.datatable.DataTable;
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.PerspectiveController;
 import com.rapidminer.gui.PerspectiveModel;
 import com.rapidminer.gui.RapidMinerGUI;
@@ -111,7 +112,7 @@ public class DockableResultDisplay extends JPanel implements ResultDisplay {
 	}
 
 	@Override
-	public void init(MainFrame mf) {
+	public void init(MainUIState mf) {
 		DockingDesktop desktop = mf.getDockingDesktop();
 
 		desktop.addDockableStateChangeListener(e -> {
@@ -169,7 +170,7 @@ public class DockableResultDisplay extends JPanel implements ResultDisplay {
 	private boolean isAskingForPerspectiveSwitch = false;
 
 	private void askForPerspectiveSwitch() {
-		MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+		MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 		PerspectiveController perspectiveController = mainFrame.getPerspectiveController();
 		DockableState dockableState = mainFrame.getDockingDesktop().getDockableState(this);
 		// do not switch perspective if the result history is currently visible

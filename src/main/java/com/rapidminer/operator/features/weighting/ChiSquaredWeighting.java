@@ -36,7 +36,6 @@ import com.rapidminer.parameter.ParameterTypeInt;
 import com.rapidminer.tools.OperatorService;
 import com.rapidminer.tools.math.ContingencyTableTools;
 
-
 /**
  * This operator calculates the relevance of a feature by computing for each attribute of the input
  * example set the value of the chi-squared statistic with respect to the class attribute.

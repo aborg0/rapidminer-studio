@@ -20,7 +20,7 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
 
@@ -34,6 +34,7 @@ public class ExitAction extends ResourceAction {
 
 	private static final long serialVersionUID = -6213819388535936519L;
 
+	private MainUIState mainFrame;
 
 	public ExitAction() {
 		super("exit");
@@ -44,7 +45,7 @@ public class ExitAction extends ResourceAction {
 	 * @deprecated use {@link #ExitAction()} instead
 	 */
 	@Deprecated
-	public ExitAction(MainFrame mainFrame) {
+	public ExitAction(MainUIState mainFrame) {
 		this();
 	}
 

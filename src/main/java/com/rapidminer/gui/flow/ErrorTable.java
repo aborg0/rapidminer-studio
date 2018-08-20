@@ -46,7 +46,8 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.AbstractUIState;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.processeditor.ProcessEditor;
 import com.rapidminer.gui.tools.ExtendedJScrollPane;
 import com.rapidminer.gui.tools.ExtendedJTable;
@@ -63,7 +64,6 @@ import com.rapidminer.operator.ports.quickfix.QuickFix;
 import com.rapidminer.tools.I18N;
 import com.vlsolutions.swing.docking.DockKey;
 import com.vlsolutions.swing.docking.Dockable;
-
 
 /**
  *
@@ -270,10 +270,10 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 
 	private final DockKey DOCK_KEY = new ResourceDockKey(ERROR_TABLE_DOCK_KEY);
 	{
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 	}
 
-	private final MainFrame mainFrame;
+	private final MainUIState mainFrame;
 
 	private Operator currentOperator;
 
@@ -293,7 +293,7 @@ public class ErrorTable extends JPanel implements Dockable, ProcessEditor {
 
 	private List<ProcessSetupError> errors = new LinkedList<ProcessSetupError>();
 
-	public ErrorTable(final MainFrame mainFrame) {
+	public ErrorTable(final MainUIState mainFrame) {
 		super(new BorderLayout());
 
 		this.mainFrame = mainFrame;

@@ -742,7 +742,6 @@ public class EMClusterer extends RMAbstractClusterer {
 		}
 
 		return createClusterModel(exampleSet);
-
 	}
 
 	@Override
@@ -806,5 +805,4 @@ public class EMClusterer extends RMAbstractClusterer {
 		newVersions[old.length] = BEFORE_MEASURE_PARAM;
 		return newVersions;
 	}
-
 }

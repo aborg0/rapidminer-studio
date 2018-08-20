@@ -20,10 +20,9 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
-
 
 /**
  * Start the corresponding action.
@@ -34,7 +33,6 @@ public class StopAction extends ResourceAction {
 
 	private static final long serialVersionUID = 1181186062812851781L;
 
-
 	public StopAction() {
 		super("stop");
 		setCondition(PROCESS_STOPPED, DISALLOWED);
@@ -44,7 +42,7 @@ public class StopAction extends ResourceAction {
 	 * @deprecated use {@link #StopAction()} instead
 	 */
 	@Deprecated
-	public StopAction(MainFrame mainFrame) {
+	public StopAction(MainUIState mainFrame) {
 		this();
 	}
 

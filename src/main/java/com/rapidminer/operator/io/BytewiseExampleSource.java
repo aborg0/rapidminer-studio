@@ -39,7 +39,6 @@ import com.rapidminer.parameter.UndefinedParameterError;
 import com.rapidminer.tools.ParameterService;
 import com.rapidminer.tools.parameter.internal.DataManagementParameterHelper;
 
-
 /**
  * Superclass for file data source operators which read the file byte per byte into a byte array and
  * extract the actual data from that array. This class provides some methods to extract integer and

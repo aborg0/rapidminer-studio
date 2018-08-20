@@ -43,7 +43,7 @@ public class CSVExampleSourceConfigurationWizardCreator extends AbstractConfigur
 	public void createConfigurationWizard(ParameterType type, ConfigurationListener listener) {
 		CSVExampleSource sourceOperator = (CSVExampleSource) listener;
 		DataImportWizardBuilder builder = new DataImportWizardBuilder();
-		JDialog wizard = builder.forOperator(sourceOperator, CSVDataSourceFactory.CSV_DATA_SOURCE_FACTORY_I18N_KEY).build(RapidMinerGUI.getMainFrame()).getDialog();
+		JDialog wizard = builder.forOperator(sourceOperator, CSVDataSourceFactory.CSV_DATA_SOURCE_FACTORY_I18N_KEY).build(RapidMinerGUI.getMainFrame().getWindow()).getDialog();
 		wizard.setVisible(true);
 	}
 

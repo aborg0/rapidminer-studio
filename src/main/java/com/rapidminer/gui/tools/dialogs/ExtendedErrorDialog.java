@@ -43,7 +43,7 @@ import javax.swing.event.ListSelectionListener;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RapidMiner.ExecutionMode;
 import com.rapidminer.gui.ApplicationFrame;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.PerspectiveModel;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ExtendedJScrollPane;
@@ -187,7 +187,7 @@ public class ExtendedErrorDialog extends ButtonDialog {
 
 				@Override
 				public void loggedActionPerformed(ActionEvent e) {
-					MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+					final MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 					mainFrame.getPerspectiveController().showPerspective(PerspectiveModel.DESIGN);
 					mainFrame.selectAndShowOperator(mainFrame.getProcess().getOperator(opName), true);
 				}

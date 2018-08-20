@@ -25,9 +25,10 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.rapidminer.gui.tools.SwingTools;
-
 
 /**
  * Class providing new protocols special for RapidMiner. Currently it supports the icon:// protocol,
@@ -61,6 +62,7 @@ public class NetTools {
 			}
 
 			// set our own factory now which will ask a potentially previously registered factory if we do nothing with a protocol
+            try {
 			URL.setURLStreamHandlerFactory(protocol -> {
 				// try our own handlers
 				if (ICON_PROTOCOL.equals(protocol)) {
@@ -107,6 +109,9 @@ public class NetTools {
 				// nothing to do with the protocol, let Java handle it (e.g. http)
 				return null;
 			});
+        } catch (final RuntimeException e) {
+            Logger.getAnonymousLogger().log(Level.INFO, "Failed to initialize URLStreamHandler.", e);
+        }
 			initialized = true;
 		}
 	}

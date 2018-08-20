@@ -20,10 +20,9 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
-
 
 /**
  * Start the corresponding action.
@@ -33,7 +32,6 @@ import com.rapidminer.gui.tools.ResourceAction;
 public class UndoAction extends ResourceAction {
 
 	private static final long serialVersionUID = 4767902062440337756L;
-
 
 	public UndoAction() {
 		super("undo");
@@ -45,7 +43,7 @@ public class UndoAction extends ResourceAction {
 	 * @deprecated use {@link #UndoAction()} instead
 	 */
 	@Deprecated
-	public UndoAction(MainFrame mainFrame) {
+	public UndoAction(MainUIState mainFrame) {
 		this();
 	}
 

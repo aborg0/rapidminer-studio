@@ -41,6 +41,7 @@ import javax.swing.SwingWorker;
 
 import com.rapidminer.Process;
 import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.processeditor.ExtendedProcessEditor;
 import com.rapidminer.gui.tools.NotificationPopup;
@@ -161,7 +162,7 @@ public final class BlacklistedOperatorProcessEditor implements ExtendedProcessEd
 
 			@Override
 			public void loggedActionPerformed(final ActionEvent e) {
-				MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+				MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 				mainFrame.selectAndShowOperator(mainFrame.getProcess().getOperator(op.getName()), true);
 			}
 		});
