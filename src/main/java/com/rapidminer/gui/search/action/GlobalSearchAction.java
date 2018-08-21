@@ -26,7 +26,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import com.rapidminer.gui.ApplicationFrame;
+import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.search.GlobalSearchDialog;
 import com.rapidminer.gui.search.GlobalSearchPanel;
 import com.rapidminer.gui.tools.ResourceAction;
@@ -45,11 +45,15 @@ public class GlobalSearchAction extends ResourceAction {
 
 	public GlobalSearchAction() {
 		super(true, GLOBAL_SEARCH);
-		InputMap inputMap = ApplicationFrame.getApplicationFrame().getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		ActionMap actionMap = ApplicationFrame.getApplicationFrame().getRootPane().getActionMap();
+		if (RapidMinerGUI.getMainFrame() != null && RapidMinerGUI.getMainFrame().getWindow() != null) {
+			InputMap inputMap = RapidMinerGUI.getMainFrame().getWindow().getRootPane()
+					.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+			ActionMap actionMap = RapidMinerGUI.getMainFrame().getWindow().getRootPane().getActionMap();
 
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), GLOBAL_SEARCH);
-		actionMap.put(GLOBAL_SEARCH, this);
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					GLOBAL_SEARCH);
+			actionMap.put(GLOBAL_SEARCH, this);
+		}
 	}
 
 	@Override

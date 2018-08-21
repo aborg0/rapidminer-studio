@@ -225,8 +225,8 @@ dependencies {
 	compile 'com.h2database:h2:1.4.194'
 
 	// up until 7.4.1 this was a transitive dependency coming from license-commons (jackson version 2.4.0)
-	compile 'com.fasterxml.jackson.core:jackson-core:2.9.5'
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+	compile 'com.fasterxml.jackson.core:jackson-core:2.8.9'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
 
 	// Advanced Search functionality via Lucene
 	compile 'org.apache.lucene:lucene-queryparser:7.2.0'
@@ -243,6 +243,10 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) { gradleVersion = '4.0.1' }
+
+javadoc {
+	failOnError = false
+}
 
 jar {
 	manifest {
