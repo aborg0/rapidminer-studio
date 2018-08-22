@@ -253,13 +253,17 @@ jar {
 	//com.sun.management should be provided.
 	//javafx should be provided
 //    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.mxgraph.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!jxl.*,!org.apache.commons.collections15.*,!org.freehep.*,!org.math.plot.*,!com.lowagie.text.*,!edu.uci.ics.jung.*,!Jama,!org.bouncycastle.*,!org.jdesktop.swingx.*,!org.jgraph.*,!org.jfree.*,!com.rapidminer.external.alphanum,!javafx.*,!netscape.*,*'
-    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!javafx.*,!netscape.*,*'
+//    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!javafx.*,!netscape.*,*'
+//    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!javafx.*,!netscape.*,!org.jsoup.*,org.apache.lucene.analysis;bundle-version="7.2.0",org.apache.lucene.analysis.miscellaneous;bundle-version="7.2.0",org.apache.lucene.analysis.standard;bundle-version="7.2.0",org.apache.lucene.analysis.util;bundle-version="7.2.0",org.apache.lucene.document;bundle-version="7.2.0",org.apache.lucene.index;bundle-version="7.2.0",org.apache.lucene.queryparser.classic;bundle-version="7.2.0",org.apache.lucene.search;bundle-version="7.2.0",org.apache.lucene.search.highlight;bundle-version="7.2.0",org.apache.lucene.store;bundle-version="7.2.0",org.apache.lucene.util;bundle-version="7.2.0",*'
+    	instruction 'Import-Package', '!com.sun.*,!sun.*,!com.michaelbaranov.microba.*,!com.vlsolutions.swing.*,!com.rapidminer.license.*,!com.rapidminer.gui.osx,!com.apple.*,!com.rapidminer.core.*,!javafx.*,!netscape.*,!org.jsoup.*,!org.apache.lucene.*,!javax.mail.*,!org.apache.poi.*,!org.antlr.v4.*,*'
 //    	instruction '-exportcontents', 'com.vlsolutions.swing.docking,com.vlsolutions.swing.docking.ui,com.vlsolutions.swing.docking.animation,com.vlsolutions.swing.docking.event,com.vlsolutions.swing.docking.ws,com.vlsolutions.swing.toolbars,jxl,jxl.biff,jxl.format,jxl.read.biff,jxl.write,'
     	instruction '-exportcontents', 'com.vlsolutions.swing.docking,com.vlsolutions.swing.docking.ui,com.vlsolutions.swing.docking.animation,com.vlsolutions.swing.docking.event,com.vlsolutions.swing.docking.ws,com.vlsolutions.swing.toolbars'
+    	instruction 'Require-Bundle','org.jsoup;bundle-version="[1.8,2)",org.apache.lucene.core;bundle-version="[7.2,8)",org.apache.lucene.analyzers-common;bundle-version="[7.2,8)",org.apache.lucene.join;bundle-version="[7.2,8)",org.apache.lucene.memory;bundle-version="[7.2,8)",org.apache.lucene.queryparser;bundle-version="[7.2,8)",org.apache.lucene.sandbox;bundle-version="[7.2,8)",org.apache.lucene.highlighter;bundle-version="[7.2,8)",com.sun.mail.javax.mail;bundle-version="1.6.0",org.antlr.antlr4-runtime-osgi;bundle-version="[4.5.1,5)",org.apache.servicemix.bundles.poi;bundle-version="[3.17,4)",com.sun.jna;bundle-version="[4.5.0,5)",com.sun.jna.platform;bundle-version="[4.5.1,5)"'
     	// In order to allow loading plugins, let the included license bundle use jackson
     	instruction 'DynamicImport-Package', '*'
 		//instruction 'Bundle-RequiredExecutionEnvironment', 'JavaSE-1.8'
-		instruction 'Require-Capability', 'osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.7))"'
+		//instruction 'Require-Capability', 'osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.7))"'
+		instruction '-noee', 'true'
 		instruction 'Bundle-ActivationPolicy', 'lazy'
 	}
 	//From: http://kennethjorgensen.com/blog/2014/fat-jars-with-excluded-dependencies-in-gradle
