@@ -4,18 +4,17 @@
 
 package com.rapidminer.gui;
 
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +31,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.event.EventListenerList;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -42,21 +40,38 @@ import com.rapidminer.ProcessLocation;
 import com.rapidminer.ProcessStorageListener;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.core.io.data.source.DataSourceFactoryRegistry;
-import com.rapidminer.gui.actions.*;
+import com.rapidminer.gui.actions.AboutAction;
+import com.rapidminer.gui.actions.Actions;
+import com.rapidminer.gui.actions.AutoWireAction;
+import com.rapidminer.gui.actions.BrowseAction;
+import com.rapidminer.gui.actions.ExitAction;
+import com.rapidminer.gui.actions.ExportProcessAction;
+import com.rapidminer.gui.actions.ImportDataAction;
+import com.rapidminer.gui.actions.ImportProcessAction;
+import com.rapidminer.gui.actions.ManageConfigurablesAction;
+import com.rapidminer.gui.actions.NewAction;
+import com.rapidminer.gui.actions.NewPerspectiveAction;
+import com.rapidminer.gui.actions.OpenAction;
+import com.rapidminer.gui.actions.PauseAction;
+import com.rapidminer.gui.actions.PropagateRealMetaDataAction;
+import com.rapidminer.gui.actions.RedoAction;
+import com.rapidminer.gui.actions.RestoreDefaultPerspectiveAction;
+import com.rapidminer.gui.actions.RunAction;
+import com.rapidminer.gui.actions.SaveAction;
+import com.rapidminer.gui.actions.SaveAsAction;
+import com.rapidminer.gui.actions.SettingsAction;
+import com.rapidminer.gui.actions.StopAction;
+import com.rapidminer.gui.actions.ToggleAction;
+import com.rapidminer.gui.actions.ToggleExpertModeAction;
+import com.rapidminer.gui.actions.UndoAction;
+import com.rapidminer.gui.actions.ValidateAutomaticallyAction;
+import com.rapidminer.gui.actions.ValidateProcessAction;
 import com.rapidminer.gui.actions.export.ShowPrintAndExportDialogAction;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearch;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearchManager;
 import com.rapidminer.gui.actions.startup.TutorialAction;
 import com.rapidminer.gui.dialog.UnknownParametersInfoDialog;
 import com.rapidminer.gui.flow.ErrorTable;
 import com.rapidminer.gui.flow.ProcessPanel;
 import com.rapidminer.gui.flow.ProcessUndoManager;
-import com.rapidminer.gui.flow.processrendering.annotations.model.WorkflowAnnotation;
-import com.rapidminer.gui.flow.processrendering.event.ProcessRendererAnnotationEvent;
-import com.rapidminer.gui.flow.processrendering.event.ProcessRendererEventListener;
-import com.rapidminer.gui.flow.processrendering.event.ProcessRendererModelEvent;
-import com.rapidminer.gui.flow.processrendering.event.ProcessRendererOperatorEvent;
-import com.rapidminer.gui.flow.processrendering.event.ProcessRendererOperatorEvent.OperatorEvent;
 import com.rapidminer.gui.flow.processrendering.model.ProcessRendererModel;
 import com.rapidminer.gui.look.Colors;
 import com.rapidminer.gui.operatortree.OperatorTree;
@@ -75,7 +90,6 @@ import com.rapidminer.gui.processeditor.XMLEditor;
 import com.rapidminer.gui.processeditor.results.ResultDisplay;
 import com.rapidminer.gui.processeditor.results.ResultDisplayTools;
 import com.rapidminer.gui.properties.OperatorPropertyPanel;
-import com.rapidminer.gui.search.action.GlobalSearchAction;
 import com.rapidminer.gui.security.PasswordManager;
 import com.rapidminer.gui.tools.ProcessGUITools;
 import com.rapidminer.gui.tools.ProgressThread;
@@ -92,7 +106,11 @@ import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardFacto
 import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardRegistry;
 import com.rapidminer.gui.tools.ioobjectcache.IOObjectCacheViewer;
 import com.rapidminer.gui.tools.logging.LogViewer;
-import com.rapidminer.operator.*;
+import com.rapidminer.operator.IOContainer;
+import com.rapidminer.operator.Operator;
+import com.rapidminer.operator.OperatorChain;
+import com.rapidminer.operator.ProcessSetupError;
+import com.rapidminer.operator.UnknownParameterInformation;
 import com.rapidminer.operator.ports.Port;
 import com.rapidminer.parameter.ParameterType;
 import com.rapidminer.parameter.ParameterTypeBoolean;
@@ -108,7 +126,6 @@ import com.rapidminer.tools.ProcessTools;
 import com.rapidminer.tools.SystemInfoUtilities;
 import com.rapidminer.tools.SystemInfoUtilities.OperatingSystem;
 import com.rapidminer.tools.config.ConfigurationManager;
-import com.rapidminer.tools.config.gui.ConfigurableDialog;
 import com.rapidminer.tools.container.Pair;
 import com.rapidminer.tutorial.Tutorial;
 import com.rapidminer.tutorial.gui.TutorialBrowser;
@@ -118,8 +135,6 @@ import com.vlsolutions.swing.docking.Dockable;
 import com.vlsolutions.swing.docking.DockingContext;
 import com.vlsolutions.swing.docking.DockingDesktop;
 import com.vlsolutions.swing.toolbars.ToolBarContainer;
-
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
  * The abstract base class implementation of the {@link MainUIState} interface.
@@ -553,7 +568,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler,
 	 */
 	private BubbleWindow missingParameterBubble;
 	
-	protected transient ActionsGlobalSearchManager actionsGlobalSearchManager;
+//	protected transient ActionsGlobalSearchManager actionsGlobalSearchManager;
 
 	protected final JMenuBar menuBar;
 	protected final MainToolBar toolBar;
@@ -1280,7 +1295,7 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler,
 		getStatusBar().startClockThread();
 
 		// initialize Ctrl+F shortcut to start Global Search
-		new GlobalSearchAction();
+//		new GlobalSearchAction();
 
 /*		// listen for selection changes in the ProcessRendererView and notify all registered process
 		// editors
@@ -2572,16 +2587,16 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler,
 	}
 	
 
-	/**
-	 * The {@link com.rapidminer.search.GlobalSearchManager} for {@link ResourceAction}s.
-	 *
-	 * @return the manager to add resource actions to the Global Search.
-	 * @since 8.1
-	 */
-	@Override
-	public ActionsGlobalSearchManager getActionsGlobalSearchManager() {
-		return actionsGlobalSearchManager;
-	}
+//	/**
+//	 * The {@link com.rapidminer.search.GlobalSearchManager} for {@link ResourceAction}s.
+//	 *
+//	 * @return the manager to add resource actions to the Global Search.
+//	 * @since 8.1
+//	 */
+//	@Override
+//	public ActionsGlobalSearchManager getActionsGlobalSearchManager() {
+//		return actionsGlobalSearchManager;
+//	}
 
 	/**
 	 * Prepare adding menu actions to global search. Calling multiple times has no effect.
@@ -2589,9 +2604,9 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler,
 	 */
 	@Override
 	public void initActionsGlobalSearch() {
-		if (actionsGlobalSearchManager == null) {
-			actionsGlobalSearchManager = (ActionsGlobalSearchManager) new ActionsGlobalSearch().getSearchManager();
-		}
+//		if (actionsGlobalSearchManager == null) {
+//			actionsGlobalSearchManager = (ActionsGlobalSearchManager) new ActionsGlobalSearch().getSearchManager();
+//		}
 	}
 
 	/**

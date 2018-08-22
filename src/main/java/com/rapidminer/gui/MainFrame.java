@@ -19,18 +19,11 @@
 package com.rapidminer.gui;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.Serializable;
 import java.net.InetAddress;
-import java.net.URI;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -38,42 +31,15 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 import com.rapidminer.Process;
 import com.rapidminer.ProcessLocation;
 import com.rapidminer.ProcessStorageListener;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.gui.actions.Actions;
-import com.rapidminer.gui.actions.AutoWireAction;
-import com.rapidminer.gui.actions.BrowseAction;
-import com.rapidminer.gui.actions.ExitAction;
-import com.rapidminer.gui.actions.ExportProcessAction;
-import com.rapidminer.gui.actions.ImportDataAction;
-import com.rapidminer.gui.actions.ImportProcessAction;
-import com.rapidminer.gui.actions.ManageConfigurablesAction;
-import com.rapidminer.gui.actions.NewPerspectiveAction;
-import com.rapidminer.gui.actions.PauseAction;
-import com.rapidminer.gui.actions.PropagateRealMetaDataAction;
-import com.rapidminer.gui.actions.RedoAction;
-import com.rapidminer.gui.actions.RestoreDefaultPerspectiveAction;
 import com.rapidminer.gui.actions.RunAction;
 import com.rapidminer.gui.actions.SaveAction;
 import com.rapidminer.gui.actions.ToggleAction;
-import com.rapidminer.gui.actions.UndoAction;
-import com.rapidminer.gui.actions.ValidateAutomaticallyAction;
-import com.rapidminer.gui.actions.ValidateProcessAction;
-import com.rapidminer.gui.actions.export.ShowPrintAndExportDialogAction;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearch;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearchManager;
-import com.rapidminer.gui.actions.startup.NewAction;
-import com.rapidminer.gui.actions.startup.OpenAction;
-import com.rapidminer.gui.actions.startup.TutorialAction;
-import com.rapidminer.gui.dialog.UnknownParametersInfoDialog;
-import com.rapidminer.gui.flow.ErrorTable;
 import com.rapidminer.gui.flow.ProcessPanel;
 import com.rapidminer.gui.operatortree.OperatorTree;
 import com.rapidminer.gui.processeditor.ExtendedProcessEditor;
@@ -82,13 +48,6 @@ import com.rapidminer.gui.processeditor.ProcessContextProcessEditor;
 import com.rapidminer.gui.processeditor.ProcessEditor;
 import com.rapidminer.gui.processeditor.results.ResultDisplay;
 import com.rapidminer.gui.properties.OperatorPropertyPanel;
-import com.rapidminer.gui.search.action.GlobalSearchAction;
-import com.rapidminer.gui.security.PasswordManager;
-import com.rapidminer.gui.tools.ProcessGUITools;
-import com.rapidminer.gui.tools.ProgressThread;
-import com.rapidminer.gui.tools.ResourceAction;
-import com.rapidminer.gui.tools.ResourceMenu;
-import com.rapidminer.gui.tools.ResultWarningPreventionRegistry;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.dialogs.ConfirmDialog;
 import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardFactory;
@@ -96,24 +55,9 @@ import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardRegis
 import com.rapidminer.gui.tools.logging.LogViewer;
 import com.rapidminer.operator.IOContainer;
 import com.rapidminer.operator.Operator;
-import com.rapidminer.operator.OperatorChain;
-import com.rapidminer.operator.ProcessSetupError;
-import com.rapidminer.operator.UnknownParameterInformation;
-import com.rapidminer.operator.ports.Port;
-import com.rapidminer.parameter.ParameterType;
 import com.rapidminer.repository.RepositoryLocation;
 import com.rapidminer.repository.gui.RepositoryBrowser;
-import com.rapidminer.tools.LogService;
-import com.rapidminer.tools.Observable;
-import com.rapidminer.tools.Observer;
-import com.rapidminer.tools.ParameterService;
-import com.rapidminer.tools.ProcessTools;
-import com.rapidminer.tools.SystemInfoUtilities;
-import com.rapidminer.tools.SystemInfoUtilities.OperatingSystem;
-import com.rapidminer.tools.config.ConfigurationManager;
-import com.rapidminer.tools.container.Pair;
 import com.rapidminer.tutorial.Tutorial;
-import com.rapidminer.tutorial.gui.TutorialBrowser;
 import com.rapidminer.tutorial.gui.TutorialSelector;
 import com.vlsolutions.swing.docking.DockGroup;
 import com.vlsolutions.swing.docking.Dockable;
@@ -1385,16 +1329,16 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 	public JMenu getExtensionsMenu() {
 		return state.getExtensionsMenu();
 	}
-    /**
-     * The {@link com.rapidminer.search.GlobalSearchManager} for {@link ResourceAction}s.
-     *
-     * @return the manager to add resource actions to the Global Search.
-     * @since 8.1
-     */
-    @Override
-    public ActionsGlobalSearchManager getActionsGlobalSearchManager() {
-        return state.getActionsGlobalSearchManager();
-    }
+//    /**
+//     * The {@link com.rapidminer.search.GlobalSearchManager} for {@link ResourceAction}s.
+//     *
+//     * @return the manager to add resource actions to the Global Search.
+//     * @since 8.1
+//     */
+//    @Override
+//    public ActionsGlobalSearchManager getActionsGlobalSearchManager() {
+//        return state.getActionsGlobalSearchManager();
+//    }
 
     /**
      * Prepare adding menu actions to global search. Calling multiple times has no effect.

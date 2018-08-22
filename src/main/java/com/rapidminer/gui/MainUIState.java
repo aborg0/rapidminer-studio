@@ -19,8 +19,6 @@ import com.rapidminer.gui.actions.Actions;
 import com.rapidminer.gui.actions.RunAction;
 import com.rapidminer.gui.actions.SaveAction;
 import com.rapidminer.gui.actions.ToggleAction;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearch;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearchManager;
 import com.rapidminer.gui.operatortree.OperatorTree;
 import com.rapidminer.gui.processeditor.ExtendedProcessEditor;
 import com.rapidminer.gui.processeditor.NewOperatorEditor;
@@ -28,7 +26,6 @@ import com.rapidminer.gui.processeditor.ProcessContextProcessEditor;
 import com.rapidminer.gui.processeditor.ProcessEditor;
 import com.rapidminer.gui.processeditor.results.ResultDisplay;
 import com.rapidminer.gui.properties.OperatorPropertyPanel;
-import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.StatusBar;
 import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardFactory;
 import com.rapidminer.gui.tools.dialogs.wizards.dataimport.DataImportWizardRegistry;
@@ -279,13 +276,13 @@ public interface MainUIState extends MenusUI, ProcessState {
 	 * @return the toolbar containg e.g. process run buttons
 	 */
 	public JToolBar getButtonToolbar();
-	/**
-	 * The {@link com.rapidminer.search.GlobalSearchManager} for {@link ResourceAction}s.
-	 *
-	 * @return the manager to add resource actions to the Global Search.
-	 * @since 8.1
-	 */
-	public ActionsGlobalSearchManager getActionsGlobalSearchManager();
+//	/**
+//	 * The {@link com.rapidminer.search.GlobalSearchManager} for {@link ResourceAction}s.
+//	 *
+//	 * @return the manager to add resource actions to the Global Search.
+//	 * @since 8.1
+//	 */
+//	public ActionsGlobalSearchManager getActionsGlobalSearchManager();
 
 	/**
 	 * Prepare adding menu actions to global search. Calling multiple times has no effect.

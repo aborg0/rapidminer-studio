@@ -44,7 +44,6 @@ import com.rapidminer.repository.internal.remote.RemoteRepository;
 import com.rapidminer.repository.local.LocalRepository;
 import com.rapidminer.repository.resource.ResourceFolder;
 import com.rapidminer.repository.resource.ResourceRepository;
-import com.rapidminer.repository.search.RepositoryGlobalSearch;
 import com.rapidminer.security.PluginSandboxPolicy;
 import com.rapidminer.tools.AbstractObservable;
 import com.rapidminer.tools.I18N;
@@ -233,8 +232,6 @@ public class RepositoryManager extends AbstractObservable<Repository> {
 	public static void init() {
 		synchronized (INSTANCE_LOCK) {
 			instance = new RepositoryManager();
-			// initialize Repository Global Search
-			new RepositoryGlobalSearch();
 			instance.postInstall();
 		}
 	}

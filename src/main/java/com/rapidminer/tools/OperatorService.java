@@ -45,7 +45,6 @@ import org.w3c.dom.NodeList;
 
 import com.rapidminer.RapidMiner;
 import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.gui.processeditor.search.OperatorGlobalSearch;
 import com.rapidminer.io.process.XMLTools;
 import com.rapidminer.license.LicenseEvent;
 import com.rapidminer.license.LicenseManagerListener;
@@ -59,7 +58,6 @@ import com.rapidminer.operator.ports.Port;
 import com.rapidminer.operator.ports.Ports;
 import com.rapidminer.operator.ports.metadata.MetaData;
 import com.rapidminer.operator.tools.OperatorCreationHook;
-import com.rapidminer.search.GlobalSearchable;
 import com.rapidminer.tools.documentation.OperatorDocBundle;
 import com.rapidminer.tools.documentation.OperatorDocumentation;
 import com.rapidminer.tools.documentation.XMLOperatorDocBundle;
@@ -133,7 +131,7 @@ public class OperatorService {
 
 	private static final GroupTreeRoot groupTreeRoot = new GroupTreeRoot();
 
-	private static GlobalSearchable operatorSearchable;
+//	private static GlobalSearchable operatorSearchable;
 
 	/** Updates the operator blacklist when it changes */
 	private static final ParameterChangeListener UPDATE_BLACKLIST_LISTENER = new ParameterChangeListener() {
@@ -167,7 +165,7 @@ public class OperatorService {
 		// this serves 2 purposes:
 		// 1: Add Global Search capabilities for operators by registering OperatorServiceListener
 		// 2: Keep reference so that weak listener reference is not killed via GC
-		operatorSearchable = new OperatorGlobalSearch();
+//		operatorSearchable = new OperatorGlobalSearch();
 
 		URL mainOperators = getMainOperators();
 		if (mainOperators == null) {

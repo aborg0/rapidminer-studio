@@ -38,6 +38,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JToggleButton;
@@ -63,7 +64,6 @@ import com.rapidminer.operator.ports.InputPort;
 import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.ports.Port;
 import com.rapidminer.parameter.ParameterType;
-import com.rapidminer.repository.search.RepositoryGlobalSearch;
 import com.rapidminer.settings.Telemetry;
 import com.rapidminer.tools.Tools;
 import com.rapidminer.tools.XMLException;
@@ -329,9 +329,6 @@ public enum ActionStatisticsCollector {
 	 */
 	public void logGlobalSearchAction(String searchTerm, String categoryId, String chosenItemIdentifier) {
 		String myChosenItem = chosenItemIdentifier;
-		if (RepositoryGlobalSearch.CATEGORY_ID.equalsIgnoreCase(categoryId)) {
-			myChosenItem = "";
-		}
 		StringBuilder arg = new StringBuilder();
 		arg.append(searchTerm).append(ARG_GLOBAL_SEARCH_SPACER);
 		arg.append(categoryId).append(ARG_GLOBAL_SEARCH_SPACER);

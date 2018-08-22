@@ -280,9 +280,9 @@ public abstract class ResourceAction extends ConditionalAction {
 
 		// this must not crash the EDT, so it's wrapped in try/catch
 		try {
-			if (RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().isActionRegistered(this)) {
-				RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().addAction(this);
-			}
+//			if (RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().isActionRegistered(this)) {
+//				RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().addAction(this);
+//			}
 		} catch (Throwable e) {
 			// We cannot risk blowing up the EDT, so catch absolutely everything here
 			LogService.getRoot().log(Level.WARNING, "com.rapidminer.gui.tools.ResourceAction.error.update_global_search", e);
@@ -322,7 +322,7 @@ public abstract class ResourceAction extends ConditionalAction {
 			return;
 		}
 
-		RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().addAction(this);
+//		RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().addAction(this);
 	}
 
 	/**
@@ -334,7 +334,7 @@ public abstract class ResourceAction extends ConditionalAction {
 			return;
 		}
 
-		RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().removeAction(this);
+//		RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().removeAction(this);
 	}
 
 	/**
@@ -358,9 +358,9 @@ public abstract class ResourceAction extends ConditionalAction {
 	 * @return {@code true} if it is ready; {@code false} otherwise
 	 */
 	private boolean isGlobalSearchReady() {
-		return RapidMinerGUI.getMainFrame() != null &&
+		return RapidMinerGUI.getMainFrame() != null/* &&
 				RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager() != null &&
-				RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().isInitialized();
+				RapidMinerGUI.getMainFrame().getActionsGlobalSearchManager().isInitialized()*/;
 	}
 
 	private static String getMessage(String key) {

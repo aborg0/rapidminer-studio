@@ -57,23 +57,15 @@ import com.rapidminer.RapidMiner;
 import com.rapidminer.RepositoryProcessLocation;
 import com.rapidminer.core.io.data.source.DataSourceFactoryRegistry;
 import com.rapidminer.gui.actions.OpenAction;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearch;
-import com.rapidminer.gui.actions.search.ActionsGlobalSearchGUIProvider;
 import com.rapidminer.gui.autosave.AutoSave;
-import com.rapidminer.gui.dialog.EULADialog;
 import com.rapidminer.gui.docking.RapidDockableContainerFactory;
 import com.rapidminer.gui.internal.GUIStartupListener;
-import com.rapidminer.gui.license.LicenseTools;
 import com.rapidminer.gui.look.RapidLookAndFeel;
 import com.rapidminer.gui.look.fc.BookmarkIO;
 import com.rapidminer.gui.look.ui.RapidDockingUISettings;
 import com.rapidminer.gui.osx.OSXAdapter;
 import com.rapidminer.gui.plotter.PlotterPanel;
-import com.rapidminer.gui.processeditor.search.OperatorGlobalSearch;
-import com.rapidminer.gui.processeditor.search.OperatorGlobalSearchGUIProvider;
 import com.rapidminer.gui.safemode.SafeMode;
-import com.rapidminer.gui.search.GlobalSearchGUIRegistry;
-import com.rapidminer.gui.search.GlobalSearchPanel;
 import com.rapidminer.gui.security.BlacklistedOperatorProcessEditor;
 import com.rapidminer.gui.tools.SwingTools;
 import com.rapidminer.gui.tools.dialogs.DecisionRememberingConfirmDialog;
@@ -82,7 +74,6 @@ import com.rapidminer.gui.tools.logging.LogModel;
 import com.rapidminer.gui.tools.logging.LogModelRegistry;
 import com.rapidminer.gui.tools.logging.LogViewer;
 import com.rapidminer.gui.viewer.MetaDataViewerTableModel;
-import com.rapidminer.license.LicenseManagerRegistry;
 import com.rapidminer.parameter.ParameterTypeBoolean;
 import com.rapidminer.parameter.ParameterTypeCategory;
 import com.rapidminer.parameter.ParameterTypeColor;
@@ -90,10 +81,6 @@ import com.rapidminer.parameter.ParameterTypeInt;
 import com.rapidminer.repository.MalformedRepositoryLocationException;
 import com.rapidminer.repository.RepositoryLocation;
 import com.rapidminer.repository.RepositoryManager;
-import com.rapidminer.repository.gui.search.RepositoryGlobalSearchGUIProvider;
-import com.rapidminer.repository.search.RepositoryGlobalSearch;
-import com.rapidminer.search.GlobalSearchIndexer;
-import com.rapidminer.search.GlobalSearchRegistry;
 import com.rapidminer.security.PluginSandboxPolicy;
 import com.rapidminer.security.PluginSecurityManager;
 import com.rapidminer.studio.io.data.internal.file.LocalFileDataSourceFactory;
@@ -351,7 +338,7 @@ public class RapidMinerGUI extends RapidMiner {
 		RapidMiner.splashMessage("basic");
 
 		// initialize Global Search framework
-		GlobalSearchIndexer.INSTANCE.initialize();
+//		GlobalSearchIndexer.INSTANCE.initialize();
 
 		// initialize RapidMiner
 		// As side effect this also initialized the ConstraintManager
@@ -445,18 +432,18 @@ public class RapidMinerGUI extends RapidMiner {
 		mainFrame.getLogViewer().getLogSelectionModel().setSelectedLogModel(RapidMinerGUI.getDefaultLogModel());
 
 		// Global Search GUI Provider initialization
-		if (GlobalSearchRegistry.INSTANCE.getSearchCategoryById(OperatorGlobalSearch.CATEGORY_ID) != null) {
-			GlobalSearchGUIRegistry.INSTANCE.registerSearchVisualizationProvider(GlobalSearchRegistry.INSTANCE.getSearchCategoryById(
-					OperatorGlobalSearch.CATEGORY_ID), new OperatorGlobalSearchGUIProvider());
-		}
-		if (GlobalSearchRegistry.INSTANCE.getSearchCategoryById(RepositoryGlobalSearch.CATEGORY_ID) != null) {
-			GlobalSearchGUIRegistry.INSTANCE.registerSearchVisualizationProvider(GlobalSearchRegistry.INSTANCE.getSearchCategoryById(
-					RepositoryGlobalSearch.CATEGORY_ID), new RepositoryGlobalSearchGUIProvider());
-		}
-		if (GlobalSearchRegistry.INSTANCE.getSearchCategoryById(ActionsGlobalSearch.CATEGORY_ID) != null) {
-			GlobalSearchGUIRegistry.INSTANCE.registerSearchVisualizationProvider(GlobalSearchRegistry.INSTANCE.getSearchCategoryById(
-					ActionsGlobalSearch.CATEGORY_ID), new ActionsGlobalSearchGUIProvider());
-		}
+//		if (GlobalSearchRegistry.INSTANCE.getSearchCategoryById(OperatorGlobalSearch.CATEGORY_ID) != null) {
+//			GlobalSearchGUIRegistry.INSTANCE.registerSearchVisualizationProvider(GlobalSearchRegistry.INSTANCE.getSearchCategoryById(
+//					OperatorGlobalSearch.CATEGORY_ID), new OperatorGlobalSearchGUIProvider());
+//		}
+//		if (GlobalSearchRegistry.INSTANCE.getSearchCategoryById(RepositoryGlobalSearch.CATEGORY_ID) != null) {
+//			GlobalSearchGUIRegistry.INSTANCE.registerSearchVisualizationProvider(GlobalSearchRegistry.INSTANCE.getSearchCategoryById(
+//					RepositoryGlobalSearch.CATEGORY_ID), new RepositoryGlobalSearchGUIProvider());
+//		}
+//		if (GlobalSearchRegistry.INSTANCE.getSearchCategoryById(ActionsGlobalSearch.CATEGORY_ID) != null) {
+//			GlobalSearchGUIRegistry.INSTANCE.registerSearchVisualizationProvider(GlobalSearchRegistry.INSTANCE.getSearchCategoryById(
+//					ActionsGlobalSearch.CATEGORY_ID), new ActionsGlobalSearchGUIProvider());
+//		}
 
 		RapidMiner.hideSplash();
 
@@ -470,7 +457,7 @@ public class RapidMinerGUI extends RapidMiner {
 		}
 
 		// init visualization after extensions had the chance to add their GUI providers as well
-		GlobalSearchPanel.getInstance().initializeSearchResultVisualization();
+//		GlobalSearchPanel.getInstance().initializeSearchResultVisualization();
 
 		UsageStatsScheduler.init();
 
