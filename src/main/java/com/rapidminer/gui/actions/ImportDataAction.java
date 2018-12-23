@@ -60,7 +60,7 @@ public class ImportDataAction extends ResourceAction {
 	public void loggedActionPerformed(ActionEvent e) {
 		DataImportWizardBuilder builder = new DataImportWizardBuilder();
 		builder.setCallback(DataImportWizardUtils.showInResultsCallback());
-		JDialog wizard = builder.build(RapidMinerGUI.getMainFrame()).getDialog();
+		JDialog wizard = builder.build(RapidMinerGUI.getMainFrame().getWindow()).getDialog();
 		wizard.setVisible(true);
 	}
 

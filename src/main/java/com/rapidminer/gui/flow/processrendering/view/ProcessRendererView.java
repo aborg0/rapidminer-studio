@@ -65,7 +65,7 @@ import com.rapidminer.BreakpointListener;
 import com.rapidminer.Process;
 import com.rapidminer.ProcessLocation;
 import com.rapidminer.core.license.ProductConstraintManager;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.actions.ConnectPortToRepositoryAction;
 import com.rapidminer.gui.actions.StoreInRepositoryAction;
@@ -713,13 +713,13 @@ public class ProcessRendererView extends JPanel implements PrintableComponent {
 	private final OverviewPanel overviewPanel;
 
 	/** the mainframe instance */
-	private final MainFrame mainFrame;
+	private final MainUIState mainFrame;
 
 	/** the repaint filter to ensure a minimal interval between repaints */
 	private final RepaintFilter repaintFilter;
 
 	public ProcessRendererView(final ProcessRendererModel model, final ProcessPanel processPanel,
-							   final MainFrame mainFrame) {
+			final MainUIState mainFrame) {
 		this.mainFrame = mainFrame;
 		this.model = model;
 		this.controller = new ProcessRendererController(this, model);
@@ -1924,5 +1924,9 @@ public class ProcessRendererView extends JPanel implements PrintableComponent {
 			}
 		}
 		return false;
+	}
+	
+	public MainUIState getMainFrame() {
+		return mainFrame;
 	}
 }

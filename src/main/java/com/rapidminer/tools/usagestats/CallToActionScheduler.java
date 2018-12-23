@@ -225,13 +225,13 @@ public enum CallToActionScheduler {
 			CtaDao.INSTANCE.mergeConstant(LICENSE_EXPIRATION, activeLicense.getExpirationDate() == null ? null : activeLicense.getExpirationDate().toString()); // yyyy-MM-dd
 			CtaDao.INSTANCE.mergeConstant(LICENSE_ANNOTATION, activeLicense.getAnnotations());
 
-			License upcomingLicense = ProductConstraintManager.INSTANCE.getUpcomingLicense();
-			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_EDITION, upcomingLicense.getProductEdition());
-			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_PRECEDENCE, String.valueOf(upcomingLicense.getPrecedence()));
-			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_EMAIL, upcomingLicense.getLicenseUser().getEmail());
-			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_START, upcomingLicense.getStartDate() == null ? null : upcomingLicense.getStartDate().toString()); // yyyy-MM-dd
-			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_EXPIRATION, upcomingLicense.getExpirationDate() == null ? null : upcomingLicense.getExpirationDate().toString()); // yyyy-MM-dd
-			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_ANNOTATION, upcomingLicense.getAnnotations());
+//			License upcomingLicense = ProductConstraintManager.INSTANCE.getUpcomingLicense();
+//			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_EDITION, upcomingLicense.getProductEdition());
+//			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_PRECEDENCE, String.valueOf(upcomingLicense.getPrecedence()));
+//			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_EMAIL, upcomingLicense.getLicenseUser().getEmail());
+//			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_START, upcomingLicense.getStartDate() == null ? null : upcomingLicense.getStartDate().toString()); // yyyy-MM-dd
+//			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_EXPIRATION, upcomingLicense.getExpirationDate() == null ? null : upcomingLicense.getExpirationDate().toString()); // yyyy-MM-dd
+//			CtaDao.INSTANCE.mergeConstant(LICENSE_UPCOMING_ANNOTATION, upcomingLicense.getAnnotations());
 
 			CtaDao.INSTANCE.mergeConstant(USER_COUNTRY, I18N.getOriginalLocale().getCountry());
 			CtaDao.INSTANCE.mergeConstant(USER_LANGUAGE, I18N.getOriginalLocale().getLanguage());

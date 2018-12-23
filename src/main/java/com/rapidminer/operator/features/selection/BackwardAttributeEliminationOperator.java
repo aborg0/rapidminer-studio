@@ -144,7 +144,6 @@ public class BackwardAttributeEliminationOperator extends OperatorChain {
 				return buffer.toString();
 			}
 		});
-
 	}
 
 	@Override

@@ -67,7 +67,8 @@ import org.xml.sax.InputSource;
 
 import com.rapidminer.Process;
 import com.rapidminer.gui.DockableMenu;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.AbstractUIState;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.look.Colors;
 import com.rapidminer.gui.look.RapidLookTools;
@@ -180,7 +181,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 	private static final String FEEDBACK_KEY_TUTORIAL = "tutorial";
 
 	static {
-		DOCK_KEY.setDockGroup(MainFrame.DOCK_GROUP_ROOT);
+		DOCK_KEY.setDockGroup(AbstractUIState.DOCK_GROUP_ROOT);
 		DockableMenu.registerHideInDockableMenuPrefix(TUTORIAL_BROWSER_DOCK_KEY);
 	}
 
@@ -382,7 +383,7 @@ public class TutorialBrowser extends JPanel implements Dockable {
 	/** @since 8.2 */
 	private void activateNextTutorial() {
 		try {
-			MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+			MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 			Process tutorialProcess = nextTutorial.makeProcess();
 			mainFrame.setOpenedProcess(tutorialProcess);
 			TutorialManager.INSTANCE.completedTutorial(nextTutorial.getIdentifier());

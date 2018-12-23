@@ -21,7 +21,7 @@ package com.rapidminer.gui.actions;
 import java.awt.event.ActionEvent;
 
 import com.rapidminer.gui.ApplicationFrame;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.PerspectiveController;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
@@ -65,7 +65,6 @@ public class NewPerspectiveAction extends ResourceAction {
 		}
 	}
 
-
 	public NewPerspectiveAction() {
 		super("new_perspective");
 		setCondition(EDIT_IN_PROGRESS, DONT_CARE);
@@ -75,7 +74,7 @@ public class NewPerspectiveAction extends ResourceAction {
 	 * @deprecated use {@link #NewPerspectiveAction()} instead
 	 */
 	@Deprecated
-	public NewPerspectiveAction(MainFrame mainFrame) {
+	public NewPerspectiveAction(MainUIState mainFrame) {
 		this();
 	}
 

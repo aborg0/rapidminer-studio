@@ -20,7 +20,7 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.EditBlockingProgressThread;
 import com.rapidminer.gui.tools.ResourceAction;
@@ -40,7 +40,6 @@ public class AutoWireAction extends ResourceAction {
 
 	private static final long serialVersionUID = -4597160351305617508L;
 
-
 	public AutoWireAction() {
 		super(true, "wire");
 		setCondition(OPERATOR_SELECTED, MANDATORY);
@@ -50,7 +49,7 @@ public class AutoWireAction extends ResourceAction {
 	 * @deprecated use {@link #AutoWireAction()} instead
 	 */
 	@Deprecated
-	public AutoWireAction(MainFrame mainFrame) {
+	public AutoWireAction(MainUIState mainFrame) {
 		this();
 	}
 

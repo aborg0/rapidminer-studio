@@ -28,7 +28,7 @@ import com.rapidminer.repository.internal.remote.RemoteRepository;
  * <p>
  *     <strong>Note that since 8.1, the new method {@link #entryMoved(Entry, Folder, String)} is available!</strong>
  * </p>
- * 
+ *
  * @author Simon Fischer, Marco Boeck
  */
 public interface RepositoryListener extends EventListener {

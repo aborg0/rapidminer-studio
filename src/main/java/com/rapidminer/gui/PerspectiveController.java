@@ -170,7 +170,7 @@ public class PerspectiveController {
 				return;
 			}
 		}
-		RapidMinerGUI.getMainFrame().RESTORE_PERSPECTIVE_ACTION.setEnabled(!target.isUserDefined() && (PerspectiveModel.DESIGN.equals(target.getName()) || PerspectiveModel.RESULT.equals(target.getName())));
+		RapidMinerGUI.getMainFrame().getRestorePerspectiveAction().setEnabled(!target.isUserDefined() && (PerspectiveModel.DESIGN.equals(target.getName()) || PerspectiveModel.RESULT.equals(target.getName())));
 		ActionStatisticsCollector.getInstance().startTimer(target, ActionStatisticsCollector.TYPE_PERSPECTIVE,
 				target.getName(), null);
 		ActionStatisticsCollector.getInstance().log(ActionStatisticsCollector.TYPE_PERSPECTIVE, target.getName(),
@@ -350,7 +350,7 @@ public class PerspectiveController {
 	 */
 	@Deprecated
 	public Action getRestoreDefaultAction() {
-		return RapidMinerGUI.getMainFrame().RESTORE_PERSPECTIVE_ACTION;
+		return RapidMinerGUI.getMainFrame().getRestorePerspectiveAction();
 	}
 
 	/**

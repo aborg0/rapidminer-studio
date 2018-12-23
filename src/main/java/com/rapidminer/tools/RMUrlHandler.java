@@ -34,7 +34,7 @@ import javax.swing.event.HyperlinkListener;
 
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RepositoryProcessLocation;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.OperatorDocumentationBrowser;
 import com.rapidminer.gui.Perspective;
 import com.rapidminer.gui.RapidMinerGUI;
@@ -126,25 +126,25 @@ public class RMUrlHandler {
 	 * @since 9.0.0
 	 */
 	public static void initActions() {
-		register(ACTION_PROCESS_NEW, RapidMinerGUI.getMainFrame().NEW_ACTION);
-		register(ACTION_PROCESS_OPEN, RapidMinerGUI.getMainFrame().OPEN_ACTION);
-		register(ACTION_PROCESS_SAVE, RapidMinerGUI.getMainFrame().SAVE_ACTION);
-		register(ACTION_PROCESS_SAVE_AS, RapidMinerGUI.getMainFrame().SAVE_AS_ACTION);
-		register(ACTION_IMPORT_DATA, RapidMinerGUI.getMainFrame().IMPORT_DATA_ACTION);
-		register(ACTION_PROCESS_IMPORT, RapidMinerGUI.getMainFrame().IMPORT_PROCESS_ACTION);
-		register(ACTION_PROCESS_EXPORT, RapidMinerGUI.getMainFrame().EXPORT_PROCESS_ACTION);
-		register(ACTION_UNDO, RapidMinerGUI.getMainFrame().UNDO_ACTION);
-		register(ACTION_REDO, RapidMinerGUI.getMainFrame().REDO_ACTION);
-		register(ACTION_RUN_PROCESS, RapidMinerGUI.getMainFrame().RUN_ACTION);
-		register(ACTION_STOP_PROCESS, RapidMinerGUI.getMainFrame().STOP_ACTION);
-		register(ACTION_AUTOWIRE, RapidMinerGUI.getMainFrame().AUTO_WIRE);
-		register(ACTION_VIEW_NEW, RapidMinerGUI.getMainFrame().NEW_PERSPECTIVE_ACTION);
-		register(ACTION_MANAGE_CONFIGURABLES, RapidMinerGUI.getMainFrame().MANAGE_CONFIGURABLES_ACTION);
-		register(ACTION_SCREEN_EXPORT, RapidMinerGUI.getMainFrame().EXPORT_ACTION);
-		register(ACTION_SETTINGS, RapidMinerGUI.getMainFrame().SETTINGS_ACTION);
-		register(ACTION_VIEW_RESTORE, RapidMinerGUI.getMainFrame().RESTORE_PERSPECTIVE_ACTION);
-		register(ACTION_TUTORIALS, RapidMinerGUI.getMainFrame().TUTORIAL_ACTION);
-		register(ACTION_ABOUT, RapidMinerGUI.getMainFrame().ABOUT_ACTION);
+		register(ACTION_PROCESS_NEW, RapidMinerGUI.getMainFrame().getNewAction());
+		register(ACTION_PROCESS_OPEN, RapidMinerGUI.getMainFrame().getOpenAction());
+		register(ACTION_PROCESS_SAVE, RapidMinerGUI.getMainFrame().getSaveAction());
+		register(ACTION_PROCESS_SAVE_AS, RapidMinerGUI.getMainFrame().getSaveAsAction());
+		register(ACTION_IMPORT_DATA, RapidMinerGUI.getMainFrame().getImportDataAction());
+		register(ACTION_PROCESS_IMPORT, RapidMinerGUI.getMainFrame().getProcessImport());
+		register(ACTION_PROCESS_EXPORT, RapidMinerGUI.getMainFrame().getProcessExport());
+		register(ACTION_UNDO, RapidMinerGUI.getMainFrame().getUndo());
+		register(ACTION_REDO, RapidMinerGUI.getMainFrame().getRedo());
+		register(ACTION_RUN_PROCESS, RapidMinerGUI.getMainFrame().getRunAction());
+		register(ACTION_STOP_PROCESS, RapidMinerGUI.getMainFrame().getStopAction());
+		register(ACTION_AUTOWIRE, RapidMinerGUI.getMainFrame().getAutoWire());
+		register(ACTION_VIEW_NEW, RapidMinerGUI.getMainFrame().getNewPerspective());
+		register(ACTION_MANAGE_CONFIGURABLES, RapidMinerGUI.getMainFrame().getManageConfigurables());
+		register(ACTION_SCREEN_EXPORT, RapidMinerGUI.getMainFrame().getExportAction());
+		register(ACTION_SETTINGS, RapidMinerGUI.getMainFrame().getSettingsAction());
+		register(ACTION_VIEW_RESTORE, RapidMinerGUI.getMainFrame().getRestorePerspectiveAction());
+		register(ACTION_TUTORIALS, RapidMinerGUI.getMainFrame().getTutorialAction());
+		register(ACTION_ABOUT, RapidMinerGUI.getMainFrame().getAboutAction());
 		register(ACTION_MANAGE_PASSWORDS, PasswordManager.OPEN_WINDOW);
 		register(ACTION_ADD_REPOSITORY, RepositoryBrowser.ADD_REPOSITORY_ACTION);
 
@@ -341,7 +341,7 @@ public class RMUrlHandler {
 		} else if (suffix.startsWith(INTERNAL_SCHEMA_OPERATOR)) {
 			// operator selection
 			String opName = suffix.substring(INTERNAL_SCHEMA_OPERATOR.length());
-			MainFrame mainFrame = RapidMinerGUI.getMainFrame();
+			MainUIState mainFrame = RapidMinerGUI.getMainFrame();
 			mainFrame.selectAndShowOperator(mainFrame.getProcess().getOperator(opName), true);
 		} else {
 			// try if an action is registered under than name and trigger it

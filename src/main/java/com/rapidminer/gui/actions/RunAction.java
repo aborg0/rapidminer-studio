@@ -22,7 +22,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.Icon;
 
 import com.rapidminer.Process;
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
+import com.rapidminer.gui.ProcessState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.SwingTools;
@@ -52,7 +53,7 @@ public class RunAction extends ResourceAction {
 	 * @deprecated use {@link #RunAction()} instead
 	 */
 	@Deprecated
-	public RunAction(MainFrame mainFrame) {
+	public RunAction(MainUIState mainFrame) {
 		this();
 	}
 

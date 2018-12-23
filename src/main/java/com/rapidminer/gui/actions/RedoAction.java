@@ -20,10 +20,9 @@ package com.rapidminer.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.rapidminer.gui.MainFrame;
+import com.rapidminer.gui.MainUIState;
 import com.rapidminer.gui.RapidMinerGUI;
 import com.rapidminer.gui.tools.ResourceAction;
-
 
 /**
  * Start the corresponding action.
@@ -45,7 +44,7 @@ public class RedoAction extends ResourceAction {
 	 * @deprecated use {@link #RedoAction()} instead
 	 */
 	@Deprecated
-	public RedoAction(MainFrame mainFrame) {
+	public RedoAction(MainUIState mainFrame) {
 		this();
 	}
 

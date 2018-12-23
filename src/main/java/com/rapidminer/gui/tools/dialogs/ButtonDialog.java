@@ -692,8 +692,8 @@ public class ButtonDialog extends JDialog {
 				// return the next smaller dimension instead to avoid components being too large for
 				// display
 				if (RapidMinerGUI.getMainFrame() != null
-						&& RapidMinerGUI.getMainFrame().getGraphicsConfiguration() != null) {
-					if (RapidMinerGUI.getMainFrame().getGraphicsConfiguration().getBounds().getHeight() <= MAX_HEIGHT) {
+						&& RapidMinerGUI.getMainFrame().getWindow().getGraphicsConfiguration() != null) {
+					if (RapidMinerGUI.getMainFrame().getWindow().getGraphicsConfiguration().getBounds().getHeight() <= MAX_HEIGHT) {
 						return getDefaultSize(LARGE);
 					} else {
 						return DIMENSION_HUGE;

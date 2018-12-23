@@ -173,7 +173,7 @@ public abstract class ReceivingOperatorTransferHandler extends OperatorTransferH
 				SwingUtilities.invokeLater(() -> {
 					DataImportWizardBuilder importWizardBuilder = new DataImportWizardBuilder();
 					importWizardBuilder.setCallback(DataImportWizardUtils.showInResultsCallback());
-					importWizardBuilder.forFile(file.toPath()).build(RapidMinerGUI.getMainFrame()).getDialog()
+					importWizardBuilder.forFile(file.toPath()).build(RapidMinerGUI.getMainFrame().getWindow()).getDialog()
 							.setVisible(true);
 				});
 				dropEnds();

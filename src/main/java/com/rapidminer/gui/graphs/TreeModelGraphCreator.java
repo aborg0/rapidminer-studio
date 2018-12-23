@@ -161,7 +161,6 @@ public class TreeModelGraphCreator extends GraphCreatorAdaptor {
 				return true;
 			}
 		}
-
 		return false;
 	}
 

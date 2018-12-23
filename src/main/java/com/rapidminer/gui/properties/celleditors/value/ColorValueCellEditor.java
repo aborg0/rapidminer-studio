@@ -56,7 +56,7 @@ public class ColorValueCellEditor extends AbstractCellEditor implements Property
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color newColor = JColorChooser.showDialog(RapidMinerGUI.getMainFrame(), "Choose Color for " + type.getKey(),
+				Color newColor = JColorChooser.showDialog(RapidMinerGUI.getMainFrame().getWindow(), "Choose Color for " + type.getKey(),
 						((ColorIcon) button.getIcon()).getColor());
 				if (newColor != null) {
 					setEditorColor(newColor);

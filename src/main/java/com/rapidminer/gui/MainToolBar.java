@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,7 +42,6 @@ import javax.swing.JPanel;
 
 import com.rapidminer.gui.actions.WorkspaceAction;
 import com.rapidminer.gui.look.Colors;
-import com.rapidminer.gui.search.GlobalSearchPanel;
 import com.rapidminer.gui.tools.ResourceAction;
 import com.rapidminer.gui.tools.ResourceLabel;
 import com.rapidminer.gui.tools.SwingTools;
@@ -90,6 +89,8 @@ public class MainToolBar extends JPanel {
 	/** The cached name of the current perspective */
 	private String perspectiveName;
 
+	private MainUIState mainFrame;
+
 	/**
 	 * Creates a new tool bar instance. The new instance only contains build-in actions and
 	 * perspectives. To display element registered by an extension, the {@link #update()} method
@@ -98,7 +99,8 @@ public class MainToolBar extends JPanel {
 	 * @param mainframe
 	 *            the mainframe that uses this tool bar
 	 */
-	public MainToolBar(final MainFrame mainframe) {
+	public MainToolBar(final AbstractUIState mainframe) {
+		this.mainFrame = mainframe;
 		// use default look and feel background
 		setOpaque(true);
 		setBackground(Colors.WINDOW_BACKGROUND);
@@ -191,11 +193,11 @@ public class MainToolBar extends JPanel {
 		add(new JLabel(), gbc);
 
 		// Global Search
-		gbc.gridx += 1;
-		gbc.weightx = 0;
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.insets = new Insets(0, 0, 0, 5);
-		add(GlobalSearchPanel.getInstance(), gbc);
+//		gbc.gridx += 1;
+//		gbc.weightx = 0;
+//		gbc.fill = GridBagConstraints.NONE;
+//		gbc.insets = new Insets(0, 0, 0, 5);
+//		add(GlobalSearchPanel.getInstance(), gbc);
 
 		// help section
 		gbc.gridx += 1;
@@ -357,7 +359,7 @@ public class MainToolBar extends JPanel {
 		int moreButtonWidth = PerspectiveToggleGroup.getDefaultSecondaryButtonSize().width;
 		int moreButtonMinWidth = PerspectiveToggleGroup.getMinimizedSecondaryButtonSize().width;
 		int actionsWidth = actionsPanel.getPreferredSize().width;
-		int searchWidth = GlobalSearchPanel.PREFERRED_WIDTH + 5; //insets
+		int searchWidth = /*GlobalSearchPanel.PREFERRED_WIDTH +*/ 5; //insets
 		int availableWidth = toolBarWidth - actionsWidth - searchWidth - 10; //insets?
 
 		// make sure to not calculate too much

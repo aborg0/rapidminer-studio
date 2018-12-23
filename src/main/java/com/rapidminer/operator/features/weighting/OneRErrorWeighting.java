@@ -35,7 +35,6 @@ import com.rapidminer.operator.performance.PerformanceVector;
 import com.rapidminer.operator.performance.SimplePerformanceEvaluator;
 import com.rapidminer.tools.OperatorService;
 
-
 /**
  * This operator calculates the relevance of a feature by computing the error rate of a OneR Model
  * on the exampleSet without this feature.

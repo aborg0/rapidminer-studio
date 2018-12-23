@@ -195,7 +195,6 @@ public class ConfigureParameterOptimizationDialog extends PropertyDialog {
 				addParameter(parameterValue);
 			}
 		}
-
 		updateInfoLabel();
 	}
 

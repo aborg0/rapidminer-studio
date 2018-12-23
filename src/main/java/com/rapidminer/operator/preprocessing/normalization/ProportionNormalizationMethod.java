@@ -169,5 +169,4 @@ public class ProportionNormalizationMethod extends AbstractNormalizationMethod {
 				handler instanceof Operator ? (Operator) handler : null, Normalization.BEFORE_NON_FINITE_VALUES_HANDLING));
 		return Collections.singletonList(type);
 	}
-
 }

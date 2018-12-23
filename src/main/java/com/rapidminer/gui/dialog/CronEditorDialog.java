@@ -51,7 +51,6 @@ import com.rapidminer.operator.Operator;
 import com.rapidminer.parameter.ParameterTypeCronExpression;
 import com.rapidminer.tools.I18N;
 
-
 /**
  * Dialog to create a cron expression via GUI. Call {@link #getCronExpression()} to get the cron
  * expression after the dialog has been confirmed.

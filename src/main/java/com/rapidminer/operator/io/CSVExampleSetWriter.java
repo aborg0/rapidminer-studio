@@ -390,7 +390,7 @@ public class CSVExampleSetWriter extends AbstractStreamWriter {
 	protected String[] getFileExtensions() {
 		return new String[] { "csv" };
 	}
-	
+
 	@Override
 	public OperatorVersion[] getIncompatibleVersionChanges() {
 		OperatorVersion[] incompatibleVersions = super.getIncompatibleVersionChanges();
