@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2001-2018 by RapidMiner and the contributors
+ * Copyright (C) 2001-2019 by RapidMiner and the contributors
  * 
  * Complete list of developers available at our web site:
  * 
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
 */
-package com.rapidminer.gui.new_plotter.gui.popup;
+package com.rapidminer.gui.popup;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -28,35 +28,36 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.Popup;
 import javax.swing.SwingUtilities;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 
 /**
  * A JPanel that contains the component that should be shown when a popup action is triggered.
  * 
  * @author Nils Woehler
- * 
  */
 public class PopupPanel extends JPanel implements PropertyChangeListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<PopupComponentListener> listenerList = new LinkedList<PopupComponentListener>();
+	private final List<PopupComponentListener> listenerList = new LinkedList<>();
 
 	private static final String PERMANENT_FOCUS_OWNER = "permanentFocusOwner";
 
 	private Window containingWindow;
+	private Component component;
 
-	public PopupPanel(Component comp) {
+	PopupPanel(Component comp) {
 		this.setLayout(new GridBagLayout());
-
+		this.setBackground(comp.getBackground());
+		this.component = comp;
 		GridBagConstraints itemConstraint = new GridBagConstraints();
 
-		itemConstraint = new GridBagConstraints();
 		itemConstraint.fill = GridBagConstraints.BOTH;
 		itemConstraint.weightx = 1.0;
 		itemConstraint.weighty = 1.0;
@@ -64,6 +65,27 @@ public class PopupPanel extends JPanel implements PropertyChangeListener {
 		itemConstraint.insets = new Insets(5, 5, 5, 5);
 		this.setBorder(new JPopupMenu().getBorder());
 		this.add(comp, itemConstraint);
+
+		// make sure focus is set correctly once the popup is actually shown
+		addAncestorListener(new AncestorListener() {
+
+			@Override
+			public void ancestorAdded(AncestorEvent event) {
+				if (PopupPanel.this.isShowing()) {
+					PopupPanel.this.requestFocusInWindow();
+				}
+			}
+
+			@Override
+			public void ancestorRemoved(AncestorEvent event) {
+				// not needed
+			}
+
+			@Override
+			public void ancestorMoved(AncestorEvent event) {
+				// not needed
+			}
+		});
 	}
 
 	@Override
@@ -75,6 +97,12 @@ public class PopupPanel extends JPanel implements PropertyChangeListener {
 		if (!isFocusInside(newValue)) {
 			fireFocusLost();
 		}
+	}
+
+	@Override
+	public boolean requestFocusInWindow() {
+		// forwards focus request to the wrapped component
+		return component != null ? component.requestFocusInWindow() : super.requestFocusInWindow();
 	}
 
 	public void addListener(PopupComponentListener l) {
@@ -90,14 +118,13 @@ public class PopupPanel extends JPanel implements PropertyChangeListener {
 	 * 
 	 * @param containingWindow
 	 *            the window that contains the popup
-	 * @param actionSource
 	 */
-	public void startTracking(Window containingWindow, Component actionSource) {
+	void startTracking(Window containingWindow) {
 		this.containingWindow = containingWindow;
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(PERMANENT_FOCUS_OWNER, this);
 	}
 
-	public void stopTracking() {
+	void stopTracking() {
 		this.containingWindow = null;
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().removePropertyChangeListener(PERMANENT_FOCUS_OWNER, this);
 	}
@@ -124,10 +151,15 @@ public class PopupPanel extends JPanel implements PropertyChangeListener {
 
 			Window focusedWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
 
-			// if focus is on other window return true
-			if (containingWindow == focusedWindow) {
-				return false;
-			}
+			// if focus is on other window in owner chain, return false
+			Window parent = containingWindow;
+			do {
+				if (parent == focusedWindow) {
+					return false;
+				} else {
+					parent = parent.getOwner();
+				}
+			} while (parent != null);
 		}
 		return true;
 	}

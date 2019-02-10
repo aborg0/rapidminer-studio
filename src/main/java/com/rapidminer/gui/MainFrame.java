@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2001-2018 by RapidMiner and the contributors
+ * Copyright (C) 2001-2019 by RapidMiner and the contributors
  *
  * Complete list of developers available at our web site:
  *
@@ -77,6 +77,12 @@ import com.vlsolutions.swing.docking.DockingDesktop;
 public class MainFrame extends ApplicationFrame implements WindowListener, MainUIState, ProcessEndHandler {
 
 	private static final long serialVersionUID = 1L;
+
+	/** The property name whether legacy simple charts should still be hidden in the results */
+	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_SHOW_LEGACY_SIMPLE_CHARTS = "rapidminer.gui.plotter.legacy.simple_charts.show";
+
+	/** The property name whether legacy simple charts should still be shown in the results */
+	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_SHOW_LEGACY_ADVANCED_CHARTS = "rapidminer.gui.plotter.legacy.advanced_charts.show";
 
 	/** The property name for &quot;The pixel size of each plot in matrix plots.&quot; */
 	public static final String PROPERTY_RAPIDMINER_GUI_PLOTTER_MATRIXPLOT_SIZE = "rapidminer.gui.plotter.matrixplot.size";
@@ -162,7 +168,6 @@ public class MainFrame extends ApplicationFrame implements WindowListener, MainU
 
 	public static final int EDIT_MODE = 0;
 	public static final int RESULTS_MODE = 1;
-	public static final int WELCOME_MODE = 2;
 
 	// --------------------------------------------------------------------------------
 

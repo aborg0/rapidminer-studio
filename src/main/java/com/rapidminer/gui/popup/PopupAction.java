@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2001-2018 by RapidMiner and the contributors
+ * Copyright (C) 2001-2019 by RapidMiner and the contributors
  * 
  * Complete list of developers available at our web site:
  * 
@@ -16,10 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this program.
  * If not, see http://www.gnu.org/licenses/.
 */
-package com.rapidminer.gui.new_plotter.gui.popup;
-
-import com.rapidminer.gui.RapidMinerGUI;
-import com.rapidminer.gui.tools.ResourceAction;
+package com.rapidminer.gui.popup;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -29,10 +26,15 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+
+import com.rapidminer.gui.RapidMinerGUI;
+import com.rapidminer.gui.tools.ResourceAction;
 
 
 /**
@@ -54,7 +56,6 @@ import javax.swing.SwingUtilities;
  * </ul>
  * 
  * @author Nils Woehler
- * 
  */
 public class PopupAction extends ResourceAction implements PopupComponentListener, ComponentListener {
 
@@ -66,12 +67,32 @@ public class PopupAction extends ResourceAction implements PopupComponentListene
 
 		private static final long serialVersionUID = 1L;
 
-		public ContainerPopupDialog(Window owner, Component comp, Point point) {
+		private Component component;
+
+		ContainerPopupDialog(Window owner, Component comp, Point point) {
 			super(owner != null ? owner : RapidMinerGUI.getMainFrame().getWindow());
+			this.component = comp;
 			this.add(comp);
 			this.setLocation(point);
 			this.setUndecorated(true);
 			pack();
+
+			ResourceAction closeAction = new ResourceAction("close") {
+
+				@Override
+				public void loggedActionPerformed(ActionEvent e) {
+					hidePopup();
+				}
+
+			};
+			getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+					.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false), "CANCEL");
+			getRootPane().getActionMap().put("CANCEL", closeAction);
+		}
+
+		@Override
+		public boolean requestFocusInWindow() {
+			return component != null ? component.requestFocusInWindow() : super.requestFocusInWindow();
 		}
 
 	}
@@ -139,7 +160,7 @@ public class PopupAction extends ResourceAction implements PopupComponentListene
 		int ySource = source.getLocationOnScreen().y;
 
 		// get size of popup
-		Dimension popupSize = ((Component) popupComponent).getSize();
+		Dimension popupSize = popupComponent.getSize();
 		if (popupSize.width == 0) {
 			popupSize = ((Component) popupComponent).getPreferredSize();
 		}
@@ -195,8 +216,9 @@ public class PopupAction extends ResourceAction implements PopupComponentListene
 				// if the popup now would be moved outside of RM Studio at the top it would look
 				// silly, so in that case just show it at its intended position and let it be cut
 				// off on the bottom side as we cannot do anything about it
-				if (yPopup < focusedWindow.getLocationOnScreen().y
-						|| (yPopup - focusedWindow.getLocationOnScreen().y) + popupSize.height > focusedWindow.getHeight()) {
+				int minY = RapidMinerGUI.getMainFrame().getWindow().getLocationOnScreen().y;
+				int studioHeight = RapidMinerGUI.getMainFrame().getWindow().getHeight();
+				if (yPopup < minY || (yPopup - minY) + popupSize.height > studioHeight) {
 					yPopup = ySource;
 				}
 
@@ -229,7 +251,7 @@ public class PopupAction extends ResourceAction implements PopupComponentListene
 		popup = new ContainerPopupDialog(containingWindow, popupComponent, position);
 		popup.setVisible(true);
 		popup.requestFocus();
-		popupComponent.startTracking(containingWindow, actionSource);
+		popupComponent.startTracking(containingWindow);
 	}
 
 	/**
@@ -243,6 +265,7 @@ public class PopupAction extends ResourceAction implements PopupComponentListene
 
 		if (containingWindow != null) {
 			containingWindow.removeComponentListener(this);
+			containingWindow.requestFocusInWindow();
 			containingWindow = null;
 		}
 
@@ -279,13 +302,12 @@ public class PopupAction extends ResourceAction implements PopupComponentListene
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// Unnecessary to hide on move event. Causes trouble on Linux
-		// hidePopup();
+		// Nothing to be done
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		return; // Nothing to be done
+		// Nothing to be done
 	}
 
 	@Override

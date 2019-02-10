@@ -494,10 +494,10 @@ public abstract class AbstractUIState implements MainUIState, ProcessEndHandler,
 //	};
 	
 	public final transient Action TUTORIAL_ACTION = new TutorialAction();
-	public final transient Action BROWSE_VIDEOS_ACTION = new BrowseAction("toolbar_resources.help_videos", URI.create("http://redirects.rapidminer.com/app/studio/8.1/getting-started-video/main_tool_bar"));
-	public final transient Action BROWSE_COMMUNITY_ACTION = new BrowseAction("toolbar_resources.help_forum", URI.create("http://redirects.rapidminer.com/app/studio/7.2/forum/main_tool_bar"));
-	public final transient Action BROWSE_DOCUMENTATION_ACTION = new BrowseAction("toolbar_resources.documentation", URI.create("http://redirects.rapidminer.com/app/studio/7.2/documentation/main_tool_bar"));
-	public final transient Action BROWSE_SUPPORT_ACTION = new BrowseAction("toolbar_resources.support", URI.create("http://redirects.rapidminer.com/app/studio/7.2/support/main_tool_bar"));
+	public final transient Action BROWSE_VIDEOS_ACTION = new BrowseAction("toolbar_resources.help_videos", URI.create("https://redirects.rapidminer.com/app/studio/8.1/getting-started-video/main_tool_bar"));
+	public final transient Action BROWSE_COMMUNITY_ACTION = new BrowseAction("toolbar_resources.help_forum", URI.create("https://redirects.rapidminer.com/app/studio/7.2/forum/main_tool_bar"));
+	public final transient Action BROWSE_DOCUMENTATION_ACTION = new BrowseAction("toolbar_resources.documentation", URI.create("https://redirects.rapidminer.com/app/studio/7.2/documentation/main_tool_bar"));
+	public final transient Action BROWSE_SUPPORT_ACTION = new BrowseAction("toolbar_resources.support", URI.create("https://redirects.rapidminer.com/app/studio/7.2/support/main_tool_bar"));
 	public final transient Action ABOUT_ACTION = new AboutAction();
 	
 	// --------------------------------------------------------------------------------
